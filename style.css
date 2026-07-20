@@ -1,0 +1,96 @@
+/* =========================================================
+   style.css — 이예다 팬페이지 공통 스타일 (Verily 매거진 테마)
+   서브 페이지(프로필·일정·옷장·업보) 공용.
+   색만 바꾸려면 :root / body.dark 변수만 교체하면 됨.
+   ========================================================= */
+
+:root{
+  --main:#ffb1b1; --main-dark:#c62d42; --main-light:#ffe7e7;
+  --bg:#ffffff; --paper:#fff7f6; --card:#ffffff; --cream:#fdeef0;
+  --logo:#c62d42; --ink:#2e2528; --text:#3d2f33; --text-mid:#6f5b60; --text-soft:#9c878c;
+  --rule:#ead9da; --backdrop:#f2e6e6;
+  --shadow-hover:0 10px 26px rgba(150,45,60,.14);
+  --pen:'Noto Sans KR',sans-serif; --serif:'Nanum Myeongjo',serif;
+  --mag:'Playfair Display',serif; --script:'Sacramento',cursive; --katuri:'Jua','Noto Sans KR',sans-serif;
+}
+body.dark{
+  --main:#ffbdbd; --main-dark:#ffa3b1; --main-light:#3d2126;
+  --bg:#171012; --paper:#171012; --card:#211619; --cream:#2e1c20;
+  --logo:#ffa3b1; --ink:#f3e9eb; --text:#ece0e2; --text-mid:#c0aeb2; --text-soft:#958388;
+  --rule:#332327; --backdrop:#0d0809;
+  --shadow-hover:0 10px 26px rgba(0,0,0,.5);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--backdrop);font-family:var(--pen);color:var(--text);min-height:100vh;padding:1px 0;transition:background .2s,color .2s}
+a{color:inherit}
+.av{cursor:pointer}
+
+/* ── 떠있는 시트 ── */
+.wrap{max-width:1120px;margin:30px auto;padding:14px 44px 30px;background:var(--card);
+  box-shadow:0 28px 70px rgba(150,45,60,.16),0 6px 18px rgba(150,45,60,.07);position:relative;z-index:1}
+body.dark .wrap{box-shadow:0 28px 70px rgba(0,0,0,.6)}
+@media(max-width:680px){.wrap{margin:12px;padding:8px 18px 24px}}
+
+/* ── 마스트헤드 + 네비 ── */
+.mast{display:flex;justify-content:flex-end;padding:14px 0 4px}
+.logo{text-align:right;line-height:1}
+.logo .scr{font-family:var(--script);font-size:54px;color:var(--ink);display:block;line-height:1}
+.logo .sub{font-size:11px;letter-spacing:6px;font-weight:700;color:var(--text-soft);margin-top:15px}
+.navrule{border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);margin-top:4px}
+.nav{display:flex;align-items:center;gap:26px;padding:9px 2px}
+.nav a{font-size:13px;letter-spacing:2px;font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap}
+.nav a.on,.nav a:hover{color:var(--main-dark)}
+.nav .actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.tsw{width:22px;height:33px;border-radius:999px;border:1.5px solid var(--rule);background:#ffecec;cursor:pointer;position:relative;padding:0}
+.tsw .kn{position:absolute;left:1.5px;top:1.5px;width:16px;height:16px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;transition:top .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+body.dark .tsw{background:#2a1c1f}body.dark .tsw .kn{top:14px;background:#211619}
+@media(max-width:560px){.logo .scr{font-size:48px}.nav{gap:14px;overflow-x:auto}}
+
+/* ── 페이지 인트로 ── */
+.kicker{display:flex;align-items:center;gap:10px;margin-top:30px}
+.kicker .cat{font-size:12px;letter-spacing:3px;font-weight:800;color:var(--main-dark)}
+.kicker .date{margin-left:auto;background:var(--main-dark);color:#fff;font-size:11px;font-weight:800;letter-spacing:1px;padding:4px 9px}
+body.dark .kicker .date{color:#3a151b}
+.headline{font-family:var(--pen);font-weight:800;font-size:30px;line-height:1.3;color:var(--ink);margin-top:12px;letter-spacing:-1px}
+.headline em{font-style:normal;color:var(--main-dark)}
+.byline{font-size:13px;font-weight:600;color:var(--text-soft);margin-top:10px;line-height:1.7}
+.seclabel{display:flex;align-items:center;gap:12px;margin:34px 0 16px}
+.seclabel b{font-size:12px;letter-spacing:3px;font-weight:800;color:var(--main-dark);white-space:nowrap}
+.seclabel .ln{flex:1;height:1.5px;background:var(--rule)}
+
+/* ── 콘텐츠 컨테이너/카드 ── */
+.container{margin-top:24px}
+.card{background:var(--card);border:1.5px solid var(--rule);border-radius:4px;padding:22px;margin-top:18px}
+.page-title{font-family:var(--pen);font-weight:800;font-size:26px;color:var(--ink)}
+.page-subtitle{font-size:13px;color:var(--text-soft);margin-top:6px}
+
+/* ── 상태 표시 ── */
+.spinner{width:30px;height:30px;border:3px solid var(--main-light);border-top-color:var(--main-dark);border-radius:50%;margin:30px auto;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{text-align:center;color:var(--text-soft);font-size:14px;padding:38px 10px}
+.empty-icon{font-size:30px;margin-bottom:8px;opacity:.5}
+
+/* ── 푸터 ── */
+footer{text-align:center;color:var(--text-soft);font-size:12px;line-height:1.7;font-weight:600;margin-top:34px;padding-top:18px;border-top:1px solid var(--rule)}
+footer.paperfoot{max-width:1120px;margin:24px auto 46px;padding:0 22px;border-top:none}
+
+/* ── 공통 칩/필 ── */
+.pill{border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600;background:var(--main-light);color:var(--main-dark);display:inline-block}
+.pill.no{background:#ffe2e2;color:#c0564f}
+body.dark .pill.no{background:#3a2222;color:#e79a94}
+.tag{font-size:11px;background:var(--main);color:#7a2230;border-radius:6px;padding:2px 7px;font-weight:800}
+body.dark .tag{color:#3a151b}
+
+/* ── 문의 모달 (페이지 공통) ── */
+.modal{position:fixed;inset:0;background:rgba(46,20,26,.4);display:none;align-items:center;justify-content:center;z-index:500;padding:16px}
+.modal.on{display:flex}
+.modal .box{background:var(--card);border-radius:18px;width:100%;max-width:420px;padding:24px}
+.modal .box h4{font-family:var(--pen);font-size:18px;color:var(--main-dark);font-weight:800}
+.modal .box p{font-size:13px;color:var(--text-soft);margin:4px 0 14px}
+.modal .box input,.modal .box textarea{width:100%;padding:12px 14px;border-radius:13px;border:1.5px solid var(--rule);font-size:14px;margin-bottom:10px;font-family:inherit;background:var(--bg);color:var(--text);outline:none}
+.modal .box .bt{display:flex;gap:8px}.modal .box .bt button{flex:1;padding:12px;border-radius:13px;border:none;font-weight:800;cursor:pointer}
+.modal .box .send{background:var(--main);color:#7a2230}.modal .box .cancel{background:var(--main-light);color:var(--main-dark)}
+
+/* ── 토스트 ── */
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:11px 20px;border-radius:999px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:9999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}

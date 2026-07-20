@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이예다 · 프로필</title>
+<link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Sacramento&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  #pmain{opacity:0;transition:opacity .4s}
+  #pmain.show{opacity:1}
+  /* 신원 */
+  .pwrap{display:grid;grid-template-columns:200px 1fr;gap:34px;align-items:center;margin-top:26px}
+  @media(max-width:640px){.pwrap{grid-template-columns:1fr;gap:18px;text-align:center}}
+  .pav{width:200px;height:200px;border-radius:50%;overflow:hidden;border:5px solid #fff;box-shadow:0 0 0 5px var(--main),0 12px 28px rgba(198,45,66,.25);margin:0 auto}
+  body.dark .pav{border-color:var(--card)}
+  .pav img{width:100%;height:100%;object-fit:cover}
+  .pname{font-family:var(--pen);font-weight:800;font-size:40px;color:var(--ink);line-height:1}
+  .pen{font-size:12px;letter-spacing:6px;font-weight:700;color:var(--text-soft);margin-top:6px}
+  .ptag{font-family:var(--serif);font-size:15px;color:var(--text-mid);margin-top:14px;line-height:1.6}
+  .ptbl{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:0 26px}
+  @media(max-width:640px){.ptbl{grid-template-columns:1fr;text-align:left}}
+  .ptbl div{display:flex;justify-content:space-between;gap:12px;padding:9px 2px;border-bottom:1px dashed var(--main-light);font-size:13px}
+  .ptbl span{color:var(--text-soft);font-weight:700}.ptbl b{color:var(--main-dark)}
+  .ptbl .dd{font-size:10px;background:var(--main);color:#7a2230;border-radius:6px;padding:1px 6px;margin-right:6px;font-weight:800}
+  body.dark .ptbl .dd{color:#3a151b}
+
+  .sec{margin-top:6px}
+  .sec[hidden]{display:none}
+  .intro{font-size:15px;line-height:1.95;color:var(--text)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .lk2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  @media(max-width:520px){.lk2{grid-template-columns:1fr}}
+  .lk2 .t{font-size:12px;letter-spacing:1px;font-weight:800;color:var(--text-soft);margin-bottom:9px}
+
+  /* 능력치 */
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 26px}
+  @media(max-width:520px){.stats{grid-template-columns:1fr}}
+  .stat .sl{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:5px}
+  .stat .sl em{font-style:normal;color:var(--main-dark)}
+  .bar{height:9px;border-radius:999px;background:var(--main-light);overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--main),var(--main-dark))}
+
+  /* 어록 */
+  .quotes{display:flex;flex-direction:column;gap:10px}
+  .quote{border-left:3px solid var(--main);background:var(--cream);border-radius:0 10px 10px 0;padding:12px 16px;font-family:var(--serif);font-size:15px;color:var(--text)}
+  /* 진행 · 참여한 컨텐츠 (테이블) */
+  .ctable{width:100%;border-collapse:collapse}
+  .ctable th{text-align:left;font-size:12px;font-weight:800;color:var(--main-dark);background:var(--main-light);padding:11px 16px}
+  .ctable th:first-child{border-radius:8px 0 0 8px}.ctable th:last-child{border-radius:0 8px 8px 0}
+  .ctable td{padding:15px 16px;border-bottom:1px solid var(--rule);font-size:14px;vertical-align:middle}
+  .ctable tbody tr.lnk{cursor:pointer}
+  .ctable tbody tr.lnk:hover td{background:var(--cream)}
+  .ctable .cdate{color:var(--main-dark);font-weight:800;white-space:nowrap;width:128px}
+  .ctable .ctitle{color:var(--ink);font-weight:600}
+  .ctable .cchev{text-align:right;color:var(--main-dark);font-size:17px;width:26px}
+  .cpg{display:flex;justify-content:center;gap:6px;margin-top:16px;flex-wrap:wrap}
+  .cpgb{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--rule);background:var(--card);color:var(--text-mid);font-size:13px;font-weight:700;cursor:pointer}
+  .cpgb:hover{border-color:var(--main)}
+  .cpgb.on{background:var(--main);color:#7a2230;border-color:var(--main)}
+  body.dark .cpgb.on{color:#3a151b}
+
+  /* 이벤트 */
+  .evcard{border:1.5px solid var(--main);border-radius:10px;padding:18px 20px;position:relative;background:var(--cream)}
+  .evcard .now{position:absolute;top:-10px;left:16px;background:#e0466e;color:#fff;font-size:10px;font-weight:800;letter-spacing:1px;border-radius:999px;padding:3px 10px}
+  .evcard .evt{font-size:17px;font-weight:800;color:var(--ink)}
+  .evcard .evcode{display:inline-block;margin-top:8px;background:var(--main-dark);color:#fff;border-radius:8px;padding:5px 12px;font-weight:800;font-size:13px;letter-spacing:1px}
+  body.dark .evcard .evcode{color:#3a151b}
+  .evcard .evnote{font-size:13px;color:var(--text-mid);margin-top:10px;line-height:1.6;white-space:pre-wrap}
+
+  /* 목표 */
+  .goal .gl{display:flex;justify-content:space-between;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:7px}
+  .goal .gbar{height:16px;border-radius:999px;background:var(--main-light);overflow:hidden}
+  .goal .gbar i{display:block;height:100%;background:linear-gradient(90deg,var(--main),var(--main-dark));text-align:right;color:#ffffff;font-size:10px;font-weight:800;line-height:16px;padding-right:8px}
+  .goal .gnext{font-size:12px;color:var(--text-soft);margin-top:8px}
+
+
+  /* 링크 */
+  .links{display:flex;gap:10px;flex-wrap:wrap}
+  .links a{padding:11px 22px;border:1.5px solid var(--main);border-radius:10px;text-decoration:none;font-size:13px;font-weight:800;color:var(--main-dark);background:var(--card)}
+  .links a:hover{background:var(--main);color:#7a2230}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="mast"><div class="logo"><span class="scr">Yeda</span><span class="sub">Y E D A · D A I L Y</span></div></div>
+    <div class="navrule"><nav class="nav">
+      <a href="../index.html">메인</a>
+      <a href="index.html" class="on">프로필</a>
+      <a href="../schedule/">일정</a>
+      <a href="../dress/">옷장</a>
+      <a href="../work/">업보</a>
+      <div class="actions"><button class="tsw" id="tsw" type="button" aria-label="다크"><span class="kn" id="kn">🌙</span></button></div>
+    </nav></div>
+  </header>
+
+  <div class="kicker"><span class="cat">PROFILE · 🎀🍑</span><span class="date dbox"></span></div>
+
+  <div id="pmain">
+    <!-- 신원 -->
+    <div class="pwrap">
+      <div class="pav av"><img id="pav" src="" referrerpolicy="no-referrer" alt="이예다"></div>
+      <div>
+        <div class="pname" id="pname">이예다</div>
+        <div class="pen" id="pen">LEE YEDA</div>
+        <div class="ptag" id="ptag"></div>
+        <div class="ptbl" id="ptbl"></div>
+      </div>
+    </div>
+
+    <!-- 소개 -->
+    <section class="sec" id="sec-intro"><div class="seclabel"><b>소개</b><span class="ln"></span></div><p class="intro" id="intro"></p></section>
+
+
+    <!-- 좋아 / 싫어 -->
+    <section class="sec" id="sec-pref"><div class="seclabel"><b>좋아 · 싫어</b><span class="ln"></span></div>
+      <div class="lk2">
+        <div><div class="t">LIKE ♡</div><div class="chips" id="likes"></div></div>
+        <div><div class="t">DISLIKE ✕</div><div class="chips" id="dislikes"></div></div>
+      </div>
+    </section>
+
+    <!-- 능력치 -->
+    <section class="sec" id="sec-stats"><div class="seclabel"><b>능력치</b><span class="ln"></span></div><div class="stats" id="stats"></div></section>
+
+    <!-- 진행 · 참여한 컨텐츠 -->
+    <section class="sec" id="sec-contents"><div class="seclabel"><b>진행 · 참여한 컨텐츠</b><span class="ln"></span></div><div id="contents"></div><div class="cpg" id="contents-pg"></div></section>
+
+    <!-- 지금 진행 중 이벤트 -->
+    <section class="sec" id="sec-event"><div class="seclabel"><b>지금 진행 중</b><span class="ln"></span></div><div id="event"></div></section>
+
+    <!-- 목표 -->
+    <section class="sec" id="sec-goal"><div class="seclabel"><b>목표</b><span class="ln"></span></div><div class="goal" id="goal"></div></section>
+
+
+    <!-- 관련 링크 -->
+    <section class="sec" id="sec-links"><div class="seclabel"><b>관련 링크</b><span class="ln"></span></div><div class="links" id="links"></div></section>
+  </div>
+
+</div>
+
+<footer class="paperfoot">© 2026 이예다 Official.<br>비즈니스 문의 — 1eeye4a@gmail.com</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../supabase.js"></script>
+<script>
+/* ── 프로필 데이터 모델 (admin과 동일 키) ──
+   name name_en soop_id avatar tagline intro birthday(MM-DD) debut agency mbti age fan_name
+   likes[] dislikes[] contents[{date,title,url}]
+   stats[{label,value}] event{title,code,note} goal{label,current,target,next} links{soop,youtube,x,cafe} */
+const DEFAULTS = {
+  name:'이예다', name_en:'LEE YEDA', soop_id:'leeyeda', avatar:'',
+  tagline:'아이돌을 꿈꾸는 당신의 옆집 유부녀 예다 🍑',
+  intro:'러블리하고 청초한, 그런데 어딘가 어른스러운 옆집 유부녀 버추얼, 이예다예요. 평일 저녁 7시(주말은 낮 1시)에 만나서 소통하고, 롤하고, 종겜도 해요 🎀🍑',
+  birthday:'08-18', debut:'2022.12.17', agency:'유부녀즈 · 크리에이터 버스', mbti:'', age:'', fan_name:'복숭이',
+  likes:['복숭이','남편','고양이별로 떠난 제제','롤'],
+  dislikes:['예의 없고 무례한 것','오이','메밀','파'],
+  quotes:[],
+  contents:[{date:'2022.12.17',title:'이예다 데뷔 🎉 (예시 — 관리자에서 수정)',url:''}],
+  stats:[{label:'애교',value:95},{label:'여자력',value:90},{label:'신사력',value:88},{label:'게임 피지컬',value:75},{label:'지능',value:70},{label:'행운',value:60},{label:'멘탈',value:85},{label:'순발력',value:80},{label:'체력',value:65},{label:'가창력',value:78}],
+  event:{title:'',code:'',note:''},
+  goal:{label:'',current:0,target:0,next:''},
+  links:{soop:'https://www.sooplive.com/station/leeyeda', youtube:'https://www.youtube.com/@leeyeda', x:'https://x.com/1eeye4a', cafe:'https://cafe.naver.com/soldoutvtuber'}
+};
+const esc=s=>(s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const arr=v=>Array.isArray(v)?v.filter(x=>x!=='' && x!=null):(typeof v==='string'?v.split(/\n|,/).map(s=>s.trim()).filter(Boolean):[]);
+function avatarUrl(d){ if(d.avatar) return d.avatar; const id=d.soop_id||''; if(!id) return ''; return `https://profile.img.sooplive.co.kr/LOGO/${id.slice(0,2)}/${id}/${id}.jpg`; }
+function dday(mmdd){ if(!mmdd) return null; if(typeof window.fxDday==='function') return window.fxDday(mmdd);
+  var p=mmdd.split('-'),m=+p[0],d=+p[1],now=new Date();now.setHours(0,0,0,0);var nx=new Date(now.getFullYear(),m-1,d);if(nx<now)nx=new Date(now.getFullYear()+1,m-1,d);return Math.round((nx-now)/86400000); }
+function daysSince(s){ if(!s) return null; var t=String(s).replace(/[.]/g,'-').replace(/[^0-9-]/g,''); var dt=new Date(t); if(isNaN(dt)) return null; var now=new Date(); now.setHours(0,0,0,0); dt.setHours(0,0,0,0); return Math.floor((now-dt)/86400000); }
+
+function render(d){
+  // 신원
+  document.getElementById('pav').src = avatarUrl(d) || '';
+  document.getElementById('pname').textContent = d.name||'';
+  document.getElementById('pen').textContent = d.name_en||'';
+  const tag=document.getElementById('ptag'); tag.textContent=d.tagline||''; tag.style.display=d.tagline?'':'none';
+  // 표
+  const rows=[];
+  if(d.birthday){ const n=dday(d.birthday); const tag=(n===0?'오늘! 🎉':(n!=null?'D-'+n:'')); const bday=String(d.birthday).replace('-','.'); rows.push(['생일', (tag?`<em class="dd">${tag}</em>`:'')+esc(bday)]); }
+  if(d.debut){ const ds=daysSince(d.debut); const dplus=(ds!=null&&ds>=0?'D+'+ds:''); rows.push(['데뷔', (dplus?`<em class="dd">${dplus}</em>`:'')+esc(d.debut)]); }
+  if(d.agency) rows.push(['소속', esc(d.agency)]);
+  if(d.mbti) rows.push(['MBTI', esc(d.mbti)]);
+  if(d.age) rows.push(['나이', esc(d.age)]);
+  if(d.fan_name) rows.push(['팬닉', esc(d.fan_name)]);
+  document.getElementById('ptbl').innerHTML = rows.map(r=>`<div><span>${r[0]}</span><b>${r[1]}</b></div>`).join('');
+
+  // 소개
+  sec('sec-intro', !!d.intro, ()=>{document.getElementById('intro').textContent=d.intro;});
+  // 좋아/싫어
+  const likes=arr(d.likes),dis=arr(d.dislikes);
+  sec('sec-pref', likes.length||dis.length, ()=>{
+    document.getElementById('likes').innerHTML=likes.map(t=>`<span class="pill">${esc(t)}</span>`).join('')||'<span class="pill" style="opacity:.5">-</span>';
+    document.getElementById('dislikes').innerHTML=dis.map(t=>`<span class="pill no">${esc(t)}</span>`).join('')||'<span class="pill no" style="opacity:.5">-</span>';
+  });
+  // 능력치
+  const stats=(d.stats||[]).filter(s=>s&&s.label);
+  sec('sec-stats', stats.length, ()=>{document.getElementById('stats').innerHTML=stats.map(s=>{
+    const v=Math.max(0,Math.min(100,+s.value||0));
+    return `<div class="stat"><div class="sl">${esc(s.label)}<em>${v}</em></div><div class="bar"><i style="width:${v}%"></i></div></div>`;
+  }).join('');});
+  // 어록
+  const cts=(d.contents||[]).filter(c=>c&&c.title); sec('sec-contents', cts.length, ()=>renderContents(cts));
+  // 이벤트
+  const ev=d.event||{}; sec('sec-event', !!ev.title, ()=>{document.getElementById('event').innerHTML=
+    `<div class="evcard"><span class="now">NOW</span><div class="evt">${esc(ev.title)}</div>${ev.code?`<div class="evcode">${esc(ev.code)}</div>`:''}${ev.note?`<div class="evnote">${esc(ev.note)}</div>`:''}</div>`;});
+  // 목표
+  const g=d.goal||{}; const has=g.target&&+g.target>0; sec('sec-goal', has, ()=>{
+    const pct=Math.max(0,Math.min(100,Math.round((+g.current||0)/(+g.target)*100)));
+    document.getElementById('goal').innerHTML=
+      `<div class="gl"><span>${esc(g.label||'목표')}</span><span>${(+g.current||0).toLocaleString()} / ${(+g.target).toLocaleString()}</span></div>
+       <div class="gbar"><i style="width:${pct}%">${pct}%</i></div>${g.next?`<div class="gnext">다음 목표 — ${esc(g.next)}</div>`:''}`;
+  });
+  // 링크
+  const L=d.links||{}; const linkDefs=[['soop','SOOP',L.soop],['youtube','YouTube',L.youtube],['x','X',L.x],['cafe','팬카페',L.cafe]];
+  const links=linkDefs.filter(x=>x[2]);
+  sec('sec-links', links.length, ()=>{document.getElementById('links').innerHTML=links.map(x=>`<a href="${esc(x[2])}" target="_blank" rel="noreferrer">${x[1]}</a>`).join('');});
+}
+function sec(id,show,fill){ const el=document.getElementById(id); if(show){el.hidden=false;fill();} else {el.hidden=true;} }
+var CONTENTS=[], CPAGE=1; const CPER=5;
+function ckey(c){ return (c && c.date ? String(c.date).replace(/[^0-9]/g,'') : ''); }
+function renderContents(items){ CONTENTS=items.slice().sort(function(a,b){ var ka=ckey(a),kb=ckey(b); if(ka&&kb) return kb.localeCompare(ka); if(ka) return -1; if(kb) return 1; return 0; }); CPAGE=1; drawContents(); }
+function drawContents(){
+  const total=Math.ceil(CONTENTS.length/CPER)||1; if(CPAGE>total) CPAGE=1;
+  const slice=CONTENTS.slice((CPAGE-1)*CPER, CPAGE*CPER);
+  const rows=slice.map(function(c){
+    const d=c.date?esc(String(c.date).replace(/-/g,'.')):'';
+    const t=esc(c.title);
+    const click=c.url?` class="lnk" onclick="window.open('${esc(c.url)}','_blank','noopener')"`:'';
+    return `<tr${click}><td class="cdate">${d}</td><td class="ctitle">${t}</td><td class="cchev">${c.url?'›':''}</td></tr>`;
+  }).join('');
+  document.getElementById('contents').innerHTML =
+    `<table class="ctable"><thead><tr><th>날짜</th><th>컨텐츠</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+  const pg=document.getElementById('contents-pg');
+  if(total>1){ let s=''; for(let i=1;i<=total;i++) s+=`<button class="cpgb${i===CPAGE?' on':''}" onclick="goContents(${i})">${i}</button>`; pg.innerHTML=s; }
+  else pg.innerHTML='';
+}
+function goContents(n){ CPAGE=n; drawContents(); }
+
+async function init(){
+  let d = JSON.parse(JSON.stringify(DEFAULTS));
+  try{
+    const rows = await fetchAll('profile');
+    const row = (rows||[]).find(r=>r.id===1) || (rows||[])[0];
+    if(row && row.data && typeof row.data==='object') d = Object.assign(d, row.data);
+  }catch(e){ /* 키 미입력/네트워크 시 기본값 사용 */ }
+  render(d);
+  document.getElementById('pmain').classList.add('show');
+  if(typeof enableIframeAutoHeight==='function') enableIframeAutoHeight();
+}
+init();
+setTimeout(()=>document.getElementById('pmain').classList.add('show'), 2500); // FOUC 안전장치
+(function(){var M=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];var t=new Date();var s=t.getFullYear()+' · '+M[t.getMonth()]+' '+t.getDate();document.querySelectorAll('.dbox').forEach(function(e){e.textContent=s});})();
+</script>
+<script>
+(function(){if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');var sw=document.getElementById('tsw'),kn=document.getElementById('kn');function r(){if(kn)kn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';}if(sw)sw.addEventListener('click',function(){document.body.classList.toggle('dark');localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');r();});r();})();
+</script>
+<script src="../fx.js"></script>
+</body>
+</html>

@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔐 이예다 Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700&family=Sacramento&display=swap" rel="stylesheet">
+  <style>
+    /* ── 자체 내장 라임 디자인 시스템 (admin 전용) ── */
+    :root{
+      --main:#ffb1b1; --main-dark:#c62d42; --main-deep:#7a2230; --main-light:#ffe7e7;
+      --bg:#faf0f1; --card:#ffffff; --logo:#c62d42; --ink:#2e2528;
+      --text:#3d2f33; --text-mid:#6f5b60; --text-soft:#9c878c;
+      --radius-lg:18px; --radius-md:14px; --radius-sm:10px;
+      --shadow:0 4px 20px rgba(198,45,66,.12); --shadow-hover:0 8px 28px rgba(198,45,66,.20);
+      --transition:.2s ease;
+      --pen:'Noto Sans KR',sans-serif; --mag:'Playfair Display',serif; --script:'Sacramento',cursive;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:var(--pen);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+    .container{max-width:1000px;margin:0 auto;padding:28px 16px 80px;display:flex;flex-direction:column;gap:16px}
+    .page-title{font-family:var(--pen);font-weight:800;font-size:30px;color:var(--main-dark);text-align:center;margin-bottom:4px}
+    .page-subtitle{font-size:13px;color:var(--text-soft);text-align:center;margin-bottom:8px}
+    .card{background:var(--card);border-radius:var(--radius-lg);border:1.5px solid var(--main-light);box-shadow:var(--shadow);padding:22px}
+    .card-title{font-size:12px;font-weight:800;color:var(--main-dark);letter-spacing:.08em;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .card-title::before{content:'';display:block;width:3px;height:14px;background:var(--main);border-radius:999px;flex-shrink:0}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;border:none;text-decoration:none;transition:all var(--transition)}
+    .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+    .btn-primary{background:var(--main);color:var(--main-deep)}.btn-primary:hover{background:var(--main-dark);color:#fff}
+    .badge{display:inline-block;padding:3px 12px;border-radius:999px;font-size:12px;font-weight:600}
+    .badge-pink{background:var(--main-light);color:var(--main-dark)}
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th{padding:10px 12px;background:var(--main-light);color:var(--main-deep);font-weight:700;text-align:left;font-size:12px}
+    th:first-child{border-radius:var(--radius-sm) 0 0 var(--radius-sm)}th:last-child{border-radius:0 var(--radius-sm) var(--radius-sm) 0}
+    td{padding:12px;border-bottom:1px solid var(--main-light);color:var(--text-mid);vertical-align:middle}
+    tr:last-child td{border-bottom:none}tr:hover td{background:var(--main-light)}
+    .input{width:100%;padding:10px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--main-light);font-size:14px;font-family:inherit;outline:none;background:#fff;color:var(--text);transition:border-color var(--transition)}
+    .input:focus{border-color:var(--main)}
+    .input-label{display:block;font-size:11px;font-weight:700;color:var(--main-dark);letter-spacing:.04em;margin-bottom:5px}
+    .form-field{margin-bottom:12px}
+    .empty{text-align:center;padding:40px 20px;color:var(--text-soft);font-size:14px}.empty-icon{font-size:36px;margin-bottom:10px}
+    .spinner{width:28px;height:28px;border:3px solid var(--main-light);border-top-color:var(--main-dark);border-radius:50%;animation:spin .8s linear infinite;margin:30px auto}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    footer{text-align:center;padding:24px;font-size:12px;color:var(--text-soft);line-height:1.7}
+    .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:var(--main-dark);color:#fff;padding:12px 26px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;transition:all .3s;pointer-events:none;z-index:9999;white-space:nowrap;box-shadow:0 8px 24px rgba(198,45,66,.3);max-width:90vw;overflow:hidden;text-overflow:ellipsis}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  </style>
+  <style>
+    .login-overlay { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 999; }
+    .login-box { background: var(--card); border-radius: 24px; border: 1.5px solid var(--main-light); box-shadow: var(--shadow-hover); padding: 40px 36px; text-align: center; width: 320px; }
+    .login-title { font-family: 'Pretendard','Noto Sans KR',sans-serif; font-size: 32px; color: var(--main-dark); margin-bottom: 6px; }
+    .login-sub { font-size: 13px; color: var(--text-soft); margin-bottom: 24px; }
+    .login-err { color: #e05; font-size: 13px; margin-top: 10px; min-height: 20px; }
+    .tabs { display: flex; gap: 3px; background: var(--main-light); border-radius: 14px; padding: 4px; flex-wrap: wrap; }
+    .tab-btn { flex: 1; padding: 10px 6px; border: none; background: transparent; border-radius: 10px; font-size: 12px; font-weight: 600; color: var(--text-soft); cursor: pointer; transition: all 0.2s; min-width: 60px; white-space: nowrap; }
+    .tab-btn.active { background: #fff; color: var(--main-dark); box-shadow: var(--shadow); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .form-grid .full { grid-column: 1 / -1; }
+    .delete-btn { background: none; border: none; cursor: pointer; color: #ccc; font-size: 16px; padding: 4px 8px; border-radius: 6px; transition: color 0.2s; }
+    .delete-btn:hover { color: #e05; }
+    .avatar-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--main-light); display: none; }
+    .ord-btn { width: 22px; height: 18px; line-height: 1; padding: 0; border: 1px solid var(--main-light); background: var(--card); color: var(--main-dark); border-radius: 5px; font-size: 9px; cursor: pointer; transition: background .2s; }
+    .ord-btn:hover:not(:disabled) { background: var(--main-light); }
+    .ord-btn:disabled { opacity: .3; cursor: default; }
+  </style>
+</head>
+<body>
+
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <div class="login-title">🔐 Admin</div>
+    <div class="login-sub">관리자 비밀번호를 입력하세요</div>
+    <input class="input" type="password" id="pwInput" placeholder="비밀번호" onkeydown="if(event.key==='Enter') tryLogin()" style="margin-bottom:10px;text-align:center">
+    <button class="btn btn-primary" style="width:100%" onclick="tryLogin()">입장 ♥</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+
+
+<div class="container" id="adminBody" style="display:none">
+  <div class="page-title">관리자 페이지</div>
+  <div class="page-subtitle">수정 후 저장하면 바로 반영돼요 ♡</div>
+
+  <div class="card" style="padding:6px">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('main',this)">🏠 메인</button>
+      <button class="tab-btn" onclick="switchTab('profile',this)">🎀 프로필</button>
+      <button class="tab-btn" onclick="switchTab('schedule',this)">📅 일정</button>
+      <button class="tab-btn" onclick="switchTab('work',this)">⚡ 업보</button>
+      <button class="tab-btn" onclick="switchTab('dress',this)">👗 옷장</button>
+      <button class="tab-btn" onclick="switchTab('inquiry',this)">✉️ 문의</button>
+    </div>
+  </div>
+
+<div class="tab-panel active" id="tab-main">
+    <div class="card" style="background:var(--main-light);border:none">
+      <div style="font-size:13px;color:var(--main-dark);font-weight:700">🏠 메인(첫 화면)에 보이는 글·이미지·문구를 여기서 바꿔요.</div>
+      <div style="font-size:12px;color:var(--text-mid);margin-top:4px">이름·생일·데뷔·소속·팬닉·링크·프사는 <b>프로필 탭</b>에서 바꾸면 메인에도 같이 반영돼요.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">상단 (로고 · 카테고리)</div>
+      <div class="form-grid">
+        <div class="form-field"><label class="input-label">로고 글자</label><input class="input" id="mn-brand" placeholder="Yeda"></div>
+        <div class="form-field"><label class="input-label">로고 밑 소제목</label><input class="input" id="mn-sub" placeholder="V T U B E R · D A I L Y"></div>
+        <div class="form-field full"><label class="input-label">카테고리 (작은 머리말)</label><input class="input" id="mn-kicker" placeholder="PROFILE · 🎀🍑"></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveMain()">저장 ♥</button></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">메인 기사</div>
+      <div class="form-field"><label class="input-label">큰 제목 (앞부분)</label><input class="input" id="mn-headline" placeholder="아이돌을 꿈꾸는,"></div>
+      <div class="form-field"><label class="input-label">큰 제목 강조 (포인트색 부분 · 선택)</label><input class="input" id="mn-headline_em" placeholder="당신의 옆집 유부녀 예다"></div>
+      <div class="form-grid">
+        <div class="form-field"><label class="input-label">BY (작성자)</label><input class="input" id="mn-by" placeholder="복숭이"></div>
+        <div class="form-field"><label class="input-label">ART BY (그림 · 선택)</label><input class="input" id="mn-art" placeholder="이예다"></div>
+      </div>
+      <div class="form-field"><label class="input-label">대표 이미지 URL (비우면 기본 이미지 유지)</label><input class="input" id="mn-hero" type="url" placeholder="https://... 이미지 주소"></div>
+      <div class="form-field"><label class="input-label">이미지 위 서명 글씨</label><input class="input" id="mn-sign" placeholder="Yeda"></div>
+      <div class="form-field"><label class="input-label">이미지 아래 캡션</label><input class="input" id="mn-herocap" placeholder="— 평일 저녁 7시, 오늘도 복숭이를 기다리는 예다 🍑"></div>
+      <div class="form-field"><label class="input-label">소개 문단 (lead)</label><textarea class="input" id="mn-lead" rows="3"></textarea></div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveMain()">저장 ♥</button></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">이번 주 일정 (요일별 시간)</div>
+      <div class="form-grid"><div class="form-field"><label class="input-label">일</label><input class="input" id="mn-week-0" placeholder="13:00"></div><div class="form-field"><label class="input-label">월</label><input class="input" id="mn-week-1" placeholder="19:00"></div><div class="form-field"><label class="input-label">화</label><input class="input" id="mn-week-2" placeholder="19:00"></div><div class="form-field"><label class="input-label">수</label><input class="input" id="mn-week-3" placeholder="19:00"></div><div class="form-field"><label class="input-label">목</label><input class="input" id="mn-week-4" placeholder="19:00"></div><div class="form-field"><label class="input-label">금</label><input class="input" id="mn-week-5" placeholder="19:00"></div><div class="form-field"><label class="input-label">토</label><input class="input" id="mn-week-6" placeholder="13:00"></div></div>
+      <div style="font-size:11px;color:var(--text-soft);margin-top:-4px;margin-bottom:8px">비워두면 그 요일 칸이 빈칸으로 보여요</div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveMain()">저장 ♥</button></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">사이드 (프로필 박스 · 인용 카드)</div>
+      <div class="form-field"><label class="input-label">프로필 박스 라벨</label><input class="input" id="mn-plabel" placeholder="Profile"></div>
+      <div class="form-field"><label class="input-label">인용 카드 윗 글씨</label><input class="input" id="mn-qlabel" placeholder="Today's words"></div>
+      <div class="form-field"><label class="input-label">인용 문구</label><textarea class="input" id="mn-quote" rows="2" placeholder="복숭이를 세상에서 제일 사랑하는 예다 🍑"></textarea></div>
+      <div class="form-field"><label class="input-label">인용 카드 배경 이미지 URL (비우면 기본 유지)</label><input class="input" id="mn-qimg" type="url" placeholder="https://... 이미지 주소"></div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveMain()">저장 ♥</button></div>
+    </div>
+  </div>
+
+  <!-- 프로필 탭 -->
+  <div class="tab-panel" id="tab-profile">
+    <div class="card">
+      <div class="card-title">🖼 프로필 사진</div>
+      <div class="form-field">
+        <label class="input-label">프사 이미지 링크 (URL) — 비우면 SOOP 프사 자동</label>
+        <input class="input" id="f-avatar" type="url" placeholder="https://.../image.png" oninput="previewAvatar()">
+      </div>
+      <div class="form-field">
+        <label class="input-label">SOOP 아이디</label>
+        <input class="input" id="f-soop_id" type="text" placeholder="leeyeda" oninput="previewAvatar()">
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:8px">
+        <div style="width:64px;height:64px;border-radius:50%;overflow:hidden;background:var(--main-light);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px">
+          <img id="av-preview" alt="" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;display:none" onerror="this.style.display='none';var q=document.getElementById('av-ph');if(q)q.style.display='flex'">
+          <span id="av-ph">🎀</span>
+        </div>
+        <span style="font-size:12px;color:var(--text-soft)">← 표시될 프사 미리보기</span>
+        <button class="btn btn-primary" style="margin-left:auto" onclick="saveProfile()">저장 ♥</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎀 기본 정보</div>
+      <div class="form-grid">
+        <div class="form-field"><label class="input-label">이름 (한글)</label><input class="input" id="f-name" placeholder="이예다"></div>
+        <div class="form-field"><label class="input-label">이름 (영문)</label><input class="input" id="f-name_en" placeholder="LEE YEDA"></div>
+        <div class="form-field"><label class="input-label">생일 (MM-DD)</label><input class="input" id="f-birthday" placeholder="08-18"></div>
+        <div class="form-field"><label class="input-label">데뷔</label><input class="input" id="f-debut" placeholder="2022.12.17"></div>
+        <div class="form-field"><label class="input-label">소속</label><input class="input" id="f-agency" placeholder="유부녀즈 / 크리에이터 버스"></div>
+        <div class="form-field"><label class="input-label">MBTI</label><input class="input" id="f-mbti" placeholder="ENFP"></div>
+        <div class="form-field"><label class="input-label">나이 (선택)</label><input class="input" id="f-age" placeholder=""></div>
+        <div class="form-field"><label class="input-label">팬닉</label><input class="input" id="f-fan_name" placeholder="복숭이"></div>
+        <div class="form-field full"><label class="input-label">한마디 (태그라인)</label><input class="input" id="f-tagline" placeholder="짧은 인사 한 줄"></div>
+        <div class="form-field full"><label class="input-label">소개 (문단)</label><textarea class="input" id="f-intro" rows="3"></textarea></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveProfile()">저장 ♥</button></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">♥ 좋아 · 싫어 (한 줄에 하나씩)</div>
+      <div class="form-grid">
+        <div class="form-field"><label class="input-label">좋아하는 것</label><textarea class="input" id="f-likes" rows="3" placeholder="복숭이&#10;남편"></textarea></div>
+        <div class="form-field"><label class="input-label">싫어하는 것</label><textarea class="input" id="f-dislikes" rows="3" placeholder="오이&#10;메밀"></textarea></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveProfile()">저장 ♥</button></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎬 진행 · 참여한 컨텐츠</div>
+      <div class="form-grid">
+        <div class="form-field"><label class="input-label">날짜</label><input class="input" id="c-date" type="date"></div>
+        <div class="form-field full"><label class="input-label">제목 *</label><input class="input" id="c-title" placeholder="예: 합방 컨텐츠 1회차"></div>
+        <div class="form-field full"><label class="input-label">링크 URL (행 클릭 시 이동)</label><input class="input" id="c-url" placeholder="https://"></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:6px"><button class="btn btn-primary" onclick="addContent()">+ 추가</button></div>
+      <div class="table-wrap" style="margin-top:14px"><table><thead><tr><th>날짜</th><th>제목</th><th>링크</th><th>삭제</th></tr></thead>
+      <tbody id="content-list"><tr><td colspan="4" style="text-align:center;color:#ccc;padding:16px">없음</td></tr></tbody></table></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 능력치 (한 줄에 <b>라벨,숫자(0~100)</b>)</div>
+      <div class="form-field"><textarea class="input" id="f-stats" rows="4" placeholder="애교,95&#10;여자력,90&#10;게임 피지컬,75"></textarea></div>
+      <div style="font-size:11px;color:var(--text-soft);margin-top:-4px;margin-bottom:8px">예: <b>애교,95</b> — 비워두면 능력치 섹션이 숨겨져요</div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveProfile()">저장 ♥</button></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📣 지금 진행 중 이벤트 (제목 비우면 숨김)</div>
+      <div class="form-field"><label class="input-label">이벤트 제목</label><input class="input" id="f-event-title" placeholder="예: 팔로우 이벤트"></div>
+      <div class="form-field"><label class="input-label">입장 코드 / 키워드 (선택)</label><input class="input" id="f-event-code" placeholder="예: YEDA"></div>
+      <div class="form-field"><label class="input-label">설명 (선택)</label><textarea class="input" id="f-event-note" rows="2"></textarea></div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveProfile()">저장 ♥</button></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎯 목표 (목표치 0이면 숨김)</div>
+      <div class="form-grid">
+        <div class="form-field full"><label class="input-label">목표 이름</label><input class="input" id="f-goal-label" placeholder="예: 팔로워"></div>
+        <div class="form-field"><label class="input-label">현재</label><input class="input" id="f-goal-current" type="number" placeholder="0"></div>
+        <div class="form-field"><label class="input-label">목표</label><input class="input" id="f-goal-target" type="number" placeholder="1000"></div>
+        <div class="form-field full"><label class="input-label">다음 목표 (선택)</label><input class="input" id="f-goal-next" placeholder="예: 2000명"></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveProfile()">저장 ♥</button></div>
+    </div>
+
+
+    <div class="card">
+      <div class="card-title">🔗 관련 링크</div>
+      <div class="form-field"><label class="input-label">SOOP URL</label><input class="input" id="f-link-soop" type="url" placeholder="https://www.sooplive.com/station/leeyeda"></div>
+      <div class="form-field"><label class="input-label">YouTube URL</label><input class="input" id="f-link-youtube" type="url" placeholder="https://"></div>
+      <div class="form-field"><label class="input-label">X (트위터) URL</label><input class="input" id="f-link-x" type="url" placeholder="https://"></div>
+      <div class="form-field"><label class="input-label">팬카페 URL</label><input class="input" id="f-link-cafe" type="url" placeholder="https://cafe.naver.com/..."></div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveProfile()">저장 ♥</button></div>
+    </div>
+  </div>
+
+
+  <!-- 일정 탭 -->
+  <div class="tab-panel" id="tab-schedule">
+    <style>
+      .color-pick { display:flex; gap:8px; flex-wrap:wrap; }
+      .color-pick label { width:30px; height:30px; border-radius:50%; cursor:pointer; border:2px solid transparent; display:inline-block; }
+      .color-pick input { display:none; }
+      .color-pick input:checked + span { box-shadow:0 0 0 2px #fff, 0 0 0 4px var(--main); }
+      .color-pick span { width:30px; height:30px; border-radius:50%; display:inline-block; }
+      .cdot-green{background:#3fae7e}.cdot-pink{background:#f48fb1}.cdot-yellow{background:#f5c542}.cdot-orange{background:#ee9a4d}.cdot-blue{background:#5a9fe0}.cdot-purple{background:#a07fd0}.cdot-red{background:#e36}.cdot-gray{background:#aaa}
+    </style>
+    <div class="card">
+      <div class="card-title">일정 추가</div>
+      <div class="form-grid">
+        <div class="form-field"><label class="input-label">날짜 *</label><input class="input" id="sch-date" type="date"></div>
+        <div class="form-field"><label class="input-label">유형</label>
+          <select class="input" id="sch-type"><option value="방송">방송</option><option value="휴방">휴방</option></select>
+        </div>
+        <div class="form-field full">
+          <label class="input-label">1부 색상</label>
+          <div class="color-pick">
+            <label><input type="radio" name="schcolor" value="green" checked><span class="cdot-green"></span></label>
+            <label><input type="radio" name="schcolor" value="pink"><span class="cdot-pink"></span></label>
+            <label><input type="radio" name="schcolor" value="yellow"><span class="cdot-yellow"></span></label>
+            <label><input type="radio" name="schcolor" value="orange"><span class="cdot-orange"></span></label>
+            <label><input type="radio" name="schcolor" value="blue"><span class="cdot-blue"></span></label>
+            <label><input type="radio" name="schcolor" value="purple"><span class="cdot-purple"></span></label>
+            <label><input type="radio" name="schcolor" value="red"><span class="cdot-red"></span></label>
+            <label><input type="radio" name="schcolor" value="gray"><span class="cdot-gray"></span></label>
+          </div>
+        </div>
+        <div class="form-field"><label class="input-label">1부 시간</label><input class="input" id="sch-time" placeholder="오후 5시"></div>
+        <div class="form-field"><label class="input-label">1부 제목 (휴방이면 비워도 됨)</label><input class="input" id="sch-title" placeholder="방송 제목"></div>
+        <div class="form-field"><label class="input-label">2부 시간 (선택)</label><input class="input" id="sch-time2" placeholder="오후 9시"></div>
+        <div class="form-field"><label class="input-label">2부 제목 (선택)</label><input class="input" id="sch-title2" placeholder="2부 있을 경우"></div>
+        <div class="form-field full">
+          <label class="input-label">2부 색상 (2부 있을 때)</label>
+          <div class="color-pick">
+            <label><input type="radio" name="schcolor2" value="green"><span class="cdot-green"></span></label>
+            <label><input type="radio" name="schcolor2" value="pink"><span class="cdot-pink"></span></label>
+            <label><input type="radio" name="schcolor2" value="yellow"><span class="cdot-yellow"></span></label>
+            <label><input type="radio" name="schcolor2" value="orange"><span class="cdot-orange"></span></label>
+            <label><input type="radio" name="schcolor2" value="blue" checked><span class="cdot-blue"></span></label>
+            <label><input type="radio" name="schcolor2" value="purple"><span class="cdot-purple"></span></label>
+            <label><input type="radio" name="schcolor2" value="red"><span class="cdot-red"></span></label>
+            <label><input type="radio" name="schcolor2" value="gray"><span class="cdot-gray"></span></label>
+          </div>
+        </div>
+        <div class="form-field full"><label class="input-label">설명 (선택)</label><textarea class="input" id="sch-desc" rows="2"></textarea></div>
+        <div class="form-field full"><label><input type="checkbox" id="sch-hl"> ⭐ 하이라이트 (달력에서 강조)</label></div>
+        <div class="form-field full" style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="addSchedule()">+ 추가</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">등록된 일정</div>
+      <div class="table-wrap"><table><thead><tr><th>날짜</th><th>시간</th><th>유형</th><th>제목</th><th>삭제</th></tr></thead>
+      <tbody id="sch-list"><tr><td colspan="5"><div class="spinner"></div></td></tr></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- 업보 탭 -->
+  <div class="tab-panel" id="tab-work">
+    <style>
+      .subtabs { display:flex; gap:6px; margin-bottom:14px; }
+      .subtab { padding:9px 16px; border-radius:999px; border:1.5px solid var(--main-light); background:#fff; color:var(--text-soft); font-size:13px; font-weight:600; cursor:pointer; }
+      .subtab.active { background:var(--main); color:#fff; border-color:var(--main); }
+      .subpanel { display:none; } .subpanel.active { display:block; }
+      .vbtn { background:var(--main-light); color:var(--main-dark); border:none; padding:5px 12px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; }
+      .vbtn:hover { background:var(--main); color:#fff; }
+      .vbtn.del { background:#eceef1; color:#cf5b5b; } .vbtn.del:hover { background:#cf5b5b; color:#fff; }
+      .vrow { display:flex; align-items:center; gap:8px; padding:11px 14px; background:#fff; border:1px solid var(--main-light); border-radius:12px; margin-bottom:8px; }
+      .vrow .vn { flex:1; font-size:14px; font-weight:600; color:var(--text); }
+      .vrow .vid { font-size:12px; color:var(--text-soft); }
+      .pick { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; }
+      .pick-item { padding:10px 12px; border:1.5px solid var(--main-light); border-radius:12px; background:#fff; cursor:pointer; }
+      .pick-item.sel { border-color:var(--main); background:var(--main-light); }
+      .pick-item .pn { font-size:14px; font-weight:700; color:var(--text); }
+      .pick-item .pi { font-size:11px; color:var(--text-soft); }
+      .counter-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:8px; }
+      .counter { display:flex; align-items:center; gap:6px; padding:10px 12px; background:#fff; border:1px solid var(--main-light); border-radius:12px; }
+      .counter .cn { flex:1; font-size:13px; color:var(--text); }
+      .counter .cn .evt { font-size:9px; color:#b07d18; background:#fff0d6; padding:1px 6px; border-radius:999px; margin-left:4px; }
+      .cbtn { width:26px; height:26px; border-radius:50%; border:1.5px solid var(--main-light); background:#fff; color:var(--main-dark); font-weight:700; cursor:pointer; font-size:14px; line-height:1; }
+      .cbtn:hover { background:var(--main); color:#fff; }
+      .cval { min-width:26px; text-align:center; font-weight:800; color:var(--main-dark); }
+      .type-row { display:flex; align-items:center; gap:8px; padding:10px 14px; background:#fff; border:1px solid var(--main-light); border-radius:10px; margin-bottom:7px; }
+      .type-cat { font-size:10px; font-weight:700; padding:2px 9px; border-radius:999px; }
+      .type-cat.일반 { background:var(--main-light); color:var(--main-dark); }
+      .type-cat.이벤트 { background:#fff0d6; color:#b07d18; }
+      .type-name { flex:1; font-size:14px; color:var(--text); }
+    </style>
+
+    <div class="subtabs">
+      <button class="subtab active" onclick="switchSub('assign',this)">📋 업보 부여</button>
+      <button class="subtab" onclick="switchSub('viewers',this)">👥 시청자 관리</button>
+      <button class="subtab" onclick="switchSub('types',this)">🏷 타입 관리</button>
+    </div>
+
+    <!-- 업보 부여 -->
+    <div class="subpanel active" id="sub-assign">
+      <div class="card">
+        <div class="card-title">시청자 선택</div>
+        <input class="input" id="assign-search" placeholder="🔍 시청자 검색..." style="margin-bottom:12px" oninput="renderPick()">
+        <div class="pick" id="pick-list"><div class="spinner"></div></div>
+      </div>
+      <div class="card" id="assign-card" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div class="card-title" id="assign-title" style="margin:0">업보 부여</div>
+          <button class="btn btn-primary" onclick="saveCounts()">💾 저장</button>
+        </div>
+        <div class="counter-grid" id="counter-grid"></div>
+      </div>
+    </div>
+
+    <!-- 시청자 관리 -->
+    <div class="subpanel" id="sub-viewers">
+      <div class="card">
+        <div class="card-title">시청자 추가</div>
+        <div class="form-grid">
+          <div class="form-field"><label class="input-label">닉네임 *</label><input class="input" id="v-nick" placeholder="닉네임"></div>
+          <div class="form-field"><label class="input-label">SOOP 아이디</label><input class="input" id="v-soop" placeholder="user_id"></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="addViewer()">+ 추가</button></div>
+      </div>
+      <div class="card">
+        <div class="card-title">시청자 목록</div>
+        <input class="input" id="v-search" placeholder="🔍 검색..." style="margin-bottom:12px" oninput="renderViewers()">
+        <div id="viewer-list"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <!-- 타입 관리 -->
+    <div class="subpanel" id="sub-types">
+      <div class="card">
+        <div class="card-title">업보 타입 추가</div>
+        <div class="form-grid">
+          <div class="form-field"><label class="input-label">타입명 *</label><input class="input" id="t-name" placeholder="예: 랜덤 단컷"></div>
+          <div class="form-field"><label class="input-label">카테고리</label>
+            <select class="input" id="t-cat"><option value="일반">일반</option><option value="이벤트">이벤트</option></select>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="addType()">+ 추가</button></div>
+      </div>
+      <div class="card">
+        <div class="card-title">업보 타입 목록</div>
+        <div id="type-list"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 옷장 탭 -->
+  <div class="tab-panel" id="tab-dress">
+    <div class="card">
+      <div class="card-title">👗 옷장 항목 추가</div>
+      <div class="form-grid">
+        <div class="form-field"><label class="input-label">분류</label>
+          <select class="input" id="dr-cat"><option value="outfit">의상</option><option value="hair">헤어</option><option value="lens">렌즈</option></select>
+        </div>
+        <div class="form-field"><label class="input-label">순서 (작을수록 앞 · 비우면 맨 뒤)</label>
+          <input class="input" id="dr-order" type="number" min="0" placeholder="비워두면 맨 뒤">
+        </div>
+        <div class="form-field full"><label class="input-label">이름 *</label><input class="input" id="dr-name" placeholder="예: 기본 헤어"></div>
+        <div class="form-field full"><label class="input-label">설명 (선택)</label><input class="input" id="dr-desc" placeholder="짧은 설명"></div>
+        <div class="form-field full"><label class="input-label">이미지 링크 (이미지 주소 붙여넣기)</label><input type="url" id="dr-img-url" class="input" placeholder="https://... 이미지 주소"></div>
+        <div class="form-field full" style="font-size:11px;color:var(--text-soft);margin-top:-4px">💡 SOOP <b>비공개 게시판</b>에 이미지 올린 뒤 → <b>우클릭 → "이미지 주소 복사"</b> → 위 칸에 붙여넣기. 권장 크기 <b>세로 3:4 (900×1200px)</b></div>
+        <div class="form-field full"><label><input type="checkbox" id="dr-new"> ✨ <b>새 옷</b>으로 올리기 <span style="color:var(--text-soft);font-weight:400">(체크하면 옷장 '새 옷'에 포스터로 떠요)</span></label></div>
+        <div class="form-field full" style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="addDressItem()">+ 추가</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">등록된 옷장 항목</div>
+      <div id="dress-list"><div class="spinner"></div></div>
+    </div>
+  </div>
+
+  <!-- 문의 탭 -->
+  <div class="tab-panel" id="tab-inquiry">
+    <div class="card">
+      <div class="card-title">📬 문의함</div>
+      <div id="inquiry-list"><div class="spinner"></div></div>
+    </div>
+  </div>
+
+</div>
+<footer>© 2026 Yeda 관리자 ♥</footer>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../supabase.js"></script>
+<script>
+  const ADMIN_PASSWORD = '1234';
+
+  function tryLogin() {
+    if (document.getElementById('pwInput').value === ADMIN_PASSWORD) {
+      document.getElementById('loginOverlay').style.display = 'none';
+      document.getElementById('adminBody').style.display = 'flex';
+      checkDb();
+      loadProfileFields(); loadMain(); loadContents();
+      loadSchedule(); loadWork(); loadDress(); loadInquiry();
+    } else {
+      document.getElementById('loginErr').textContent = '비밀번호가 틀렸어요 >﹏<';
+    }
+  }
+  // DB 연결/설정 점검: 실패하면 화면 상단에 빨간 배너로 원인 안내
+  async function checkDb() {
+    var banner = document.getElementById('db-banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = 'db-banner';
+      banner.style.cssText = 'display:none;background:#ffe0e0;color:#b3261e;border:1.5px solid #f3b4ae;border-radius:12px;padding:14px 18px;font-size:13px;line-height:1.6;margin-bottom:8px';
+      var body = document.getElementById('adminBody');
+      body.insertBefore(banner, body.children[1] || null);
+    }
+    try {
+      if (SUPABASE_URL.indexOf('{{') !== -1 || SUPABASE_ANON.indexOf('{{') !== -1) {
+        banner.innerHTML = '⚠️ <b>supabase.js</b> 상단 2줄(프로젝트 URL · anon 키)이 아직 안 채워졌어요. 채우기 전에는 저장이 안 돼요.';
+        banner.style.display = 'block'; return;
+      }
+      // 1) 읽기 테스트
+      var rd = await db.from('profile').select('id').limit(1);
+      if (rd.error) {
+        banner.innerHTML = '⚠️ <b>읽기 실패</b>: ' + rd.error.message + '<br>→ 대개 <b>supabase_setup.sql</b>을 안 돌렸거나(테이블 없음), URL/키가 안 맞아서예요.';
+        banner.style.display = 'block'; return;
+      }
+      // 2) 쓰기 테스트 (profile 행 updated_at만 갱신 — 데이터 변화 없음)
+      var wt = await db.from('profile').update({ updated_at: new Date().toISOString() }).eq('id', 1);
+      if (wt.error) {
+        banner.innerHTML = '⚠️ <b>저장(쓰기) 실패</b>: ' + wt.error.message + '<br>→ 읽기는 되는데 저장이 안 되면 <b>RLS 정책</b> 문제예요. Supabase SQL Editor에 <b>supabase_setup.sql 전체</b>를 다시 Run 하세요(정책까지 다시 생성됨).';
+        banner.style.display = 'block'; return;
+      }
+      banner.style.display = 'none';
+    } catch (e) {
+      banner.innerHTML = '⚠️ DB에 연결하지 못했어요: <b>' + (e && e.message ? e.message : e) + '</b><br>supabase.js의 URL/키를 확인하고, 배포본(또는 인터넷 연결)에서 열어주세요. (로컬 파일 미리보기는 저장이 안 될 수 있어요)';
+      banner.style.display = 'block';
+    }
+  }
+
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // ── 프로필 (프로필 페이지 모델과 동일 키) ──
+  const PSAVE = ['name','name_en','soop_id','avatar','tagline','intro','birthday','debut','agency','mbti','age','fan_name'];
+  const v  = id => (document.getElementById(id)?.value || '').trim();
+  const lns = id => (document.getElementById(id)?.value || '').split('\n').map(s=>s.trim()).filter(Boolean);
+  async function fetchProfile(){ try{ const {data:rows}=await db.from('profile').select('data').eq('id',1); if(rows&&rows[0]&&rows[0].data) return rows[0].data; }catch(e){} return {}; }
+  // ── 진행 · 참여한 컨텐츠 (profile.data.contents 배열로 관리) ──
+  let CONTENTS_CACHE = [];
+  function ckeyA(c){ return (c && c.date ? String(c.date).replace(/[^0-9]/g,'') : ''); }
+  async function loadContents(){
+    const d = await fetchProfile();
+    CONTENTS_CACHE = Array.isArray(d.contents) ? d.contents : [];
+    const t = document.getElementById('content-list');
+    if(!CONTENTS_CACHE.length){ t.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#ccc;padding:16px">없음</td></tr>'; return; }
+    // 원본 인덱스 보존하며 날짜 최신순 표시
+    const rows = CONTENTS_CACHE.map(function(c,i){ return {c:c,i:i}; }).sort(function(a,b){ var ka=ckeyA(a.c),kb=ckeyA(b.c); if(ka&&kb) return kb.localeCompare(ka); if(ka) return -1; if(kb) return 1; return 0; });
+    t.innerHTML = rows.map(function(r){
+      var c=r.c;
+      var link = c.url ? '<a href="'+esc(c.url)+'" target="_blank" rel="noreferrer" style="color:var(--main-dark);font-weight:700">링크</a>' : '-';
+      return '<tr><td>'+(c.date?esc(c.date):'-')+'</td><td>'+esc(c.title||'')+'</td><td>'+link+'</td><td><button class="delete-btn" onclick="delContent('+r.i+')">🗑</button></td></tr>';
+    }).join('');
+  }
+  async function addContent(){
+    const title = document.getElementById('c-title').value.trim();
+    if(!title){ showToast('❗ 제목 필수!'); return; }
+    const item = { date: document.getElementById('c-date').value || '', title: title, url: document.getElementById('c-url').value.trim() };
+    const d = await fetchProfile();
+    d.contents = Array.isArray(d.contents) ? d.contents : [];
+    d.contents.push(item);
+    const { error } = await db.from('profile').upsert({ id:1, data:d });
+    if(error){ showToast('❌ 추가 실패: ' + error.message); return; }
+    showToast('✅ 추가!');
+    ['c-date','c-title','c-url'].forEach(function(id){ document.getElementById(id).value=''; });
+    loadContents();
+  }
+  async function delContent(idx){
+    const d = await fetchProfile();
+    if(!Array.isArray(d.contents)) return;
+    d.contents.splice(idx,1);
+    const { error } = await db.from('profile').upsert({ id:1, data:d });
+    if(error){ showToast('❌ 삭제 실패: ' + error.message); return; }
+    showToast('🗑 삭제!');
+    loadContents();
+  }
+  async function loadProfileFields(){
+    const d = await fetchProfile();
+    PSAVE.forEach(k=>{ const el=document.getElementById('f-'+k); if(el) el.value = d[k]||''; });
+    document.getElementById('f-likes').value    = (d.likes||[]).join('\n');
+    document.getElementById('f-dislikes').value = (d.dislikes||[]).join('\n');
+    document.getElementById('f-stats').value    = (d.stats||[]).map(s=>`${s.label},${s.value}`).join('\n');
+    const ev=d.event||{}; document.getElementById('f-event-title').value=ev.title||''; document.getElementById('f-event-code').value=ev.code||''; document.getElementById('f-event-note').value=ev.note||'';
+    const g=d.goal||{};  document.getElementById('f-goal-label').value=g.label||''; document.getElementById('f-goal-current').value=(g.current!=null?g.current:''); document.getElementById('f-goal-target').value=(g.target!=null?g.target:''); document.getElementById('f-goal-next').value=g.next||'';
+    const L=d.links||{}; document.getElementById('f-link-soop').value=L.soop||''; document.getElementById('f-link-youtube').value=L.youtube||''; document.getElementById('f-link-x').value=L.x||''; document.getElementById('f-link-cafe').value=L.cafe||'';
+    previewAvatar();
+  }
+  function soopAvatarUrl(id) {
+    id = (id || '').trim().toLowerCase();
+    if (id.length < 2) return '';
+    return `https://profile.img.sooplive.co.kr/LOGO/${id.slice(0,2)}/${id}/${id}.jpg`;
+  }
+  function previewAvatar() {
+    const direct = (document.getElementById('f-avatar')?.value || '').trim();
+    const url = direct || soopAvatarUrl(document.getElementById('f-soop_id')?.value);
+    const img = document.getElementById('av-preview');
+    const ph = document.getElementById('av-ph');
+    if (!img) return;
+    if (url) { img.src = url; img.style.display = 'block'; if (ph) ph.style.display = 'none'; }
+    else { img.style.display = 'none'; if (ph) ph.style.display = 'flex'; }
+  }
+  async function saveProfile(){
+    const d = await fetchProfile();
+    PSAVE.forEach(k=>{ d[k]=v('f-'+k); });
+    d.likes=lns('f-likes'); d.dislikes=lns('f-dislikes');
+    d.stats = lns('f-stats').map(row=>{ const i=row.lastIndexOf(','); if(i<0) return {label:row,value:0}; return {label:row.slice(0,i).trim(), value:Math.max(0,Math.min(100,parseInt(row.slice(i+1))||0))}; });
+    d.event = { title:v('f-event-title'), code:v('f-event-code'), note:v('f-event-note') };
+    d.goal  = { label:v('f-goal-label'), current:Number(v('f-goal-current'))||0, target:Number(v('f-goal-target'))||0, next:v('f-goal-next') };
+    d.links = { soop:v('f-link-soop'), youtube:v('f-link-youtube'), x:v('f-link-x'), cafe:v('f-link-cafe') };
+    const { error } = await db.from('profile').upsert({ id:1, data:d });
+    if(error){ showToast('❌ 저장 실패: '+error.message); return; }
+    showToast('✅ 저장됐어요!');
+  }
+  // ── 메인(첫 화면) — data.main 으로 저장 ──
+  async function loadMain(){
+    const d = await fetchProfile(); const m = d.main || {};
+    const g=(id,val)=>{ const e=document.getElementById(id); if(e) e.value = val||''; };
+    g('mn-brand',m.brand); g('mn-sub',m.masthead_sub); g('mn-kicker',m.kicker);
+    g('mn-headline',m.headline); g('mn-headline_em',m.headline_em);
+    g('mn-by',m.byline_by); g('mn-art',m.byline_art);
+    g('mn-hero',m.hero_img); g('mn-sign',m.hero_sign); g('mn-herocap',m.herocap); g('mn-lead',m.lead);
+    g('mn-plabel',m.pbox_label); g('mn-qlabel',m.quote_label); g('mn-quote',m.quote); g('mn-qimg',m.quote_img);
+    const wk=m.week||[]; for(let i=0;i<7;i++){ const e=document.getElementById('mn-week-'+i); if(e) e.value=wk[i]||''; }
+  }
+  async function saveMain(){
+    const d = await fetchProfile();
+    const wk=[]; for(let i=0;i<7;i++){ wk.push((document.getElementById('mn-week-'+i)?.value||'').trim()); }
+    d.main = {
+      brand:v('mn-brand'), masthead_sub:v('mn-sub'), kicker:v('mn-kicker'),
+      headline:v('mn-headline'), headline_em:v('mn-headline_em'),
+      byline_by:v('mn-by'), byline_art:v('mn-art'),
+      hero_img:v('mn-hero'), hero_sign:v('mn-sign'), herocap:v('mn-herocap'), lead:v('mn-lead'),
+      week:wk, pbox_label:v('mn-plabel'), quote_label:v('mn-qlabel'), quote:v('mn-quote'), quote_img:v('mn-qimg')
+    };
+    const { error } = await db.from('profile').upsert({ id:1, data:d });
+    if(error){ showToast('❌ 저장 실패: '+error.message); return; }
+    showToast('✅ 메인 저장됐어요!');
+  }
+  function showCurrentAvatar(url) {
+    const cur = document.getElementById('current-avatar');
+    const none = document.getElementById('no-avatar');
+    const delBtn = document.getElementById('delete-avatar-btn');
+    if (!cur || !none) return;   // 프사는 SOOP 연동 전용 → 업로드/미리보기 UI 없음
+    if (url) {
+      cur.src = url; cur.style.display = 'inline-block'; none.style.display = 'none';
+      if (delBtn) delBtn.style.display = 'inline-flex';
+    } else {
+      cur.style.display = 'none'; none.style.display = 'inline';
+      if (delBtn) delBtn.style.display = 'none';
+    }
+  }
+  async function deleteAvatar() {
+    if (!confirm('프로필 사진을 삭제할까요?\n(삭제하면 SOOP 아이디 프사가 적용돼요)')) return;
+    let saved = {};
+    try {
+      const { data: rows } = await db.from('profile').select('data').eq('id', 1);
+      if (rows && rows.length > 0 && rows[0].data) saved = rows[0].data;
+    } catch(e) {}
+    saved['avatar'] = '';
+    const { error } = await db.from('profile').upsert({ id: 1, data: saved });
+    if (error) { showToast('❌ 삭제 실패: ' + error.message); return; }
+    showCurrentAvatar('');
+    showToast('🗑 사진 삭제됨! 이제 SOOP 아이디 프사가 떠요');
+  }
+  function previewUpload() {
+    const file = document.getElementById('avatar-file').files[0];
+    if (!file) return;
+    document.getElementById('avatar-preview').src = URL.createObjectURL(file);
+    document.getElementById('avatar-preview').style.display = 'block';
+    document.getElementById('upload-btn').style.display = 'inline-flex';
+  }
+  async function uploadAvatar() {
+    const file = document.getElementById('avatar-file').files[0];
+    if (!file) return;
+    const status = document.getElementById('upload-status');
+    status.textContent = '업로드 중...';
+    const ext = file.name.split('.').pop();
+    const { data, error } = await db.storage.from('images').upload('profile.' + ext, file, { upsert: true });
+    if (error) { status.textContent = '❌ 업로드 실패: ' + error.message; return; }
+    const { data: u } = db.storage.from('images').getPublicUrl('profile.' + ext);
+    const url = u.publicUrl + '?t=' + Date.now();
+    let saved = {};
+    try {
+      const { data: rows } = await db.from('profile').select('data').eq('id', 1);
+      if (rows && rows.length > 0 && rows[0].data) saved = rows[0].data;
+    } catch(e) {}
+    saved['avatar'] = url;
+    await db.from('profile').upsert({ id: 1, data: saved });
+    showCurrentAvatar(url);
+    status.textContent = '✅ 완료!';
+    showToast('✅ 프로필 사진 저장!');
+  }
+
+  // ── 일정 ──
+  async function loadSchedule() {
+    const data = await fetchAll('schedule', { order: 'date', asc: true });
+    const t = document.getElementById('sch-list');
+    if (!data.length) { t.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#ccc;padding:20px">없음</td></tr>'; return; }
+    t.innerHTML = data.map(s => {
+      const isOff = s.type === '휴방';
+      const badge = isOff ? '<span class="badge" style="background:#eceef1;color:#6b7280">휴방</span>' : '<span class="badge" style="background:#d6f0e4;color:#1f7a52">방송</span>';
+      const has2 = !!(s.time2 || s.title2);
+      const timeCell = (s.time||'-') + (has2 ? ` <span style="color:var(--text-soft);font-size:11px">/ 2부 ${s.time2||'-'}</span>` : '');
+      const titleCell = (s.title||'-') + (has2 ? ` <span style="color:var(--text-soft);font-size:11px">/ ${s.title2||'2부'}</span>` : '');
+      return `<tr><td>${s.date}</td><td>${timeCell}</td><td>${badge}</td><td>${titleCell}</td><td><button class="delete-btn" onclick="del('schedule',${s.id},loadSchedule)">🗑</button></td></tr>`;
+    }).join('');
+  }
+  async function addSchedule() {
+    const date = document.getElementById('sch-date').value;
+    if (!date) { showToast('❗ 날짜 필수!'); return; }
+    const type = document.getElementById('sch-type').value;
+    let title = document.getElementById('sch-title').value.trim();
+    if (!title) title = (type === '휴방' ? '휴방' : '방송');
+    const color = (document.querySelector('input[name="schcolor"]:checked')||{}).value || 'green';
+    const color2 = (document.querySelector('input[name="schcolor2"]:checked')||{}).value || 'blue';
+    const row = {
+      title, date, type, color, color2,
+      time: document.getElementById('sch-time').value,
+      time2: document.getElementById('sch-time2').value,
+      title2: document.getElementById('sch-title2').value.trim(),
+      description: document.getElementById('sch-desc').value.trim(),
+      highlight: document.getElementById('sch-hl').checked
+    };
+    const ok = await insertRow('schedule', row);
+    if (ok) {
+      showToast('✅ 추가!');
+      ['sch-title','sch-date','sch-time','sch-time2','sch-title2','sch-desc'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('sch-hl').checked = false;
+      loadSchedule();
+    } else showToast('❌ 실패' + (window.__dbErr ? ': ' + window.__dbErr : ''));
+  }
+
+  // ── 업보 시스템 v2 ──
+  let viewers = [], types = [], counts = [];
+  let currentViewer = null, editCounts = {};
+
+  function switchSub(name, btn) {
+    document.querySelectorAll('.subpanel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.subtab').forEach(b => b.classList.remove('active'));
+    document.getElementById('sub-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  async function loadWork() {
+    [viewers, types, counts] = await Promise.all([
+      fetchAll('viewers', { order:'sort_order', asc:true }),
+      fetchAll('upbo_types', { order:'sort_order', asc:true }),
+      fetchAll('upbo_counts', { order:'id', asc:true })
+    ]);
+    renderPick(); renderViewers(); renderTypes();
+    if (currentViewer) openAssign(currentViewer);
+  }
+
+  /* ===== 업보 부여 ===== */
+  function renderPick() {
+    const q = (document.getElementById('assign-search')?.value || '').trim().toLowerCase();
+    const list = viewers.filter(v => (v.nickname||'').toLowerCase().includes(q) || (v.soop_id||'').toLowerCase().includes(q));
+    const el = document.getElementById('pick-list');
+    if (!viewers.length) { el.innerHTML = '<div style="color:var(--text-soft);font-size:13px">먼저 시청자를 추가하세요</div>'; return; }
+    el.innerHTML = list.map(v => `
+      <div class="pick-item ${currentViewer===v.id?'sel':''}" onclick="openAssign(${v.id})">
+        <div class="pn">${v.nickname}</div>
+        <div class="pi">${v.soop_id||'-'}</div>
+      </div>`).join('');
+  }
+  function openAssign(vid) {
+    currentViewer = vid;
+    const v = viewers.find(x=>x.id===vid);
+    if (!v) return;
+    editCounts = {};
+    counts.filter(c=>c.viewer_id===vid).forEach(c=>{ editCounts[c.type_id]=c.count; });
+    document.getElementById('assign-title').textContent = `${v.nickname} 업보 부여`;
+    document.getElementById('assign-card').style.display = 'block';
+    renderPick();
+    if (!types.length) { document.getElementById('counter-grid').innerHTML = '<div style="color:var(--text-soft);font-size:13px">먼저 타입을 추가하세요</div>'; return; }
+    document.getElementById('counter-grid').innerHTML = types.map(t => `
+      <div class="counter">
+        <span class="cn">${t.name}${t.category==='이벤트'?'<span class="evt">이벤트</span>':''}</span>
+        <button class="cbtn" onclick="bump(${t.id},-1)">−</button>
+        <span class="cval" id="cv-${t.id}">${editCounts[t.id]||0}</span>
+        <button class="cbtn" onclick="bump(${t.id},1)">+</button>
+      </div>`).join('');
+  }
+  function bump(tid, d) {
+    editCounts[tid] = Math.max(0, (editCounts[tid]||0) + d);
+    document.getElementById('cv-'+tid).textContent = editCounts[tid];
+  }
+  async function saveCounts() {
+    if (!currentViewer) return;
+    const rows = types.map(t => ({ viewer_id: currentViewer, type_id: t.id, count: editCounts[t.id]||0, updated_at: new Date().toISOString() }));
+    const { error } = await db.from('upbo_counts').upsert(rows, { onConflict: 'viewer_id,type_id' });
+    if (error) { showToast('❌ 저장 실패: ' + error.message); return; }
+    showToast('✅ 저장됐어요!');
+    counts = await fetchAll('upbo_counts', { order:'id', asc:true });
+  }
+
+  /* ===== 시청자 관리 ===== */
+  function renderViewers() {
+    const q = (document.getElementById('v-search')?.value || '').trim().toLowerCase();
+    const list = viewers.filter(v => (v.nickname||'').toLowerCase().includes(q) || (v.soop_id||'').toLowerCase().includes(q));
+    const el = document.getElementById('viewer-list');
+    if (!viewers.length) { el.innerHTML = '<div style="color:var(--text-soft);font-size:13px;text-align:center;padding:16px">시청자가 없어요</div>'; return; }
+    el.innerHTML = list.map(v => `
+      <div class="vrow">
+        <span class="vn">${v.nickname}</span>
+        <span class="vid">${v.soop_id||'-'}</span>
+        <button class="vbtn" onclick="editViewer(${v.id})">수정</button>
+        <button class="vbtn del" onclick="delViewer(${v.id})">삭제</button>
+      </div>`).join('');
+  }
+  async function addViewer() {
+    const nick = document.getElementById('v-nick').value.trim();
+    if (!nick) { showToast('❗ 닉네임 필수!'); return; }
+    const maxOrder = viewers.reduce((m,v)=>Math.max(m, v.sort_order||0), 0);
+    const ok = await insertRow('viewers', { nickname: nick, soop_id: document.getElementById('v-soop').value.trim(), sort_order: maxOrder+1 });
+    if (ok) { showToast('✅ 추가!'); document.getElementById('v-nick').value=''; document.getElementById('v-soop').value=''; loadWork(); }
+    else showToast('❌ 실패' + (window.__dbErr ? ': ' + window.__dbErr : ''));
+  }
+  async function editViewer(id) {
+    const v = viewers.find(x=>x.id===id);
+    const nick = prompt('닉네임', v.nickname); if (nick===null) return;
+    const sid = prompt('SOOP 아이디', v.soop_id||''); if (sid===null) return;
+    await updateRow('viewers', id, { nickname: nick.trim(), soop_id: sid.trim() });
+    showToast('✅ 수정!'); loadWork();
+  }
+  async function delViewer(id) {
+    if (!confirm('이 시청자를 삭제할까요?\n(업보 기록도 함께 사라져요)')) return;
+    await db.from('upbo_counts').delete().eq('viewer_id', id);
+    await deleteRow('viewers', id);
+    if (currentViewer===id) { currentViewer=null; document.getElementById('assign-card').style.display='none'; }
+    showToast('🗑 삭제!'); loadWork();
+  }
+
+  /* ===== 타입 관리 ===== */
+  function renderTypes() {
+    const el = document.getElementById('type-list');
+    if (!types.length) { el.innerHTML = '<div style="color:var(--text-soft);font-size:13px;text-align:center;padding:16px">타입이 없어요</div>'; return; }
+    el.innerHTML = types.map(t => `
+      <div class="type-row">
+        <span class="type-cat ${t.category}">${t.category}</span>
+        <span class="type-name">${t.name}</span>
+        <button class="vbtn" onclick="editType(${t.id})">수정</button>
+        <button class="vbtn del" onclick="delType(${t.id})">삭제</button>
+      </div>`).join('');
+  }
+  async function addType() {
+    const name = document.getElementById('t-name').value.trim();
+    if (!name) { showToast('❗ 타입명 필수!'); return; }
+    const maxOrder = types.reduce((m,t)=>Math.max(m, t.sort_order||0), 0);
+    const ok = await insertRow('upbo_types', { name, category: document.getElementById('t-cat').value, sort_order: maxOrder+1 });
+    if (ok) { showToast('✅ 추가!'); document.getElementById('t-name').value=''; loadWork(); }
+    else showToast('❌ 실패' + (window.__dbErr ? ': ' + window.__dbErr : ''));
+  }
+  async function editType(id) {
+    const t = types.find(x=>x.id===id);
+    const name = prompt('타입명', t.name); if (name===null) return;
+    const cat = prompt('카테고리 (일반 / 이벤트)', t.category); if (cat===null) return;
+    await updateRow('upbo_types', id, { name: name.trim(), category: (cat.trim()==='이벤트'?'이벤트':'일반') });
+    showToast('✅ 수정!'); loadWork();
+  }
+  async function delType(id) {
+    if (!confirm('이 타입을 삭제할까요?\n(관련 업보 기록도 함께 사라져요)')) return;
+    await db.from('upbo_counts').delete().eq('type_id', id);
+    await deleteRow('upbo_types', id);
+    showToast('🗑 삭제!'); loadWork();
+  }
+
+  async function del(table, id, fn) {
+    if (!confirm('정말 삭제?')) return;
+    const ok = await deleteRow(table, id);
+    if (ok) { showToast('🗑 삭제!'); fn(); } else showToast('❌ 실패' + (window.__dbErr ? ': ' + window.__dbErr : ''));
+  }
+
+  // ── 문의 ──
+  async function loadInquiry() {
+    const data = await fetchAll('inquiries', { order: 'created_at', asc: false });
+    const el = document.getElementById('inquiry-list');
+    if (!data.length) { el.innerHTML = '<div style="text-align:center;color:#ccc;padding:30px">문의가 없어요</div>'; return; }
+    el.innerHTML = data.map(q => `
+      <div style="background:#fff;border:1px solid var(--main-light);border-radius:12px;padding:14px 16px;margin-bottom:9px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <span style="font-size:14px;font-weight:700;color:var(--main-dark)">${q.nickname||'익명'}</span>
+          <span style="font-size:11px;color:var(--text-soft)">${(q.created_at||'').slice(0,16).replace('T',' ')}</span>
+        </div>
+        <div style="font-size:14px;color:var(--text);white-space:pre-wrap;line-height:1.5">${(q.message||'').replace(/</g,'&lt;')}</div>
+        <div style="text-align:right;margin-top:8px"><button class="delete-btn" onclick="del('inquiries',${q.id},loadInquiry)">🗑 삭제</button></div>
+      </div>`).join('');
+  }
+
+  // ── 옷장 ──
+  let dressCache = [];
+  let dressFilter = 'all';   // 'all' | 'new'(새 옷/포스터) | 'old'(기존)
+  const DRESS_CATS = [['outfit','의상'],['hair','헤어'],['lens','렌즈']];   // 관리자 목록의 분류·순서 (분류를 바꿀 땐 위 select 옵션 + 옷장 페이지 탭도 함께 수정)
+  const dressByOrder = (a,b)=> ((a.sort_order||0)-(b.sort_order||0)) || (new Date(a.created_at)-new Date(b.created_at));
+  function hasNew(d){
+    return (d.badges||[]).some(function(b){ var l=(b&&(b.label!=null?b.label:b))||''; return String(l).trim().toUpperCase()==='NEW'; });
+  }
+
+  async function loadDress(){
+    dressCache = await fetchAll('dress_items', { order:'created_at', asc:true }) || [];
+    const el = document.getElementById('dress-list');
+    if(!el) return;
+
+    const newCnt = dressCache.filter(hasNew).length;
+    const oldCnt = dressCache.length - newCnt;
+    const fbtn = (key,label) => `<button onclick="setDressFilter('${key}')" style="border:1.5px solid ${dressFilter===key?'var(--main)':'var(--main-light)'};background:${dressFilter===key?'var(--main)':'var(--card)'};color:${dressFilter===key?'#fff':'var(--main-dark)'};font-size:12.5px;font-weight:700;padding:6px 13px;border-radius:999px;cursor:pointer">${label}</button>`;
+    let html = `<div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px">${fbtn('all','전체 '+dressCache.length)}${fbtn('new','✨ 새 옷 '+newCnt)}${fbtn('old','🗂 기존 '+oldCnt)}</div>`;
+
+    if(!dressCache.length){ el.innerHTML = html + '<div style="text-align:center;color:#ccc;padding:20px">없음</div>'; return; }
+
+    const match = (d) => dressFilter==='all' ? true : (dressFilter==='new' ? hasNew(d) : !hasNew(d));
+    const chip = (d) => hasNew(d)
+      ? `<span style="font-size:10px;font-weight:800;color:#fff;background:var(--main);padding:2px 8px;border-radius:999px;white-space:nowrap">✨ 새옷</span>`
+      : `<span style="font-size:10px;font-weight:700;color:var(--text-soft);background:var(--main-light);padding:2px 8px;border-radius:999px;white-space:nowrap">기존</span>`;
+    const tgl = (d) => `<button onclick="toggleDressNew('${d.id}')" title="새옷/기존 전환" style="border:1px solid var(--main-light);background:var(--card);color:var(--main-dark);font-size:11px;font-weight:700;padding:5px 9px;border-radius:8px;cursor:pointer;white-space:nowrap">${hasNew(d)?'기존으로':'새옷으로'}</button>`;
+
+    const row = (d, i, len) => `
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--card);border:1px solid var(--main-light);border-radius:10px;margin-bottom:7px">
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <button class="ord-btn" onclick="moveDress('${d.id}',-1)" ${i===0?'disabled':''} title="위로">▲</button>
+          <button class="ord-btn" onclick="moveDress('${d.id}',1)" ${i===len-1?'disabled':''} title="아래로">▼</button>
+        </div>
+        <div style="width:42px;height:56px;border-radius:7px;background:var(--bg) center/cover no-repeat;flex-shrink:0;${d.image_url?`background-image:url('${(d.image_url||'').replace(/'/g,'%27')}')`:''}"></div>
+        <span style="flex:1;font-size:14px;font-weight:600;min-width:0">${(d.name||'').replace(/</g,'&lt;')}</span>
+        ${chip(d)}
+        ${tgl(d)}
+        <button class="delete-btn" onclick="del('dress_items','${d.id}',loadDress)">🗑</button>
+      </div>`;
+
+    DRESS_CATS.forEach(([key,label])=>{
+      const arr = dressCache.filter(d=>d.category===key).sort(dressByOrder);
+      const shown = arr.filter(match);
+      if(!shown.length) return;
+      html += `<div style="font-size:12px;font-weight:700;color:var(--main);margin:14px 0 7px;letter-spacing:.05em">${label} <span style="color:var(--text-soft);font-weight:500">· ${shown.length}개</span></div>`;
+      html += shown.map(d=>row(d, arr.indexOf(d), arr.length)).join('');
+    });
+
+    // 목록에 없는 분류(예: 과거 데이터)도 보여줘서 잃어버리지 않게
+    const known = DRESS_CATS.map(c=>c[0]);
+    const other = dressCache.filter(d=>!known.includes(d.category)).sort(dressByOrder).filter(match);
+    if(other.length){
+      html += `<div style="font-size:12px;font-weight:700;color:var(--text-soft);margin:16px 0 7px;letter-spacing:.05em">기타 분류 <span style="font-weight:500">· ${other.length}개</span></div>`;
+      html += other.map(d=>`
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--card);border:1px dashed var(--main-light);border-radius:10px;margin-bottom:7px;opacity:.9">
+          <span style="font-size:11px;font-weight:700;color:#fff;background:var(--text-soft);padding:2px 8px;border-radius:999px">${(d.category||'?')}</span>
+          <span style="flex:1;font-size:14px;font-weight:600;min-width:0">${(d.name||'').replace(/</g,'&lt;')}</span>
+          ${chip(d)}
+          ${tgl(d)}
+          <button class="delete-btn" onclick="del('dress_items','${d.id}',loadDress)">🗑</button>
+        </div>`).join('');
+    }
+    el.innerHTML = html;
+  }
+  function setDressFilter(f){ dressFilter = f; loadDress(); }
+  async function toggleDressNew(id){
+    const d = dressCache.find(x=>x.id===id); if(!d) return;
+    const had = hasNew(d);
+    const badges = had
+      ? (d.badges||[]).filter(function(b){ var l=(b&&(b.label!=null?b.label:b))||''; return String(l).trim().toUpperCase()!=='NEW'; })
+      : (d.badges||[]).concat([{label:'NEW'}]);
+    showToast(had ? '🗂 기존으로 이동...' : '✨ 새 옷으로 이동...');
+    var ok = await updateRow('dress_items', id, { badges });
+    if(ok===false){ showToast('❌ 전환 실패: ' + (window.__dbErr||'권한/SQL 확인')); }
+    loadDress();
+  }
+
+  // ▲/▼ 순서 변경 (같은 분류 안에서 자리 바꾸기 → 0,1,2…로 다시 매김)
+  async function moveDress(id, dir){
+    const item = dressCache.find(d=>d.id===id);
+    if(!item) return;
+    const arr = dressCache.filter(d=>d.category===item.category).sort(dressByOrder);
+    const i = arr.findIndex(d=>d.id===id);
+    const j = i + dir;
+    if(j<0 || j>=arr.length) return;
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+    showToast('↕ 순서 변경 중...');
+    var rs = await Promise.all(arr.map((d,idx)=> updateRow('dress_items', d.id, { sort_order: idx })));
+    if(rs.some(function(r){return r===false;})){ showToast('❌ 순서 저장 실패: ' + (window.__dbErr||'권한(RLS)/SQL 확인')); }
+    loadDress();
+  }
+  async function addDressItem(){
+    const name = document.getElementById('dr-name').value.trim();
+    if(!name){ showToast('❗ 이름 필수!'); return; }
+    const cat = document.getElementById('dr-cat').value;
+    const image_url = document.getElementById('dr-img-url').value.trim();
+    const badges = document.getElementById('dr-new').checked ? [{label:'NEW'}] : [];
+    const orderRaw = (document.getElementById('dr-order').value||'').trim();
+    let sort_order;
+    if(orderRaw !== ''){
+      sort_order = parseInt(orderRaw,10); if(isNaN(sort_order)) sort_order = 0;
+    } else {
+      const inCat = dressCache.filter(d=>d.category===cat);
+      sort_order = inCat.length ? Math.max(...inCat.map(d=>d.sort_order||0)) + 1 : 0;
+    }
+    const ok = await insertRow('dress_items', {
+      category: cat,
+      name, description: document.getElementById('dr-desc').value.trim(),
+      image_url, badges, sort_order
+    });
+    if(ok){
+      showToast('✅ 추가됐어요!');
+      document.getElementById('dr-name').value=''; document.getElementById('dr-desc').value='';
+      document.getElementById('dr-img-url').value=''; document.getElementById('dr-new').checked=false;
+      document.getElementById('dr-order').value='';
+      loadDress();
+    } else showToast('❌ 추가 실패: ' + (window.__dbErr || '옷장 SQL 실행했는지 확인'));
+  }
+</script>
+</body>
+</html>
