@@ -285,8 +285,9 @@ footer.paperfoot{max-width:1120px;margin:16px auto 46px;text-align:center;color:
     setText('m-herocap', M.herocap);
     document.getElementById('m-lead').textContent = M.lead;
     // 이번 주 일정
-    var dn=['일','월','화','수','목','금','토']; var wk=M.week||[];
-    document.querySelector('.day7').innerHTML = dn.map(function(n,i){ return '<div class="dc"><div class="dd">'+n+'</div><div class="tt">'+esc(wk[i]||'')+'</div></div>'; }).join('');
+    /* 월요일 시작 표시 (데이터 인덱스는 0=일 그대로) */
+    var dn={1:'월',2:'화',3:'수',4:'목',5:'금',6:'토',0:'일'}; var ORDER=[1,2,3,4,5,6,0]; var wk=M.week||[];
+    document.querySelector('.day7').innerHTML = ORDER.map(function(i){ return '<div class="dc"><div class="dd">'+dn[i]+'</div><div class="tt">'+esc(wk[i]||'')+'</div></div>'; }).join('');
     // 사이드 신원
     setText('m-plabel', M.pbox_label);
     var av=avatarUrl(I); if(av){ var ae=document.getElementById('m-avatar'); ae.src=av; }
