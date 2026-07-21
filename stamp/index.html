@@ -132,7 +132,7 @@
 
   <div class="kicker"><span class="cat">STAMP · 🍑</span><span class="date dbox"></span></div>
   <h1 class="headline">복숭이 스탬프판</h1>
-  <div class="byline">닉네임을 검색해서 본인 스탬프판을 열어보세요. 🍑를 모을수록 보상이 있어요!</div>
+  <div class="byline" id="st-desc">닉네임을 검색해서 본인 스탬프판을 열어보세요. 🍑를 모을수록 보상이 있어요!</div>
 
   <div class="card">
     <div class="st-head">
@@ -206,7 +206,7 @@
   }
   syncRewards();
 
-  /* 명단 = stamps 테이블 (관리자 🍑스탬프 탭에서 등록 · 업보 시청자와 별개) */
+  /* 명단 = viewers 테이블 (업보·시참권 시청자 명단과 공유 — 관리자 ⚡업보 탭에서 관리) */
   let viewers = [], current = null;
 
   async function loadRewardConfig(){
@@ -215,6 +215,12 @@
       const d = (rows && rows[0] && rows[0].data) || {};
       const t = parseInt(d['stamp-total']);
       if(t && t>0) TOTAL = Math.min(200, t);
+      if(d['stamp-desc']!==undefined){
+        const el=document.getElementById('st-desc');
+        const v=String(d['stamp-desc']);
+        if(!v.trim()){ el.style.display='none'; }
+        else { el.innerHTML = esc(v).replace(/\n/g,'<br>'); }
+      }
       const raw = (d['stamp-rewards']||'').trim();
       if(raw){
         const list = parseRewardLines(raw);
@@ -226,7 +232,7 @@
 
   async function init(){
     await loadRewardConfig();
-    viewers = await fetchAll('stamps', { order:'sort_order', asc:true }) || [];
+    viewers = await fetchAll('viewers', { order:'sort_order', asc:true }) || [];
 
     const latest = viewers.reduce((m,s)=> s.updated_at && s.updated_at>m ? s.updated_at : m, '');
     document.getElementById('update-date').textContent = latest ? '갱신일: ' + latest.slice(0,10) : '';
@@ -246,7 +252,7 @@
     enableIframeAutoHeight();
   }
 
-  function count(vid){ const v = viewers.find(x=>String(x.id)===String(vid)); return v ? (v.count||0) : 0; }
+  function count(vid){ const v = viewers.find(x=>String(x.id)===String(vid)); return v ? (v.stamp_count||0) : 0; }
 
   function renderChips(list){
     const el = document.getElementById('chips');

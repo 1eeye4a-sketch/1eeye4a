@@ -420,26 +420,20 @@
         <label class="input-label">보상 목록</label>
         <textarea class="input" id="f-stamp-rewards" rows="7" placeholder="5|움짤 프사&#10;10|방셀&#10;20|배너&#10;30|일러스트"></textarea>
       </div>
+      <div class="form-field">
+        <label class="input-label">스탬프판 설명 문구 (제목 아래 안내글)</label>
+        <textarea class="input" id="f-stamp-desc" rows="3" placeholder="닉네임을 검색해서 본인 스탬프판을 열어보세요. 🍑를 모을수록 보상이 있어요!"></textarea>
+        <div class="hint">보상 신청 방법 같은 짧은 공지를 여기 적으면 스탬프판 위에 그대로 떠요. 줄바꿈=엔터. 비우고 저장하면 안내글이 사라져요.</div>
+      </div>
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveStampConfig()">저장 ♥</button></div>
     </div>
 
-    <!-- 스탬프 명단 추가 (업보 시청자와 별개로 관리) -->
+    <!-- 시청자 선택 (명단은 업보와 공유) -->
     <div class="card">
-      <div class="card-title">🍑 스탬프 명단 추가</div>
-      <div class="hint" style="margin-bottom:10px">스탬프판은 <b>여기 등록한 사람만</b> 나와요 (업보 시청자 명단과 별개). 판 공유 링크 — <code>사이트주소/stamp/?v=닉네임</code></div>
-      <div class="form-grid">
-        <div class="form-field"><label class="input-label">닉네임 *</label><input class="input" id="s-nick" placeholder="닉네임"></div>
-        <div class="form-field"><label class="input-label">SOOP 아이디 (프사용, 선택)</label><input class="input" id="s-soop" placeholder="user_id"></div>
-      </div>
-      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="addStampViewer()">+ 추가</button></div>
-    </div>
-
-    <!-- 명단 -->
-    <div class="card">
-      <div class="card-title">스탬프 명단</div>
-      <input class="input" id="stamp-search" placeholder="🔍 검색..." style="margin-bottom:12px" oninput="renderStampPick();renderStampList()">
-      <div class="pick" id="stamp-pick" style="margin-bottom:12px"><div class="spinner"></div></div>
-      <div id="stamp-list"></div>
+      <div class="card-title">시청자 선택</div>
+      <div class="hint" style="margin-bottom:10px">시청자 명단은 <b>⚡ 업보 탭 → 👥 시청자 관리</b>와 같이 써요. (같은 복숭이 명단 — 여기서 고르면 스탬프 개수를 조절해요)<br>판 공유 링크 — <code>사이트주소/stamp/?v=닉네임</code></div>
+      <input class="input" id="stamp-search" placeholder="🔍 검색..." style="margin-bottom:12px" oninput="renderStampPick()">
+      <div class="pick" id="stamp-pick"><div class="spinner"></div></div>
     </div>
 
     <!-- 개수 조절 -->
@@ -883,7 +877,7 @@
     if (!nick) { showToast('❗ 닉네임 필수!'); return; }
     const maxOrder = viewers.reduce((m,v)=>Math.max(m, v.sort_order||0), 0);
     const ok = await insertRow('viewers', { nickname: nick, soop_id: document.getElementById('v-soop').value.trim(), sort_order: maxOrder+1 });
-    if (ok) { showToast('✅ 추가!'); document.getElementById('v-nick').value=''; document.getElementById('v-soop').value=''; loadWork(); }
+    if (ok) { showToast('✅ 추가!'); document.getElementById('v-nick').value=''; document.getElementById('v-soop').value=''; loadWork(); loadTicket(); loadStamp(); }
     else showToast('❌ 실패' + (window.__dbErr ? ': ' + window.__dbErr : ''));
   }
   async function editViewer(id) {
@@ -894,11 +888,13 @@
     showToast('✅ 수정!'); loadWork();
   }
   async function delViewer(id) {
-    if (!confirm('이 시청자를 삭제할까요?\n(업보 기록도 함께 사라져요)')) return;
+    if (!confirm('이 시청자를 삭제할까요?\n(업보·시참권·스탬프 기록도 함께 사라져요)')) return;
     await db.from('upbo_counts').delete().eq('viewer_id', id);
+    await db.from('ticket_counts').delete().eq('viewer_id', id);
     await deleteRow('viewers', id);
     if (currentViewer===id) { currentViewer=null; document.getElementById('assign-card').style.display='none'; }
-    showToast('🗑 삭제!'); loadWork();
+    if (String(stampCur)===String(id)) { stampCur=null; document.getElementById('stamp-edit').style.display='none'; }
+    showToast('🗑 삭제!'); loadWork(); loadTicket(); loadStamp();
   }
 
   /* ===== 타입 관리 ===== */
@@ -1049,7 +1045,7 @@
     showToast('🗑 삭제!'); loadTicket();
   }
 
-  /* ===== 스탬프 (루나판 이식 · 명단은 업보 시청자와 별개 — stamps 테이블) ===== */
+  /* ===== 스탬프 (루나판 이식 · 명단은 viewers 공유 — stamp_count 컬럼) ===== */
   let stamps = [], stampCur = null, stampVal = 0;
   const STAMP_DEFAULT_REWARDS_RAW = '5|움짤 프사\n10|방셀\n20|배너\n30|일러스트';
   let STAMP_REWARDS = [[5,'움짤 프사'],[10,'방셀'],[20,'배너'],[30,'일러스트']];
@@ -1074,6 +1070,7 @@
     const d = await fetchProfile();
     d['stamp-total'] = String(Math.max(10, Math.min(200, parseInt(document.getElementById('f-stamp-total').value)||100)));
     d['stamp-rewards'] = document.getElementById('f-stamp-rewards').value;
+    d['stamp-desc'] = document.getElementById('f-stamp-desc').value;
     const { error } = await db.from('profile').upsert({ id:1, data:d });
     if(error){ showToast('❌ 저장 실패: '+error.message); return; }
     showToast('✅ 저장됐어요!');
@@ -1089,9 +1086,11 @@
       if(tEl) tEl.value = (d['stamp-total']!==undefined && parseInt(d['stamp-total'])>0) ? d['stamp-total'] : 100;
       const rEl=document.getElementById('f-stamp-rewards');
       if(rEl) rEl.value = (d['stamp-rewards']!==undefined) ? d['stamp-rewards'] : STAMP_DEFAULT_REWARDS_RAW;
+      const dEl=document.getElementById('f-stamp-desc');
+      if(dEl) dEl.value = (d['stamp-desc']!==undefined) ? d['stamp-desc'] : '닉네임을 검색해서 본인 스탬프판을 열어보세요. 🍑를 모을수록 보상이 있어요!';
     }catch(e){}
-    stamps = await fetchAll('stamps', { order:'sort_order', asc:true }) || [];
-    renderStampPick(); renderStampList();
+    stamps = await fetchAll('viewers', { order:'sort_order', asc:true }) || [];
+    renderStampPick();
     if(stampCur && stamps.some(s=>String(s.id)===String(stampCur))) openStamp(stampCur);
     else { stampCur = null; document.getElementById('stamp-edit').style.display='none'; }
   }
@@ -1099,62 +1098,22 @@
   function stampMatch(s,q){ return (s.nickname||'').toLowerCase().includes(q) || (s.soop_id||'').toLowerCase().includes(q); }
   function stampQuery(){ return (document.getElementById('stamp-search')?.value || '').trim().toLowerCase(); }
 
-  async function addStampViewer(){
-    const nick = document.getElementById('s-nick').value.trim();
-    if(!nick){ showToast('❗ 닉네임 필수!'); return; }
-    const maxOrder = stamps.reduce((m,s)=>Math.max(m, s.sort_order||0), 0);
-    const ok = await insertRow('stamps', {
-      nickname: nick,
-      soop_id: document.getElementById('s-soop').value.trim(),
-      count: 0, sort_order: maxOrder+1, updated_at: new Date().toISOString()
-    });
-    if(ok){ showToast('✅ 추가!'); document.getElementById('s-nick').value=''; document.getElementById('s-soop').value=''; loadStamp(); }
-    else showToast('❌ 실패' + (window.__dbErr ? ': ' + window.__dbErr : ''));
-  }
-  async function editStampViewer(id){
-    const r = stampRow(id); if(!r) return;
-    const nick = prompt('닉네임', r.nickname); if(nick===null) return;
-    const sid  = prompt('SOOP 아이디 (없으면 비워두기)', r.soop_id||''); if(sid===null) return;
-    await updateRow('stamps', id, { nickname: nick.trim(), soop_id: sid.trim() });
-    showToast('✅ 수정!'); loadStamp();
-  }
-  async function delStampViewer(id){
-    const r = stampRow(id); if(!r) return;
-    if(!confirm(`'${r.nickname}' 님을 스탬프 명단에서 지울까요? (스탬프 ${r.count||0}개도 함께 삭제)`)) return;
-    await deleteRow('stamps', id);
-    if(String(stampCur)===String(id)) stampCur = null;
-    showToast('🗑 삭제!'); loadStamp();
-  }
-
   function renderStampPick(){
     const q = stampQuery();
     const el = document.getElementById('stamp-pick'); if(!el) return;
-    if(!stamps.length){ el.innerHTML = '<div style="color:var(--text-soft);font-size:13px">위에서 스탬프 명단을 추가하세요</div>'; return; }
+    if(!stamps.length){ el.innerHTML = '<div style="color:var(--text-soft);font-size:13px">먼저 ⚡업보 탭에서 시청자를 추가하세요</div>'; return; }
     const list = stamps.filter(s=>stampMatch(s,q));
     el.innerHTML = list.map(s => `
       <div class="pick-item ${String(stampCur)===String(s.id)?'sel':''}" onclick="openStamp('${s.id}')">
-        <div class="pn">${esc(s.nickname||'')} <span style="font-size:11px;color:var(--main-dark);font-weight:800">🍑 ${s.count||0}</span></div>
+        <div class="pn">${esc(s.nickname||'')} <span style="font-size:11px;color:var(--main-dark);font-weight:800">🍑 ${s.stamp_count||0}</span></div>
         <div class="pi">${esc(s.soop_id||'-')}</div>
       </div>`).join('') || '<div style="color:var(--text-soft);font-size:13px">검색 결과가 없어요</div>';
-  }
-  function renderStampList(){
-    const q = stampQuery();
-    const el = document.getElementById('stamp-list'); if(!el) return;
-    const list = stamps.filter(s=>stampMatch(s,q));
-    el.innerHTML = list.map(s => `
-      <div class="srow">
-        <span class="sn">${esc(s.nickname||'')}</span>
-        <span class="sid">${esc(s.soop_id||'-')}</span>
-        <span class="sc">🍑 ${s.count||0}</span>
-        <button class="vbtn" onclick="editStampViewer('${s.id}')">수정</button>
-        <button class="vbtn del" onclick="delStampViewer('${s.id}')">삭제</button>
-      </div>`).join('');
   }
 
   function openStamp(id){
     const r = stampRow(id); if(!r) return;
     stampCur = r.id;
-    stampVal = r.count || 0;
+    stampVal = r.stamp_count || 0;
     document.getElementById('stamp-edit').style.display = 'block';
     document.getElementById('stamp-title').textContent = `${r.nickname} 스탬프 관리`;
     document.getElementById('stamp-name').textContent  = `${r.nickname} (${r.soop_id||'-'})`;
@@ -1184,11 +1143,11 @@
   }
   async function saveStamp(){
     if(!stampCur) return;
-    const ok = await updateRow('stamps', stampCur, { count: stampVal, updated_at: new Date().toISOString() });
-    if(!ok){ showToast('❌ 저장 실패'); return; }
+    const ok = await updateRow('viewers', stampCur, { stamp_count: stampVal, updated_at: new Date().toISOString() });
+    if(!ok){ showToast('❌ 저장 실패' + (window.__dbErr ? ': ' + window.__dbErr : '')); return; }
     showToast('✅ 저장됐어요!');
-    stamps = await fetchAll('stamps', { order:'sort_order', asc:true }) || [];
-    renderStampPick(); renderStampList();
+    stamps = await fetchAll('viewers', { order:'sort_order', asc:true }) || [];
+    renderStampPick();
   }
 
   async function del(table, id, fn) {
