@@ -145,12 +145,14 @@ CREATE POLICY "dress_all" ON public.dress_items FOR ALL USING (true) WITH CHECK 
 
 -- ── 업보: 시청자 ──
 CREATE TABLE IF NOT EXISTS viewers (
-  id         BIGSERIAL PRIMARY KEY,
-  nickname   TEXT NOT NULL,
-  soop_id    TEXT,
-  memo       TEXT,
-  sort_order INT DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  id          BIGSERIAL PRIMARY KEY,
+  nickname    TEXT NOT NULL,
+  soop_id     TEXT,
+  memo        TEXT,
+  sort_order  INT DEFAULT 0,
+  stamp_count INT DEFAULT 0,               -- 스탬프 개수 (스탬프판과 공유)
+  updated_at  TIMESTAMPTZ DEFAULT NOW(),
+  created_at  TIMESTAMPTZ DEFAULT NOW()
 );
 ALTER TABLE viewers ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "viewers_all" ON viewers;
@@ -250,16 +252,4 @@ ALTER TABLE ticket_counts ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "ticket_counts_all" ON ticket_counts;
 CREATE POLICY "ticket_counts_all" ON ticket_counts FOR ALL USING (true) WITH CHECK (true);
 
--- ③ 스탬프 명단 (닉네임·SOOP아이디·개수)
-CREATE TABLE IF NOT EXISTS stamps (
-  id         BIGSERIAL PRIMARY KEY,
-  nickname   TEXT NOT NULL,
-  soop_id    TEXT,
-  count      INT DEFAULT 0,
-  sort_order INT DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-ALTER TABLE stamps ENABLE ROW LEVEL SECURITY;
-DROP POLICY IF EXISTS "stamps_all" ON stamps;
-CREATE POLICY "stamps_all" ON stamps FOR ALL USING (true) WITH CHECK (true);
+-- ③ 스탬프 = viewers 명단 공유 (stamp_count 컬럼 사용 · 별도 표 없음)

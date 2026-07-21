@@ -272,6 +272,17 @@
 <script>
 (function(){if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');var sw=document.getElementById('tsw'),kn=document.getElementById('kn');function r(){if(kn)kn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';}if(sw)sw.addEventListener('click',function(){document.body.classList.toggle('dark');localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');r();});r();})();
 </script>
+<script>
+/* 상단 로고·소제목 = admin 메인 탭(data.main)과 연동 */
+(async function(){ try{
+  const { data: rows } = await db.from('profile').select('data').eq('id', 1);
+  const m = rows && rows[0] && rows[0].data && rows[0].data.main;
+  if(m){
+    if(m.brand){ const e=document.querySelector('.logo .scr'); if(e) e.textContent=m.brand; }
+    if(m.masthead_sub!==undefined){ const e=document.querySelector('.logo .sub'); if(e) e.textContent=m.masthead_sub; }
+  }
+}catch(e){} })();
+</script>
 <script src="../fx.js"></script>
 </body>
 </html>
