@@ -169,7 +169,7 @@ footer.paperfoot{max-width:1120px;margin:16px auto 46px;text-align:center;color:
       <div class="logo"><span class="scr">Yeda</span><span class="sub" id="m-sub">V T U B E R · D A I L Y</span></div>
     </div>
     <div class="navrule"><nav class="nav">
-      <a class="on">메인</a><a href="profile/">프로필</a><a href="schedule/">일정</a><a href="dress/">옷장</a><a href="work/">업보</a>
+      <a class="on">메인</a><a href="profile/">프로필</a><a href="dress/">옷장</a><a href="work/">업보</a><a href="ticket/">시참권</a><a href="stamp/">스탬프</a>
       <div class="actions">
         <button class="tsw" id="tsw" type="button" aria-label="다크"><span class="kn" id="kn">🌙</span></button>
       </div>
@@ -276,7 +276,11 @@ footer.paperfoot{max-width:1120px;margin:16px auto 46px;text-align:center;color:
     document.getElementById('m-sign').textContent = M.hero_sign || M.brand || '';
     var logo=document.querySelector('.logo .scr'); if(logo && M.brand) logo.textContent=M.brand;
     document.getElementById('m-headline').innerHTML = esc(M.headline) + (M.headline_em?' <em>'+esc(M.headline_em)+'</em>':'');
-    document.getElementById('m-byline').innerHTML = 'BY <b>'+esc(M.byline_by)+'</b>'+(M.byline_art?' · ART BY <b>'+esc(M.byline_art)+'</b>':'');
+    var blEl=document.getElementById('m-byline'); var blParts=[];
+    if(M.byline_by) blParts.push('BY <b>'+esc(M.byline_by)+'</b>');
+    if(M.byline_art) blParts.push('ART BY <b>'+esc(M.byline_art)+'</b>');
+    blEl.style.display = blParts.length ? '' : 'none';
+    blEl.innerHTML = blParts.join(' · ');
     if(M.hero_img){ var hi=document.getElementById('m-hero'); hi.src=M.hero_img; hi.setAttribute('referrerpolicy','no-referrer'); }
     setText('m-herocap', M.herocap);
     document.getElementById('m-lead').textContent = M.lead;
@@ -295,8 +299,11 @@ footer.paperfoot{max-width:1120px;margin:16px auto 46px;text-align:center;color:
     if(I.agency) rows.push(['소속', esc(I.agency)]);
     if(I.fan_name) rows.push(['팬닉', esc(I.fan_name)]);
     document.getElementById('m-tbl').innerHTML = rows.map(function(r){return '<div><span>'+r[0]+'</span><b>'+r[1]+'</b></div>';}).join('');
-    var L=I.links||{}; var defs=[['SOOP',L.soop],['YT',L.youtube],['X',L.x],['CAFE',L.cafe]];
-    document.getElementById('m-links').innerHTML = defs.map(function(d){ var u=d[1]||'#'; var ext=d[1]?' target="_blank" rel="noreferrer"':''; return '<a href="'+esc(u)+'"'+ext+'>'+d[0]+'</a>'; }).join('');
+    var L=I.links||{}; var defs=[['SOOP',L.soop],['YouTube',L.youtube],['X',L.x],['CAFE',L.cafe]];
+    var live=defs.filter(function(d){return d[1];});
+    var mlEl=document.getElementById('m-links');
+    mlEl.style.display = live.length ? '' : 'none';
+    mlEl.innerHTML = live.map(function(d){ return '<a href="'+esc(d[1])+'" target="_blank" rel="noreferrer">'+d[0]+'</a>'; }).join('');
     // 인용 카드
     setText('m-qlabel', M.quote_label);
     document.getElementById('m-quote').textContent = '“'+(M.quote||'')+'”';
@@ -304,8 +311,8 @@ footer.paperfoot{max-width:1120px;margin:16px auto 46px;text-align:center;color:
   }
 
   (async function(){
-    // 빈 값은 무시하고 기본값을 유지(=admin에서 비워둔 칸 때문에 메인이 사라지지 않게)
-    function mt(base,ov){ if(!ov||typeof ov!=='object') return base; Object.keys(ov).forEach(function(k){ var val=ov[k]; if(val===''||val==null) return; if(Array.isArray(val)&&val.length===0) return; base[k]=val; }); return base; }
+    // admin에 저장된 값이면 빈 값도 그대로 반영(칸을 비우고 저장 = 그 요소 지우기)
+    function mt(base,ov){ if(!ov||typeof ov!=='object') return base; Object.keys(ov).forEach(function(k){ var val=ov[k]; if(val==null) return; base[k]=val; }); return base; }
     var M=Object.assign({},MD), I=Object.assign({},DI);
     try{
       var rows=await fetchAll('profile');

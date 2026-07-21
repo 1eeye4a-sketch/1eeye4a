@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이예다 · 스탬프</title>
+<link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Sacramento&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .st-head { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:6px; }
+  .st-title { font-size:20px; font-weight:800; color:var(--main-dark); }
+  .st-sub { font-size:13px; color:var(--text-soft); line-height:1.6; margin-bottom:12px; }
+  .st-update { font-size:12px; color:var(--text-soft); background:#fff; border:1px solid var(--main-light); padding:6px 14px; border-radius:999px; }
+  body.dark .st-update { background:var(--card); }
+
+  /* ── 시청자 검색 + 칩 ── */
+  .search-box { width:100%; padding:13px 18px; border-radius:999px; border:1.5px solid var(--main-light); font-size:14px; outline:none; background:#fff; margin:6px 0 14px; box-sizing:border-box; color:var(--text); }
+  .search-box:focus { border-color:var(--main); }
+  body.dark .search-box { background:var(--card); color:var(--text); }
+
+  .chips { display:flex; flex-wrap:wrap; gap:8px; max-height:168px; overflow-y:auto; padding:2px; }
+  .chip { display:inline-flex; align-items:center; gap:8px; padding:7px 14px 7px 7px; border-radius:999px;
+    border:1.5px solid var(--main-light); background:#fff; cursor:pointer; transition:all .2s; }
+  .chip:hover { border-color:var(--main); transform:translateY(-2px); }
+  .chip.on { background:var(--main); border-color:var(--main); box-shadow:var(--shadow); }
+  .chip.on .c-nick, .chip.on .c-cnt { color:#7a2230; }
+  .chip.on .c-cnt { background:rgba(255,255,255,.45); }
+  .chip .c-av { width:28px; height:28px; border-radius:50%; object-fit:cover; background:var(--main-light); flex-shrink:0; }
+  .chip .c-fb { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,var(--main),var(--main-dark)); color:#fff; font-size:12px; font-weight:700; flex-shrink:0; }
+  .chip .c-nick { font-size:13.5px; font-weight:700; color:var(--text); white-space:nowrap; }
+  .chip .c-cnt { font-size:11px; font-weight:800; color:var(--main-dark); background:var(--main-light); border-radius:999px; padding:2px 8px; }
+  body.dark .chip { background:var(--card); }
+  body.dark .chip.on .c-nick, body.dark .chip.on .c-cnt { color:#3a151b; }
+
+  /* ── 본문 2단 ── */
+  .st-wrap { display:grid; grid-template-columns:330px 1fr; gap:22px; align-items:stretch; margin-top:6px; }
+  @media (max-width:920px){ .st-wrap { grid-template-columns:1fr; gap:22px; } }
+
+  /* ── 좌: 보상 박스 ── */
+  .reward-box { position:relative; display:flex; flex-direction:column; background:#fff;
+    border:1.5px solid var(--main-light); border-radius:20px;
+    padding:26px 20px 20px; box-shadow:var(--shadow); }
+  #reward-list { flex:1; }
+  body.dark .reward-box { background:var(--card); }
+  .reward-box .rb-t { font-size:15px; font-weight:800; color:var(--main-dark); margin-bottom:3px; }
+  .reward-box .rb-s { font-size:11.5px; color:var(--text-soft); margin-bottom:14px; }
+
+  .rw { display:flex; align-items:flex-start; gap:10px; padding:10px 11px; border-radius:12px; margin-bottom:6px;
+    border:1.5px solid transparent; transition:all .2s; }
+  .rw .n { flex-shrink:0; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:12.5px; font-weight:800; background:var(--main-light); color:var(--main-dark); }
+  .rw .tx { font-size:12.5px; line-height:1.5; color:var(--text-mid); font-weight:500; padding-top:6px; word-break:keep-all; }
+  .rw.done { background:var(--main-light); border-color:var(--main); }
+  .rw.done .n { background:var(--main); color:#7a2230; }
+  .rw.done .tx { color:var(--text); font-weight:700; }
+  .rw.next { border-color:var(--main); background:rgba(198,45,66,.06); }
+  .rw .chk { margin-left:auto; font-size:13px; color:var(--main-dark); padding-top:8px; }
+  .rw .nx { margin-left:auto; flex-shrink:0; font-size:10px; font-weight:800; color:#fff; background:var(--main-dark);
+    padding:3px 8px; border-radius:999px; margin-top:7px; white-space:nowrap; }
+
+  .prog { margin-top:auto; padding-top:14px; border-top:1px dashed var(--main-light); }
+  .prog .pt { font-size:12px; font-weight:700; color:var(--main-dark); margin-bottom:7px; }
+  .prog .bar { height:9px; border-radius:999px; background:var(--main-light); overflow:hidden; }
+  .prog .fill { height:100%; border-radius:999px; background:linear-gradient(90deg,var(--main),var(--main-dark)); width:0; transition:width .6s ease; }
+
+  /* ── 우: 스탬프판 (복숭아 밤하늘) ── */
+  .board-card { position:relative; overflow:hidden; border-radius:20px; padding:22px 20px 24px;
+    background:linear-gradient(180deg,#2B1015 0%,#5A2230 55%,#8C4155 100%);
+    box-shadow:0 18px 44px rgba(70,20,30,.35); border:1.5px solid rgba(255,180,190,.3); }
+  .board-card::before { content:''; position:absolute; inset:0; pointer-events:none; opacity:.9;
+    background-image:
+      radial-gradient(1.6px 1.6px at 12% 18%, #fff, transparent),
+      radial-gradient(1.4px 1.4px at 32% 62%, #fff, transparent),
+      radial-gradient(1.8px 1.8px at 58% 12%, #fff, transparent),
+      radial-gradient(1.2px 1.2px at 74% 44%, #fff, transparent),
+      radial-gradient(1.6px 1.6px at 88% 74%, #fff, transparent),
+      radial-gradient(1.2px 1.2px at 22% 88%, #fff, transparent),
+      radial-gradient(1.4px 1.4px at 46% 36%, #fff, transparent),
+      radial-gradient(1.2px 1.2px at 66% 84%, #fff, transparent); }
+  .board-card > * { position:relative; z-index:1; }
+  .board-top { display:flex; align-items:flex-end; justify-content:space-between; gap:12px;
+    border-bottom:1px solid rgba(255,255,255,.22); padding-bottom:10px; margin-bottom:18px; }
+  .board-top .bn { font-size:19px; font-weight:800; color:#fff; }
+  .board-top .bc { font-family:'Italiana',serif; font-size:20px; letter-spacing:.12em; color:#FFDCE2; white-space:nowrap; }
+
+  .board { display:flex; flex-direction:column; gap:3px; padding-right:5%; }
+  .brow { display:grid; grid-template-columns:repeat(10, 1fr); gap:3px; }
+  .brow.odd { transform:translateX(5%); }
+  @media (max-width:560px){ .board { padding-right:10%; } .brow { grid-template-columns:repeat(5,1fr); } .brow.odd { transform:translateX(10%); } }
+
+  .cell { position:relative; aspect-ratio:1/1; border-radius:50%; background:rgba(255,255,255,.05);
+    border:1.5px solid rgba(255,190,200,.35); display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700; color:rgba(255,220,226,.62); transition:transform .2s; }
+  .cell .num { opacity:.75; }
+  .cell.stamped { background:rgba(255,255,255,.08); border-color:rgba(255,190,200,.55); }
+  .cell.stamped .num { display:none; }
+  .cell .sun { width:100%; height:100%; object-fit:contain; display:block;
+    animation:sunIn .34s cubic-bezier(.34,1.56,.64,1) backwards; filter:drop-shadow(0 1px 4px rgba(0,0,0,.28)); }
+  .cell.next { animation:pulse 1.6s ease-in-out infinite; }
+  @keyframes sunIn { from { transform:scale(0) rotate(-25deg); opacity:0; } to { transform:scale(1) rotate(-6deg); opacity:1; } }
+  @keyframes pulse { 0%,100%{ box-shadow:0 0 0 0 rgba(255,214,120,.45);} 50%{ box-shadow:0 0 0 7px rgba(255,214,120,0);} }
+  @media (prefers-reduced-motion: reduce){ .cell .sun { animation:none; } .cell.next { animation:none; } }
+
+  .tip { position:absolute; bottom:112%; left:50%; transform:translateX(-50%); white-space:nowrap; z-index:5;
+    background:#FFD36E; color:#3A2A00; font-size:11px; font-weight:800; padding:5px 10px; border-radius:8px;
+    opacity:0; pointer-events:none; transition:opacity .2s; }
+  .cell.gift:hover .tip { opacity:1; }
+  .cell.gift:hover { transform:scale(1.12); z-index:6; }
+
+  .hint-line { color:var(--text-soft); font-size:13px; padding:9px 4px; }
+  .hint-line span { opacity:.7; }
+  .no-viewer { text-align:center; padding:56px 0; color:var(--text-soft); line-height:1.7; }
+  .no-viewer .ic { font-size:44px; margin-bottom:10px; opacity:.5; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="mast"><div class="logo"><span class="scr">Yeda</span><span class="sub">Y E D A · D A I L Y</span></div></div>
+    <div class="navrule"><nav class="nav">
+      <a href="../index.html">메인</a>
+      <a href="../profile/">프로필</a>
+      <a href="../dress/">옷장</a>
+      <a href="../work/">업보</a>
+      <a href="../ticket/">시참권</a>
+      <a href="index.html" class="on">스탬프</a>
+      <div class="actions"><button class="tsw" id="tsw" type="button" aria-label="다크"><span class="kn" id="kn">🌙</span></button></div>
+    </nav></div>
+  </header>
+
+  <div class="kicker"><span class="cat">STAMP · 🍑</span><span class="date dbox"></span></div>
+  <h1 class="headline">복숭이 스탬프판</h1>
+  <div class="byline">닉네임을 검색해서 본인 스탬프판을 열어보세요. 🍑를 모을수록 보상이 있어요!</div>
+
+  <div class="card">
+    <div class="st-head">
+      <div class="st-title">🍑 스탬프 명단</div>
+      <span class="st-update" id="update-date"></span>
+    </div>
+    <input class="search-box" id="search" placeholder="🔍 닉네임 또는 아이디 검색...">
+    <div class="chips" id="chips"><div class="spinner"></div></div>
+  </div>
+
+  <div class="st-wrap" id="board-wrap" style="display:none">
+    <!-- 좌: 보상 목록 -->
+    <div class="reward-box">
+      <div class="rb-t">스탬프 보상</div>
+      <div class="rb-s">모을수록 커지는 보상 🍑</div>
+      <div id="reward-list"></div>
+      <div class="prog">
+        <div class="pt" id="prog-text"></div>
+        <div class="bar"><div class="fill" id="prog-fill"></div></div>
+      </div>
+    </div>
+
+    <!-- 우: 스탬프판 -->
+    <div class="board-card">
+      <div class="board-top">
+        <span class="bn" id="board-name"></span>
+        <span class="bc" id="board-count"></span>
+      </div>
+      <div class="board" id="board"></div>
+    </div>
+  </div>
+
+  <div class="card" id="empty-card" style="display:none">
+    <div class="no-viewer"><div class="ic">🍑</div>아직 스탬프 명단에 등록된 사람이 없어요</div>
+  </div>
+
+</div>
+
+<footer class="paperfoot">© 2026 이예다 Official.<br>비즈니스 문의 — 1eeye4a@gmail.com</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../supabase.js"></script>
+<script>
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function soopAvatar(id){ if(!id) return null; id=String(id).trim().toLowerCase(); if(id.length<2) return null; return `https://profile.img.sooplive.co.kr/LOGO/${id.slice(0,2)}/${id}/${id}.jpg`; }
+
+  /* ★ 보상 목록·칸 수 = 관리자(🍑 스탬프 탭)에서 수정 — 아래는 DB 못 읽을 때 기본값(예시) ★ */
+  let REWARDS = [
+    { at:5,  text:'움짤 프사' },
+    { at:10, text:'방셀' },
+    { at:20, text:'배너' },
+    { at:30, text:'일러스트' },
+  ];
+  let TOTAL = 100;   /* 기본 100칸 (admin에서 변경 가능) */
+  let REWARD_AT = {};
+  /* 보상 줄 파싱: '개수 | 보상' — 구분자는 | ／ ｜ 」 ㅣ : 탭 또는 그냥 공백 다 허용.
+     숫자로 시작하지 않는 줄(머리말 등)은 건너뜀. */
+  function parseRewardLines(raw){
+    return raw.split(/\n+/).map(line=>{
+      const l = line.trim();
+      const m = l.match(/^(\d{1,3})\s*[|｜／\/」ㅣ:：\-~\t ]+\s*(.+)$/);
+      if(!m) return null;
+      const at = parseInt(m[1], 10);
+      const text = m[2].trim();
+      return (at>0 && text) ? { at, text } : null;
+    }).filter(Boolean);
+  }
+  function syncRewards(){
+    REWARDS.sort((a,b)=>a.at-b.at);
+    REWARD_AT = Object.fromEntries(REWARDS.map(r=>[r.at, r.text]));
+  }
+  syncRewards();
+
+  /* 명단 = stamps 테이블 (관리자 🍑스탬프 탭에서 등록 · 업보 시청자와 별개) */
+  let viewers = [], current = null;
+
+  async function loadRewardConfig(){
+    try{
+      const { data: rows } = await db.from('profile').select('data').eq('id', 1);
+      const d = (rows && rows[0] && rows[0].data) || {};
+      const t = parseInt(d['stamp-total']);
+      if(t && t>0) TOTAL = Math.min(200, t);
+      const raw = (d['stamp-rewards']||'').trim();
+      if(raw){
+        const list = parseRewardLines(raw);
+        if(list.length) REWARDS = list;
+      }
+      syncRewards();
+    }catch(e){ /* 오프라인이면 기본값 유지 */ }
+  }
+
+  async function init(){
+    await loadRewardConfig();
+    viewers = await fetchAll('stamps', { order:'sort_order', asc:true }) || [];
+
+    const latest = viewers.reduce((m,s)=> s.updated_at && s.updated_at>m ? s.updated_at : m, '');
+    document.getElementById('update-date').textContent = latest ? '갱신일: ' + latest.slice(0,10) : '';
+
+    if(!viewers.length){ document.getElementById('chips').innerHTML=''; document.getElementById('empty-card').style.display='block'; enableIframeAutoHeight(); return; }
+
+    const q = new URLSearchParams(location.search).get('v');
+    const found = q ? viewers.find(v=> (v.nickname||'').toLowerCase() === q.toLowerCase() || String(v.id) === q) : null;
+    if(found){
+      current = found.id;
+      document.getElementById('search').value = found.nickname || '';
+      renderChips(filtered((found.nickname||'').toLowerCase()));
+      renderBoard();
+    } else {
+      renderChips([]);
+    }
+    enableIframeAutoHeight();
+  }
+
+  function count(vid){ const v = viewers.find(x=>String(x.id)===String(vid)); return v ? (v.count||0) : 0; }
+
+  function renderChips(list){
+    const el = document.getElementById('chips');
+    const q = (document.getElementById('search').value||'').trim();
+    if(!q){ el.innerHTML = `<div class="hint-line">🔍 닉네임을 입력하면 여기에 나와요 <span>(등록 ${viewers.length}명)</span></div>`; return; }
+    if(!list.length){ el.innerHTML = '<div class="hint-line">검색 결과가 없어요 — 닉네임을 다시 확인해 주세요</div>'; return; }
+    el.innerHTML = list.map(v=>{
+      const av = soopAvatar(v.soop_id); const ini = (v.nickname||'?').charAt(0);
+      const avHtml = av ? `<img class="c-av" src="${av}" referrerpolicy="no-referrer" onerror="this.outerHTML='<div class=\\'c-fb\\'>${ini}</div>'">` : `<div class="c-fb">${ini}</div>`;
+      return `<div class="chip ${String(current)===String(v.id)?'on':''}" onclick="select('${v.id}')">
+        ${avHtml}<span class="c-nick">${esc(v.nickname)}</span><span class="c-cnt">${count(v.id)}</span>
+      </div>`;
+    }).join('');
+  }
+
+  function select(vid){
+    current = vid;
+    const q = (document.getElementById('search').value||'').trim().toLowerCase();
+    renderChips(filtered(q));
+    renderBoard();
+    document.getElementById('board-wrap').scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+
+  function filtered(q){
+    if(!q) return viewers;
+    return viewers.filter(v => (v.nickname||'').toLowerCase().includes(q) || (v.soop_id||'').toLowerCase().includes(q));
+  }
+
+  function renderBoard(){
+    const v = viewers.find(x=>String(x.id)===String(current)); if(!v) return;
+    const n = count(v.id);
+    document.getElementById('board-wrap').style.display = 'grid';
+    document.getElementById('board-name').textContent  = `${v.nickname} 님의 스탬프판`;
+    document.getElementById('board-count').textContent = `${n} / ${TOTAL}`;
+
+    /* 칸 그리기 (10칸 × N줄, 홀수줄 지그재그) */
+    const rows = Math.ceil(TOTAL/10);
+    let html = '';
+    for(let r=0; r<rows; r++){
+      html += `<div class="brow ${r%2 ? 'odd':''}">`;
+      for(let c=1; c<=10; c++){
+        const i = r*10 + c;
+        if(i > TOTAL) break;
+        const on = i <= n;
+        const gift = !!REWARD_AT[i];
+        const isNext = (i === n+1);
+        html += `<div class="cell ${on?'stamped':''} ${gift?'gift':''} ${isNext?'next':''}" title="${i}">
+          ${ on ? `<img class="sun" src="../stamp.png" alt="" style="animation-delay:${Math.min(i,40)*8}ms">` : `<span class="num">${i}</span>` }
+          ${ gift ? `<span class="tip">${esc(REWARD_AT[i])}</span>` : '' }
+        </div>`;
+      }
+      html += `</div>`;
+    }
+    document.getElementById('board').innerHTML = html;
+
+    /* 좌측 보상 목록 */
+    const next = REWARDS.find(r => n < r.at);
+    document.getElementById('reward-list').innerHTML = REWARDS.map(r=>{
+      const done = n >= r.at;
+      const isNext = next && next.at === r.at;
+      return `<div class="rw ${done?'done':''} ${isNext?'next':''}">
+        <span class="n">${r.at}</span>
+        <span class="tx">${esc(r.text)}</span>
+        ${done ? '<span class="chk">✔</span>' : (isNext ? '<span class="nx">다음</span>' : '')}
+      </div>`;
+    }).join('');
+
+    /* 진행바 */
+    const pt = document.getElementById('prog-text'), pf = document.getElementById('prog-fill');
+    if(next){
+      const prev = REWARDS.filter(r=>r.at<=n).reduce((m,r)=>Math.max(m,r.at), 0);
+      const pct = Math.round(((n - prev) / (next.at - prev)) * 100);
+      pt.textContent = `다음 보상(${next.at}개)까지 ${next.at - n}개 남았어요!`;
+      pf.style.width = Math.max(3, pct) + '%';
+    } else {
+      pt.textContent = '보상 전부 달성! 🎉 축하해요';
+      pf.style.width = '100%';
+    }
+    enableIframeAutoHeight();
+  }
+
+  document.getElementById('search').addEventListener('input', e=>{
+    const q = e.target.value.trim().toLowerCase();
+    const list = q ? filtered(q) : [];
+    if(list.length === 1) current = list[0].id;
+    else if(!list.some(v=>String(v.id)===String(current))) current = null;
+    renderChips(list);
+    if(current) renderBoard();
+    else { document.getElementById('board-wrap').style.display='none'; enableIframeAutoHeight(); }
+  });
+
+  init();
+  (function(){var M=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];var t=new Date();var s=t.getFullYear()+' · '+M[t.getMonth()]+' '+t.getDate();document.querySelectorAll('.dbox').forEach(function(e){e.textContent=s});})();
+</script>
+<script>
+(function(){if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');var sw=document.getElementById('tsw'),kn=document.getElementById('kn');function r(){if(kn)kn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';}if(sw)sw.addEventListener('click',function(){document.body.classList.toggle('dark');localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');r();});r();})();
+</script>
+<script src="../fx.js"></script>
+</body>
+</html>

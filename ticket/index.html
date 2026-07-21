@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>이예다 · 업보</title>
+<title>이예다 · 시참권</title>
 <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Sacramento&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
@@ -56,16 +56,16 @@
       <a href="../index.html">메인</a>
       <a href="../profile/">프로필</a>
       <a href="../dress/">옷장</a>
-      <a href="index.html" class="on">업보</a>
-      <a href="../ticket/">시참권</a>
+      <a href="../work/">업보</a>
+      <a href="index.html" class="on">시참권</a>
       <a href="../stamp/">스탬프</a>
       <div class="actions"><button class="tsw" id="tsw" type="button" aria-label="다크"><span class="kn" id="kn">🌙</span></button></div>
     </nav></div>
   </header>
 
-  <div class="kicker"><span class="cat">UPBO · ⚡</span><span class="date dbox"></span></div>
-  <h1 class="headline">업보 현황</h1>
-  <div class="byline">복숭이들의 업보를 기록해두는 곳이에요. 카드를 누르면 상세가 떠요 🍑</div>
+  <div class="kicker"><span class="cat">TICKET · 🎟️</span><span class="date dbox"></span></div>
+  <h1 class="headline">시참권 현황</h1>
+  <div class="byline">복숭이들의 시참권을 기록해두는 곳이에요. 카드를 누르면 상세가 떠요 🎟️</div>
 
   <div class="card">
     <div class="upbo-head"><span class="upbo-update" id="update-date"></span></div>
@@ -93,8 +93,8 @@
   async function init(){
     [viewers, types, counts] = await Promise.all([
       fetchAll('viewers', { order:'sort_order', asc:true }),
-      fetchAll('upbo_types', { order:'sort_order', asc:true }),
-      fetchAll('upbo_counts', { order:'id', asc:true })
+      fetchAll('ticket_types', { order:'sort_order', asc:true }),
+      fetchAll('ticket_counts', { order:'id', asc:true })
     ]);
     let latest = counts.reduce((m,c)=> c.updated_at && c.updated_at>m ? c.updated_at : m, '');
     document.getElementById('update-date').textContent = latest ? '갱신일: ' + latest.slice(0,10) : '';
@@ -115,7 +115,7 @@
         ${avHtml}
         <div class="viewer-nick">${esc(v.nickname)}</div>
         ${v.soop_id?`<div class="viewer-id">(${esc(v.soop_id)})</div>`:'<div class="viewer-id">&nbsp;</div>'}
-        <span class="viewer-total">업보 ${total}</span>
+        <span class="viewer-total">시참권 ${total}</span>
       </div>`;
     }).join('');
     if(typeof enableIframeAutoHeight==='function')enableIframeAutoHeight();
@@ -140,7 +140,7 @@
         ${c.expires?`<span class="exp${exp?' out':''}">${exp?'기한 지남':'~'+fmtExp(c.expires)}</span>`:''}
         <span class="ct">×${c.count}</span>
       </div>`;}).join('');
-    document.getElementById('modal-body').innerHTML = rows || '<div class="modal-empty">아직 업보가 없어요 ♡</div>';
+    document.getElementById('modal-body').innerHTML = rows || '<div class="modal-empty">아직 시참권이 없어요 ♡</div>';
     const ov = document.getElementById('ov');
     const e = window.event; let y = 200;
     if (e) { y = (e.pageY != null ? e.pageY : (e.clientY||0)); }
