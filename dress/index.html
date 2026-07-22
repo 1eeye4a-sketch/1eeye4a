@@ -112,7 +112,7 @@
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
-    <a href="../index.html" class="monogram" aria-label="LEE YEDA 홈">LY</a>
+    <a href="../index.html" class="monogram" aria-label="LEE YEDA 홈">YEDA</a>
     <nav id="main-navigation" class="main-navigation" aria-label="메인 메뉴">
       <a href="../profile/"><span>01</span>프로필</a>
       <a href="../schedule/"><span>02</span>일정</a>
@@ -120,6 +120,7 @@
       <a href="../work/"><span>04</span>업보</a>
       <a href="../ticket/"><span>05</span>시참권</a>
       <a href="../stamp/"><span>06</span>스탬프</a>
+      <a href="../guide/"><span>07</span>안내</a>
     </nav>
     <div class="header-side">
       <a class="live-link" href="https://www.sooplive.com/station/leeyeda" target="_blank" rel="noreferrer"><i aria-hidden="true"></i>ON AIR</a>
@@ -159,7 +160,7 @@
     <footer class="cn-footer rv">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
       <b>WEDDING CINEMA · SCENE 03</b>
-      <span>CREATOR BUS</span>
+      <span>YBNZ</span>
     </footer>
   </main>
 
@@ -200,7 +201,7 @@
     var CATS = [
       { key:'hair',   label:'헤어' },
       { key:'outfit', label:'의상' },
-      { key:'lens',   label:'렌즈' }
+      { key:'lens',   label:'악세사리' }
     ];
     var LABELS = {}; CATS.forEach(function(c){ LABELS[c.key]=c.label; });
     var esc=CN.esc, txt=CN.txt;
@@ -312,7 +313,23 @@
         var res=await db.from('dress_items').select('*');
         if(res && Array.isArray(res.data)) items=res.data;
       }catch(e){}
-      finally{ renderTabs(); renderList(); CN.ready(); CN.reveal(); }
+      finally{
+        /* 현재 보기(새옷·헤어)가 비었으면 옷이 있는 모드/분류로 자동 이동 — "등록했는데 안 보임" 방지 */
+        if(items.length && !pool().length){
+          outer:
+          for(var mi=0; mi<2; mi++){
+            var m=[curMode, curMode==='new'?'old':'new'][mi];
+            for(var ci=0; ci<CATS.length; ci++){
+              var has=items.some(function(it){
+                return it.category===CATS[ci].key && (m==='new'?isNew(it):!isNew(it));
+              });
+              if(has){ curMode=m; curCat=CATS[ci].key; break outer; }
+            }
+          }
+          document.querySelectorAll('#mode-seg .seg-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.mode===curMode); });
+        }
+        renderTabs(); renderList(); CN.ready(); CN.reveal();
+      }
     }
     renderTabs(); renderList();
     load();

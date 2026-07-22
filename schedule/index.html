@@ -55,6 +55,8 @@
       transition:background 140ms ease;
     }
     body.day .ev{background:rgba(255,255,255,.55)}
+    .ev.tinted{border-left:3px solid var(--evc);background:var(--evbg)}
+    .ev.tinted:hover{filter:brightness(1.15)}
     .ev:hover{background:rgba(255,177,177,.16)}
     .ev b{color:var(--main);font-family:var(--font-serif);font-style:italic;font-weight:400;font-size:11px;margin-right:5px}
     body.day .ev b{color:var(--point)}
@@ -102,8 +104,8 @@
       .cal-cell{min-height:64px;padding:5px 4px 4px}
       .ev{padding:3px 4px;font-size:0}                 /* 모바일: 칩 → 점 */
       .ev b{font-size:0}
-      .ev::before{content:"";display:block;width:6px;height:6px;margin:1px auto;border-radius:50%;background:var(--main)}
-      body.day .ev::before{background:var(--point)}
+      .ev::before{content:"";display:block;width:6px;height:6px;margin:1px auto;border-radius:50%;background:var(--evc,var(--main))}
+      body.day .ev::before{background:var(--evc,var(--point))}
       .ev[data-memo]:hover::after{display:none}
       .cal-cell .more{text-align:center}
       .cal-bar{flex-direction:column;align-items:stretch}
@@ -115,7 +117,7 @@
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
-    <a href="../index.html" class="monogram" aria-label="LEE YEDA 홈">LY</a>
+    <a href="../index.html" class="monogram" aria-label="LEE YEDA 홈">YEDA</a>
     <nav id="main-navigation" class="main-navigation" aria-label="메인 메뉴">
       <a href="../profile/"><span>01</span>프로필</a>
       <a href="../schedule/" class="on"><span>02</span>일정</a>
@@ -123,6 +125,7 @@
       <a href="../work/"><span>04</span>업보</a>
       <a href="../ticket/"><span>05</span>시참권</a>
       <a href="../stamp/"><span>06</span>스탬프</a>
+      <a href="../guide/"><span>07</span>안내</a>
     </nav>
     <div class="header-side">
       <a class="live-link" href="https://www.sooplive.com/station/leeyeda" target="_blank" rel="noreferrer"><i aria-hidden="true"></i>ON AIR</a>
@@ -164,7 +167,7 @@
     <footer class="cn-footer rv">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
       <b>WEDDING CINEMA · SCENE 02</b>
-      <span>CREATOR BUS</span>
+      <span>YBNZ</span>
     </footer>
   </main>
 
@@ -235,7 +238,12 @@
         var chips='';
         list.slice(0,3).forEach(function(e){
           var dim=q&&!match(e);
-          chips+='<button class="ev'+(dim?' dim':'')+'" type="button" data-id="'+e.id+'"'+
+          var c=txt(e.color).trim(), tint='';
+          if(/^#[0-9a-fA-F]{6}$/.test(c)){
+            var r=parseInt(c.slice(1,3),16),g=parseInt(c.slice(3,5),16),bl=parseInt(c.slice(5,7),16);
+            tint=' style="--evc:'+c+';--evbg:rgba('+r+','+g+','+bl+',.18)"';
+          }
+          chips+='<button class="ev'+(dim?' dim':'')+(tint?' tinted':'')+'" type="button" data-id="'+e.id+'"'+tint+
             (txt(e.memo).trim()?' data-memo="'+esc(e.memo)+'"':'')+'>'+
             (txt(e.time).trim()?'<b>'+esc(e.time)+'</b>':'')+esc(e.title)+'</button>';
         });

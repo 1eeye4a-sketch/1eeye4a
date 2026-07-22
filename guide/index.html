@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="이예다 안내 — 방송 규칙 · 시참 규칙 · 가이드">
+  <title>LEE YEDA — 안내</title>
+  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/cinema.css">
+  <style>
+    /* ── 안내 게시판 전용 ── */
+    .gd-cats{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+    .gd-cat{
+      padding:9px 16px;border:1px solid var(--line);background:rgba(255,255,255,.04);
+      color:var(--tx);cursor:pointer;font-family:var(--font-body);font-size:12px;font-weight:750;letter-spacing:.04em;
+      transition:background 140ms ease;
+    }
+    body.day .gd-cat{background:rgba(255,255,255,.5)}
+    .gd-cat:hover{background:rgba(255,177,177,.12)}
+    .gd-cat.on{background:var(--point);border-color:var(--line);color:#fff}
+
+    /* 목록 */
+    .gd-list{border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+    .gd-row{
+      display:grid;grid-template-columns:110px 1fr auto;gap:16px;align-items:baseline;
+      width:100%;padding:17px 22px;border:0;border-bottom:1px solid var(--line-soft);
+      background:none;color:var(--tx);cursor:pointer;text-align:left;font-family:var(--font-body);
+      transition:background 140ms ease;
+    }
+    .gd-row:last-child{border-bottom:0}
+    .gd-row:hover{background:rgba(255,177,177,.08)}
+    .gd-row .c{font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.06em;color:var(--main)}
+    body.day .gd-row .c{color:var(--point)}
+    .gd-row .t{font-size:14.5px;font-weight:750;line-height:1.5}
+    .gd-row .t .pin{margin-right:7px;font-size:12px}
+    .gd-row .d{color:var(--tx-dim);font-family:var(--font-serif);font-style:italic;font-size:11px;white-space:nowrap}
+
+    /* 본문 */
+    #gd-article{display:none}
+    #gd-article.on{display:block}
+    #gd-list-wrap.off{display:none}
+    .art-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:0 0 18px}
+    .art-head .back{border:0;background:none;color:var(--tx-dim);cursor:pointer;font-size:10px;font-weight:900;letter-spacing:.14em;padding:8px 0}
+    .art-head .back:hover{color:var(--tx)}
+    .art-body-card{padding:34px clamp(22px,4vw,46px) 40px}
+    .art-cat{margin:0 0 6px;color:var(--main);font-family:var(--font-serif);font-style:italic;font-size:12px;letter-spacing:.12em}
+    body.day .art-cat{color:var(--point)}
+    .art-title{margin:0 0 6px;font-family:var(--font-serif);font-weight:400;font-size:clamp(26px,3.2vw,40px);letter-spacing:-.03em;line-height:1.3}
+    .art-date{margin:0 0 24px;padding-bottom:20px;border-bottom:1px solid var(--line-soft);color:var(--tx-dim);font-size:11px;letter-spacing:.08em}
+    .art-share{
+      display:inline-flex;align-items:center;gap:9px;padding:10px 18px;
+      border:1px solid var(--line);background:transparent;color:var(--tx);cursor:pointer;
+      font-size:10px;font-weight:900;letter-spacing:.12em;transition:background 150ms ease;
+    }
+    .art-share:hover{background:rgba(255,177,177,.12)}
+    .art-share.ok{background:var(--point);color:#fff}
+
+    /* 본문 타이포 (에디터 산출물) */
+    .art-content{font-size:14.5px;line-height:1.95;color:var(--tx-soft);word-break:keep-all;overflow-wrap:anywhere}
+    .art-content p{margin:0 0 .5em}
+    .art-content h2{margin:1.5em 0 .5em;font-family:var(--font-serif);font-weight:600;font-size:1.5em;letter-spacing:-.02em;color:var(--tx)}
+    .art-content h3{margin:1.3em 0 .4em;font-weight:800;font-size:1.13em;color:var(--tx)}
+    .art-content hr{margin:1.6em 0;border:0;border-top:1px solid var(--line)}
+    .art-content blockquote{
+      margin:1.1em 0;padding:12px 18px;border-left:3px solid var(--main);
+      background:rgba(255,177,177,.08);color:var(--tx);
+    }
+    body.day .art-content blockquote{border-left-color:var(--point);background:rgba(198,45,66,.06)}
+    .art-content ul,.art-content ol{margin:.4em 0 .9em;padding-left:1.5em}
+    .art-content li{margin:.2em 0}
+    .art-content a{color:var(--main);text-decoration:underline;text-underline-offset:3px}
+    body.day .art-content a{color:var(--point)}
+    .art-content img{max-width:100%;margin:.6em 0;border:1px solid var(--line-soft);display:block}
+    .art-content details{
+      margin:.9em 0;border:1px solid var(--line-soft);background:rgba(255,255,255,.04);
+    }
+    body.day .art-content details{background:rgba(255,255,255,.5)}
+    .art-content summary{
+      padding:12px 16px;cursor:pointer;font-weight:750;color:var(--tx);list-style:none;
+    }
+    .art-content summary::before{content:"▸";margin-right:9px;color:var(--main);display:inline-block;transition:transform 160ms ease}
+    body.day .art-content summary::before{color:var(--point)}
+    .art-content details[open] summary::before{transform:rotate(90deg)}
+    .art-content details > *:not(summary){margin-left:16px;margin-right:16px}
+    .art-content details > *:last-child{padding-bottom:12px}
+    .art-content mark{padding:.05em .15em;color:inherit}
+    .art-content b,.art-content strong{color:var(--tx)}
+
+    @media (max-width:620px){
+      .gd-row{grid-template-columns:1fr auto;padding:14px 16px}
+      .gd-row .c{display:none}
+      .art-body-card{padding:24px 18px 30px}
+    }
+  </style>
+</head>
+<body class="cinema-sub">
+<script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
+
+  <header class="site-header">
+    <a href="../index.html" class="monogram" aria-label="LEE YEDA 홈">YEDA</a>
+    <nav id="main-navigation" class="main-navigation" aria-label="메인 메뉴">
+      <a href="../profile/"><span>01</span>프로필</a>
+      <a href="../schedule/"><span>02</span>일정</a>
+      <a href="../dress/"><span>03</span>옷장</a>
+      <a href="../work/"><span>04</span>업보</a>
+      <a href="../ticket/"><span>05</span>시참권</a>
+      <a href="../stamp/"><span>06</span>스탬프</a>
+      <a href="../guide/" class="on"><span>07</span>안내</a>
+    </nav>
+    <div class="header-side">
+      <a class="live-link" href="https://www.sooplive.com/station/leeyeda" target="_blank" rel="noreferrer"><i aria-hidden="true"></i>ON AIR</a>
+      <button class="mode-toggle" type="button" aria-label="모드 전환">☀</button>
+    </div>
+    <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false" aria-label="메뉴 열기"><span></span><span></span></button>
+  </header>
+
+  <main class="chapter">
+    <div class="chapter-head rv">
+      <p class="kicker">SCENE 07 · GUIDE</p>
+      <h1><span>안내</span></h1>
+      <p class="desc" id="pg-desc">방송 규칙 · 시참 규칙 · 가이드 — 예다의 방송을 함께 즐기기 위한 안내예요.</p>
+    </div>
+
+    <!-- 목록 -->
+    <div id="gd-list-wrap">
+      <div class="gd-cats rv" id="gd-cats"></div>
+      <div class="gd-list rv" id="gd-list"></div>
+    </div>
+
+    <!-- 본문 -->
+    <article id="gd-article">
+      <div class="art-head">
+        <button class="back" id="gd-back" type="button">← 목록으로</button>
+        <button class="art-share" id="gd-share" type="button">🔗 링크 복사</button>
+      </div>
+      <div class="cn-card art-body-card">
+        <p class="art-cat" id="art-cat"></p>
+        <h2 class="art-title" id="art-title"></h2>
+        <p class="art-date" id="art-date"></p>
+        <div class="art-content" id="art-content"></div>
+      </div>
+    </article>
+
+    <footer class="cn-footer rv">
+      <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
+      <b>WEDDING CINEMA · SCENE 07</b>
+      <span>YBNZ</span>
+    </footer>
+  </main>
+
+  <!-- 연출 레이어 + 편지 모달 -->
+  <div id="cnPetals" aria-hidden="true"></div>
+  <div id="cnFx" aria-hidden="true"></div>
+  <div id="cnMask"></div>
+  <div id="cnLetter" role="dialog" aria-modal="true" aria-label="예다에게 편지 보내기">
+    <p class="lk">SEND A LETTER · 익명</p>
+    <h3>예다에게 편지</h3>
+    <textarea id="cnTa" placeholder="하고 싶은 말을 자유롭게 적어 주세요. 익명으로 예다에게만 전달돼요 ♥"></textarea>
+    <div class="acts">
+      <button id="cnClose" type="button">CLOSE</button>
+      <button id="cnSend" class="cn-btn-solid" type="button">보내기 ♥</button>
+    </div>
+    <p class="ok-msg">편지가 잘 도착했어요. 고마워요 ♥</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../supabase.js"></script>
+  <script src="../js/cinema.js"></script>
+  <script>
+  (function(){
+    var esc=CN.esc, txt=CN.txt;
+    var CATS=['전체','방송 규칙','시참 규칙','가이드'];
+    var posts=[], curCat='전체', curPost=null;
+
+    function byOrder(a,b){
+      if(!!b.pinned!==!!a.pinned) return (b.pinned?1:0)-(a.pinned?1:0);
+      var sa=+a.sort_order||0, sb=+b.sort_order||0;
+      if(sa!==sb) return sa-sb;
+      return String(b.created_at||'').localeCompare(String(a.created_at||''));
+    }
+    function fmtDate(iso){ var s=String(iso||'').slice(0,10); return s?s.replace(/-/g,'.'):''; }
+
+    function renderCats(){
+      var el=document.getElementById('gd-cats');
+      el.innerHTML=CATS.map(function(c){
+        return '<button class="gd-cat'+(c===curCat?' on':'')+'" type="button" data-c="'+esc(c)+'">'+esc(c)+'</button>';
+      }).join('');
+      el.querySelectorAll('.gd-cat').forEach(function(b){
+        b.addEventListener('click',function(){ curCat=b.dataset.c; renderCats(); renderList(); });
+      });
+    }
+    function renderList(){
+      var el=document.getElementById('gd-list');
+      var list=posts.filter(function(p){ return curCat==='전체'||p.category===curCat; }).sort(byOrder);
+      if(!list.length){
+        el.innerHTML='<div class="cn-empty">아직 등록된 안내가 없어요</div>'; return;
+      }
+      el.innerHTML=list.map(function(p){
+        return '<button class="gd-row" type="button" data-id="'+p.id+'">'+
+          '<span class="c">'+esc(p.category)+'</span>'+
+          '<span class="t">'+(p.pinned?'<span class="pin">📌</span>':'')+esc(p.title)+'</span>'+
+          '<span class="d">'+fmtDate(p.updated_at||p.created_at)+'</span></button>';
+      }).join('');
+      el.querySelectorAll('.gd-row').forEach(function(r){
+        r.addEventListener('click',function(){ openPost(r.dataset.id,true); });
+      });
+    }
+    function openPost(id,push){
+      var p=posts.find(function(x){ return String(x.id)===String(id); });
+      if(!p) return;
+      curPost=p;
+      document.getElementById('art-cat').textContent=txt(p.category);
+      document.getElementById('art-title').textContent=txt(p.title);
+      document.getElementById('art-date').textContent=fmtDate(p.updated_at||p.created_at)+' 업데이트';
+      document.getElementById('art-content').innerHTML=p.content_html||'';
+      document.getElementById('gd-list-wrap').classList.add('off');
+      document.getElementById('gd-article').classList.add('on');
+      window.scrollTo({top:0});
+      if(push && history.pushState) history.pushState({p:p.id},'','?p='+p.id);
+      var sb=document.getElementById('gd-share');
+      sb.classList.remove('ok'); sb.textContent='🔗 링크 복사';
+    }
+    function closePost(push){
+      curPost=null;
+      document.getElementById('gd-article').classList.remove('on');
+      document.getElementById('gd-list-wrap').classList.remove('off');
+      if(push && history.pushState) history.pushState({},'',location.pathname);
+    }
+    document.getElementById('gd-back').addEventListener('click',function(){ closePost(true); });
+    window.addEventListener('popstate',function(){
+      var id=new URLSearchParams(location.search).get('p');
+      if(id) openPost(id,false); else closePost(false);
+    });
+    document.getElementById('gd-share').addEventListener('click',function(){
+      if(!curPost) return;
+      var url=location.origin+location.pathname+'?p='+curPost.id;
+      var sb=document.getElementById('gd-share');
+      function done(){ sb.classList.add('ok'); sb.textContent='복사 완료 ♥'; setTimeout(function(){ sb.classList.remove('ok'); sb.textContent='🔗 링크 복사'; },1600); }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(url).then(done).catch(function(){ prompt('이 주소를 복사하세요', url); });
+      }else prompt('이 주소를 복사하세요', url);
+    });
+
+    async function load(){
+      try{
+        var r=await db.from('guide_posts').select('*');
+        if(r&&Array.isArray(r.data)) posts=r.data;
+      }catch(e){}
+      finally{
+        renderCats(); renderList();
+        var id=new URLSearchParams(location.search).get('p');
+        if(id) openPost(id,false);
+        CN.ready(); CN.reveal();
+      }
+    }
+    renderCats(); renderList();
+    load();
+  })();
+  </script>
+</body>
+</html>

@@ -97,6 +97,32 @@
     .th-row .nm i{display:block;font-style:normal;color:var(--tx-dim);font-size:10px;font-weight:400;margin-top:2px}
     .th-row input[type=color]{width:54px;height:38px;padding:2px;border:1px solid var(--line);background:transparent;cursor:pointer}
 
+    /* 안내 에디터 */
+    .ed-bar{display:flex;flex-wrap:wrap;gap:5px;padding:9px;border:1px solid var(--line);border-bottom:0;background:rgba(255,255,255,.05)}
+    .ed-btn{
+      min-width:32px;height:30px;padding:0 9px;border:1px solid var(--line-soft);background:transparent;
+      color:var(--tx);cursor:pointer;font-family:var(--font-body);font-size:11.5px;font-weight:750;
+    }
+    .ed-btn:hover{background:rgba(255,177,177,.14)}
+    .ed-dot{width:22px;height:22px;min-width:22px;padding:0;border-radius:50%;border:1px solid var(--line);align-self:center;cursor:pointer}
+    .ed-sep{width:1px;background:var(--line-soft);margin:2px 3px;align-self:stretch}
+    #ed-body{
+      min-height:280px;max-height:60vh;overflow:auto;padding:20px 22px;
+      border:1px solid var(--line);background:rgba(255,255,255,.05);
+      color:var(--tx-soft);font-size:14px;line-height:1.9;word-break:keep-all;
+    }
+    body.day #ed-body{background:rgba(255,255,255,.7)}
+    #ed-body:focus{outline:1px solid var(--main)}
+    #ed-body h2{margin:.9em 0 .4em;font-family:var(--font-serif);font-weight:600;font-size:1.45em;color:var(--tx)}
+    #ed-body h3{margin:.8em 0 .3em;font-weight:800;font-size:1.12em;color:var(--tx)}
+    #ed-body hr{margin:1.2em 0;border:0;border-top:1px solid var(--line)}
+    #ed-body blockquote{margin:.8em 0;padding:10px 15px;border-left:3px solid var(--main);background:rgba(255,177,177,.08);color:var(--tx)}
+    #ed-body a{color:var(--main);text-decoration:underline}
+    #ed-body img{max-width:100%;border:1px solid var(--line-soft);display:block;margin:.5em 0}
+    #ed-body details{margin:.7em 0;border:1px solid var(--line-soft)}
+    #ed-body summary{padding:9px 13px;cursor:pointer;font-weight:750;color:var(--tx)}
+    #ed-body b,#ed-body strong{color:var(--tx)}
+
     /* 로그인 */
     #adLogin{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:linear-gradient(135deg,#5b1027,#350917)}
     #adLogin .box{display:grid;gap:16px;width:min(88vw,360px);padding:38px 34px;border:1px solid var(--line);background:rgba(64,11,28,.6)}
@@ -124,7 +150,7 @@
   </div>
 
   <header class="site-header">
-    <a href="../index.html" class="monogram" aria-label="LEE YEDA 홈">LY</a>
+    <a href="../index.html" class="monogram" aria-label="LEE YEDA 홈">YEDA</a>
     <nav id="main-navigation" class="main-navigation" aria-label="메인 메뉴">
       <a href="../profile/"><span>01</span>프로필</a>
       <a href="../schedule/"><span>02</span>일정</a>
@@ -132,6 +158,7 @@
       <a href="../work/"><span>04</span>업보</a>
       <a href="../ticket/"><span>05</span>시참권</a>
       <a href="../stamp/"><span>06</span>스탬프</a>
+      <a href="../guide/"><span>07</span>안내</a>
     </nav>
     <div class="header-side">
       <span style="font-size:10px;font-weight:900;letter-spacing:.15em;color:var(--main)">CONSOLE</span>
@@ -154,6 +181,7 @@
       <button class="ad-tab" data-tab="upbo" type="button">📜 업보</button>
       <button class="ad-tab" data-tab="ticket" type="button">🎟 시참권</button>
       <button class="ad-tab" data-tab="stamp" type="button">💌 스탬프</button>
+      <button class="ad-tab" data-tab="guide" type="button">📖 안내</button>
       <button class="ad-tab" data-tab="inbox" type="button">📮 편지함</button>
       <button class="ad-tab" data-tab="theme" type="button">🎨 테마</button>
     </div>
@@ -176,6 +204,8 @@
           <div class="fld"><span class="cn-label">MBTI (선택)</span><input class="input" id="f-mbti" placeholder="비우면 행이 숨겨져요"></div>
           <div class="fld"><span class="cn-label">나이 (선택)</span><input class="input" id="f-age" placeholder="비우면 행이 숨겨져요"></div>
           <div class="fld full"><span class="cn-label">방송 시간 안내</span><input class="input" id="f-schedule"></div>
+          <div class="fld"><span class="cn-label">메인 큰 사진 URL (선택)</span><input class="input" id="f-main-hero" placeholder="비우면 기본 웨딩 사진"><span class="hint">가로로 넓은 사진 권장 (16:9쯤) — SOOP 게시판 "이미지 주소 복사"</span></div>
+          <div class="fld"><span class="cn-label">프로필 큰 사진 URL (선택)</span><input class="input" id="f-profile-hero" placeholder="비우면 기본 사진"><span class="hint">프로필 상단 스틸컷 자리 — 가로 넓은 사진 권장</span></div>
         </div>
       </div>
 
@@ -240,6 +270,17 @@
           <div class="fld full"><span class="cn-label">메모 (선택)</span><textarea class="input" id="sc-memo" style="min-height:70px" placeholder="달력에서 일정에 마우스를 올리면 보여요"></textarea></div>
           <div class="fld"><span class="cn-label">링크 (선택)</span><input class="input" id="sc-link" placeholder="https://…"><span class="hint">합방 상대 방송국·이벤트 글 등</span></div>
           <div class="fld"><span class="cn-label">이미지 링크 (선택)</span><input class="input" id="sc-img" placeholder="https://stimg.sooplive.com/…"><span class="hint">SOOP 게시판 이미지 우클릭 → "이미지 주소 복사"</span></div>
+          <div class="fld"><span class="cn-label">셀 색상 (선택)</span>
+            <select class="input" id="sc-color">
+              <option value="">기본</option>
+              <option value="#ffb1b1">🌸 핑크</option>
+              <option value="#e0526b">❤ 레드</option>
+              <option value="#e8b04b">⭐ 골드</option>
+              <option value="#7fd0b5">🌿 민트</option>
+              <option value="#9fb6f2">💧 블루</option>
+              <option value="#c79fe8">🔮 라벤더</option>
+            </select>
+            <span class="hint">달력에서 그 일정 칩에 색 띠가 붙어요 (합방·이벤트 구분용)</span></div>
         </div>
         <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft)">
           <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
@@ -266,11 +307,33 @@
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>날짜</th><th>시간</th><th>제목</th><th>메모</th><th>복사</th><th>삭제</th></tr></thead>
+            <thead><tr><th style="width:34px"><input type="checkbox" id="sc-all" title="전체 선택"></th><th>날짜</th><th>시간</th><th>제목</th><th>메모</th><th>복사</th><th>삭제</th></tr></thead>
             <tbody id="sc-list"></tbody>
           </table>
         </div>
-        <span class="hint" style="display:block;margin-top:8px">⧉ 복사 = 같은 내용을 다른 날짜로 하나 더 등록 · 내용 수정은 삭제 후 재등록이 깔끔해요</span>
+        <span class="hint" style="display:block;margin-top:8px">⧉ 복사 = 같은 내용을 다른 날짜로 하나 더 등록</span>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line-soft)">
+          <span class="cn-label">✔ 선택한 일정 한꺼번에 (반복 일정 관리용)</span>
+          <div class="row-line" style="margin-top:8px">
+            <div class="fld sm"><span class="cn-label">시간</span><input class="input" id="sc-bk-time" placeholder="그대로"></div>
+            <div class="fld"><span class="cn-label">제목</span><input class="input" id="sc-bk-title" placeholder="그대로"></div>
+            <div class="fld"><span class="cn-label">메모</span><input class="input" id="sc-bk-memo" placeholder="그대로"></div>
+            <div class="fld sm" style="flex:0 0 130px"><span class="cn-label">색상</span>
+              <select class="input" id="sc-bk-color">
+                <option value="__keep">그대로</option>
+                <option value="">기본으로</option>
+                <option value="#ffb1b1">🌸 핑크</option>
+                <option value="#e0526b">❤ 레드</option>
+                <option value="#e8b04b">⭐ 골드</option>
+                <option value="#7fd0b5">🌿 민트</option>
+                <option value="#9fb6f2">💧 블루</option>
+                <option value="#c79fe8">🔮 라벤더</option>
+              </select></div>
+            <button class="cn-btn-line" id="sc-bk-apply" type="button">선택 수정</button>
+            <button class="cn-btn-solid" id="sc-bk-del" type="button">선택 삭제</button>
+          </div>
+          <span class="hint" style="display:block;margin-top:8px">비워 둔 칸은 건드리지 않아요 — 예: 시간만 적으면 선택한 일정들의 시간만 바뀜</span>
+        </div>
       </div>
 
       <div class="cn-card">
@@ -292,7 +355,7 @@
             <select class="input" id="dr-cat">
               <option value="hair">헤어</option>
               <option value="outfit">의상</option>
-              <option value="lens">렌즈</option>
+              <option value="lens">악세사리</option>
             </select>
           </div>
           <div class="fld"><span class="cn-label">이름</span><input class="input" id="dr-name" placeholder="예) 화이트 브라이덜"></div>
@@ -338,6 +401,12 @@
       </div>
 
       <div class="cn-card">
+        <p class="cn-kicker">NOTICE · 업보 페이지 안내 문구</p>
+        <div class="fld"><textarea class="input" id="f-upbo-desc" placeholder="업보 페이지 제목 아래에 표시돼요 (줄바꿈 가능)"></textarea></div>
+        <div class="save-bar" style="margin-top:12px"><button class="cn-btn-solid" id="save-upbo-desc" type="button">안내 문구 저장 ♥</button></div>
+      </div>
+
+      <div class="cn-card">
         <p class="cn-kicker">TYPES · 업보 종류</p>
         <div class="row-line">
           <div class="fld"><span class="cn-label">업보 이름</span><input class="input" id="ub-tname" placeholder="예) 노래 한 곡"></div>
@@ -357,6 +426,7 @@
       <div class="cn-card">
         <p class="cn-kicker">GRANT · 업보 부여</p>
         <div class="row-line">
+          <div class="fld sm" style="flex:0 0 150px"><span class="cn-label">시청자 검색</span><input class="input" id="ub-vq" placeholder="닉네임"></div>
           <div class="fld"><span class="cn-label">시청자</span><select class="input" id="ub-viewer"></select></div>
           <div class="fld"><span class="cn-label">업보</span><select class="input" id="ub-type"></select></div>
           <div class="fld sm"><span class="cn-label">개수</span><input class="input" id="ub-count" type="number" value="1" min="1"></div>
@@ -377,6 +447,12 @@
     <!-- ═══════════ 🎟 시참권 ═══════════ -->
     <section class="tab-panel" id="tab-ticket">
       <div class="cn-card">
+        <p class="cn-kicker">NOTICE · 시참권 페이지 안내 문구</p>
+        <div class="fld"><textarea class="input" id="f-ticket-desc" placeholder="시참권 페이지 제목 아래에 표시돼요 (줄바꿈 가능)"></textarea></div>
+        <div class="save-bar" style="margin-top:12px"><button class="cn-btn-solid" id="save-ticket-desc" type="button">안내 문구 저장 ♥</button></div>
+      </div>
+
+      <div class="cn-card">
         <p class="cn-kicker">TYPES · 시참권 종류</p>
         <span class="hint" style="display:block;margin-bottom:14px">시청자 명단은 📜 업보 탭에서 관리해요 (업보·시참권·스탬프 공용 명단)</span>
         <div class="row-line">
@@ -396,6 +472,7 @@
       <div class="cn-card">
         <p class="cn-kicker">GRANT · 시참권 부여</p>
         <div class="row-line">
+          <div class="fld sm" style="flex:0 0 150px"><span class="cn-label">시청자 검색</span><input class="input" id="tk-vq" placeholder="닉네임"></div>
           <div class="fld"><span class="cn-label">시청자</span><select class="input" id="tk-viewer"></select></div>
           <div class="fld"><span class="cn-label">시참권</span><select class="input" id="tk-type"></select></div>
           <div class="fld sm"><span class="cn-label">장수</span><input class="input" id="tk-count" type="number" value="1" min="1"></div>
@@ -453,6 +530,72 @@
       </div>
     </section>
 
+    <!-- ═══════════ 📖 안내 게시판 ═══════════ -->
+    <section class="tab-panel" id="tab-guide">
+      <div class="cn-card">
+        <p class="cn-kicker">POSTS · 등록된 안내 글</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>분류</th><th>제목</th><th>📌</th><th>날짜</th><th>수정</th><th>링크</th><th>삭제</th></tr></thead>
+            <tbody id="gd-plist"></tbody>
+          </table>
+        </div>
+        <span class="hint" style="display:block;margin-top:8px">🔗 = 이 글로 바로 가는 주소 복사 (SOOP 공지·채팅에 붙여넣기용) · 📌 고정글은 목록 맨 위에 떠요</span>
+      </div>
+
+      <div class="cn-card">
+        <p class="cn-kicker" id="ed-mode-label">WRITE · 새 글 쓰기</p>
+        <div class="row-line" style="margin-bottom:12px">
+          <div class="fld sm" style="flex:0 0 150px"><span class="cn-label">분류</span>
+            <select class="input" id="ed-cat">
+              <option>방송 규칙</option>
+              <option>시참 규칙</option>
+              <option selected>가이드</option>
+            </select>
+          </div>
+          <div class="fld"><span class="cn-label">제목</span><input class="input" id="ed-title" placeholder="예) 예다 방송 5계명"></div>
+          <label style="display:flex;align-items:center;gap:7px;font-size:12px;cursor:pointer;align-self:end;padding-bottom:11px;white-space:nowrap">
+            <input type="checkbox" id="ed-pin"> 📌 고정
+          </label>
+        </div>
+        <div class="ed-bar">
+          <button class="ed-btn" data-cmd="formatBlock" data-val="h2" type="button" title="큰 제목">제목</button>
+          <button class="ed-btn" data-cmd="formatBlock" data-val="h3" type="button" title="소제목">소제목</button>
+          <button class="ed-btn" data-cmd="formatBlock" data-val="p" type="button" title="본문">본문</button>
+          <span class="ed-sep"></span>
+          <button class="ed-btn" data-cmd="bold" type="button" title="굵게"><b>B</b></button>
+          <button class="ed-btn" data-cmd="italic" type="button" title="기울임"><i>I</i></button>
+          <button class="ed-btn" data-cmd="underline" type="button" title="밑줄"><u>U</u></button>
+          <button class="ed-btn" data-cmd="strikeThrough" type="button" title="취소선"><s>S</s></button>
+          <span class="ed-sep"></span>
+          <button class="ed-dot" data-fc="#ff8fa3" style="background:#ff8fa3" type="button" title="글자색 핑크"></button>
+          <button class="ed-dot" data-fc="#e0526b" style="background:#e0526b" type="button" title="글자색 레드"></button>
+          <button class="ed-dot" data-fc="#e8b04b" style="background:#e8b04b" type="button" title="글자색 골드"></button>
+          <button class="ed-dot" data-fc="#3fb58e" style="background:#3fb58e" type="button" title="글자색 민트"></button>
+          <button class="ed-dot" data-fc="#6f8fe8" style="background:#6f8fe8" type="button" title="글자색 블루"></button>
+          <button class="ed-dot" data-fc="#a97fe0" style="background:#a97fe0" type="button" title="글자색 라벤더"></button>
+          <span class="ed-sep"></span>
+          <button class="ed-dot" data-hl="rgba(255,143,163,.35)" style="background:linear-gradient(0deg,rgba(255,143,163,.55),rgba(255,143,163,.55)),#fff" type="button" title="형광펜 핑크"></button>
+          <button class="ed-dot" data-hl="rgba(232,176,75,.35)" style="background:linear-gradient(0deg,rgba(232,176,75,.55),rgba(232,176,75,.55)),#fff" type="button" title="형광펜 골드"></button>
+          <button class="ed-dot" data-hl="rgba(111,143,232,.35)" style="background:linear-gradient(0deg,rgba(111,143,232,.55),rgba(111,143,232,.55)),#fff" type="button" title="형광펜 블루"></button>
+          <button class="ed-btn" data-hl="transparent" type="button" title="형광펜 지우기">형광✕</button>
+          <span class="ed-sep"></span>
+          <button class="ed-btn" data-cmd="insertHorizontalRule" type="button" title="구분선">─</button>
+          <button class="ed-btn" data-cmd="formatBlock" data-val="blockquote" type="button" title="인용">❝</button>
+          <button class="ed-btn" id="ed-toggle" type="button" title="접었다 펴는 토글">▸토글</button>
+          <button class="ed-btn" id="ed-img" type="button" title="이미지 넣기">🖼</button>
+          <button class="ed-btn" id="ed-link" type="button" title="링크 걸기">🔗</button>
+          <button class="ed-btn" data-cmd="removeFormat" type="button" title="서식 지우기">지우개</button>
+        </div>
+        <div id="ed-body" contenteditable="true"></div>
+        <span class="hint" style="display:block;margin-top:8px">글자를 드래그로 선택한 뒤 버튼을 누르면 그 부분에 적용돼요 · 이미지는 SOOP 게시판 "이미지 주소 복사" 링크로</span>
+        <div class="save-bar" style="margin-top:14px">
+          <button class="cn-btn-line" id="ed-new" type="button">새 글</button>
+          <button class="cn-btn-solid" id="ed-save" type="button">글 저장 ♥</button>
+        </div>
+      </div>
+    </section>
+
     <!-- ═══════════ 📮 편지함 ═══════════ -->
     <section class="tab-panel" id="tab-inbox">
       <div class="cn-card">
@@ -482,7 +625,7 @@
     <footer class="cn-footer">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
       <b>PRIVATE CONSOLE</b>
-      <span>CREATOR BUS</span>
+      <span>YBNZ</span>
     </footer>
   </main>
 
@@ -534,7 +677,7 @@
     }
 
     /* ══════════ 🎀 프로필 ══════════ */
-    var SIMPLE=['name','name_en','soop_id','avatar','tagline','quote','birthday','debut','agency','mbti','age','fan_name','schedule'];
+    var SIMPLE=['name','name_en','soop_id','avatar','tagline','quote','birthday','debut','agency','mbti','age','fan_name','schedule','main-hero','profile-hero'];
     var LISTS=['personality','catchphrases','keywords','likes','dislikes'];
     /* profileKeys — 페이지 훅과 3집합 일치 (감사용 목록) */
     var profileKeys=SIMPLE.concat(['intro'],LISTS,['stats','contents','week','links']);
@@ -544,7 +687,7 @@
       quote:'"거시기— 오늘도 복숭이랑 같이 놀아요."',
       intro:'러블리하고 청초한, 그런데 어딘가 어른스러운 옆집 유부녀 버추얼, 이예다예요. 평일 저녁 7시(주말은 낮 1시)에 만나서 소통하고, 롤하고, 종겜도 해요 🎀🍑',
       birthday:'08-18', debut:'2022.12.17', agency:'유부녀즈 · 크리에이터 버스',
-      mbti:'', age:'', fan_name:'복숭이 🍑',
+      mbti:'', age:'', fan_name:'복숭이 🍑', 'main-hero':'', 'profile-hero':'',
       schedule:'평일 저녁 7시 · 주말 낮 1시 (요일 랜덤)',
       keywords:['소통','롤','종합게임','K-POP'],
       personality:['러블리','공주','어른여자'],
@@ -645,13 +788,16 @@
       });
       var tb=document.getElementById('sc-list');
       tb.innerHTML=list.map(function(e){
-        return '<tr data-id="'+e.id+'"><td class="mini" style="white-space:nowrap">'+esc(String(e.date).slice(0,10).replace(/-/g,'.'))+'</td>'+
+        var dot=(e.color&&/^#[0-9a-fA-F]{6}$/.test(String(e.color).trim()))?'<i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:'+e.color+';margin-right:6px"></i>':'';
+        return '<tr data-id="'+e.id+'"><td><input type="checkbox" class="sc-ck"></td>'+
+          '<td class="mini" style="white-space:nowrap">'+esc(String(e.date).slice(0,10).replace(/-/g,'.'))+'</td>'+
           '<td class="mini">'+esc(e.time||'—')+'</td>'+
-          '<td>'+esc(e.title)+'</td>'+
+          '<td>'+dot+esc(e.title)+'</td>'+
           '<td class="mini">'+esc(txt(e.memo).split('\n')[0]).slice(0,26)+'</td>'+
           '<td style="width:56px;text-align:center"><button class="ic-btn" data-copy="1" title="다른 날짜로 복사">⧉</button></td>'+
           '<td><button class="ic-btn del" data-del="1">✕</button></td></tr>';
-      }).join('') || '<tr><td colspan="6" class="mini">'+(q?'검색 결과가 없어요':'등록된 일정이 없어요')+'</td></tr>';
+      }).join('') || '<tr><td colspan="7" class="mini">'+(q?'검색 결과가 없어요':'등록된 일정이 없어요')+'</td></tr>';
+      var allck=document.getElementById('sc-all'); if(allck) allck.checked=false;
       tb.querySelectorAll('tr[data-id]').forEach(function(tr){
         var e=scEvents.find(function(x){ return String(x.id)===tr.dataset.id; });
         tr.querySelector('[data-copy]').addEventListener('click',async function(){
@@ -659,7 +805,7 @@
           var d=prompt('어느 날짜로 복사할까요? (YYYY-MM-DD)', String(e.date).slice(0,10));
           if(!d) return;
           if(!/^\d{4}-\d{2}-\d{2}$/.test(d.trim())){ alert('YYYY-MM-DD 형식으로 적어 주세요!'); return; }
-          var ok=await insertRow('schedule_events',{date:d.trim(),time:e.time||'',title:e.title,memo:e.memo||'',link:e.link||'',image_url:e.image_url||''});
+          var ok=await insertRow('schedule_events',{date:d.trim(),time:e.time||'',title:e.title,memo:e.memo||'',link:e.link||'',image_url:e.image_url||'',color:e.color||''});
           if(ok) loadSchedule();
         });
         tr.querySelector('[data-del]').addEventListener('click',async function(){
@@ -670,12 +816,45 @@
       });
     }
     document.getElementById('sc-q').addEventListener('input',renderScList);
+    document.getElementById('sc-all').addEventListener('change',function(e){
+      document.querySelectorAll('#sc-list .sc-ck').forEach(function(c){ c.checked=e.target.checked; });
+    });
+    function scChecked(){
+      var ids=[];
+      document.querySelectorAll('#sc-list tr[data-id]').forEach(function(tr){
+        var ck=tr.querySelector('.sc-ck'); if(ck&&ck.checked) ids.push(tr.dataset.id);
+      });
+      return ids;
+    }
+    document.getElementById('sc-bk-del').addEventListener('click',async function(){
+      if(!guard()) return;
+      var ids=scChecked(); if(!ids.length){ alert('먼저 목록에서 체크해 주세요!'); return; }
+      if(!confirm(ids.length+'건을 삭제할까요?')) return;
+      for(var i=0;i<ids.length;i++) await deleteRow('schedule_events',ids[i]);
+      loadSchedule();
+    });
+    document.getElementById('sc-bk-apply').addEventListener('click',async function(){
+      if(!guard()) return;
+      var ids=scChecked(); if(!ids.length){ alert('먼저 목록에서 체크해 주세요!'); return; }
+      var patch={};
+      if(v('sc-bk-time')) patch.time=v('sc-bk-time');
+      if(v('sc-bk-title')) patch.title=v('sc-bk-title');
+      if(v('sc-bk-memo')) patch.memo=v('sc-bk-memo');
+      var bc=document.getElementById('sc-bk-color').value;
+      if(bc!=='__keep') patch.color=bc;
+      if(!Object.keys(patch).length){ alert('바꿀 내용을 하나 이상 적어 주세요!'); return; }
+      if(!confirm(ids.length+'건에 적용할까요?')) return;
+      for(var i=0;i<ids.length;i++) await updateRow('schedule_events',ids[i],patch);
+      setv('sc-bk-time',''); setv('sc-bk-title',''); setv('sc-bk-memo','');
+      document.getElementById('sc-bk-color').value='__keep';
+      loadSchedule();
+    });
     document.getElementById('sc-past').addEventListener('change',renderScList);
     document.getElementById('sc-add').addEventListener('click',async function(){
       if(!guard()) return;
       var date=v('sc-date'), title=v('sc-title');
       if(!date||!title){ alert('날짜와 제목은 필수예요!'); return; }
-      var base={time:v('sc-time'),title:title,memo:v('sc-memo'),link:v('sc-link'),image_url:v('sc-img')};
+      var base={time:v('sc-time'),title:title,memo:v('sc-memo'),link:v('sc-link'),image_url:v('sc-img'),color:v('sc-color')};
       var dates=[date];
       if(document.getElementById('sc-repeat').checked){
         var days=[]; document.querySelectorAll('#sc-days [data-day]:checked').forEach(function(c){ days.push(+c.dataset.day); });
@@ -716,7 +895,7 @@
 
     /* ══════════ 👗 옷장 ══════════ */
     var DRESS_CATS=['hair','outfit','lens'];      /* dress 페이지 CATS · 위 select와 동일 값 유지 */
-    var DRESS_LB={hair:'헤어',outfit:'의상',lens:'렌즈'};
+    var DRESS_LB={hair:'헤어',outfit:'의상',lens:'악세사리'};
     var dressItems=[];
     function isNew(it){
       var b=it.badges; if(typeof b==='string'){ try{ b=JSON.parse(b); }catch(e){ b=[]; } }
@@ -794,8 +973,6 @@
     async function loadViewers(){
       try{ var r=await db.from('viewers').select('*'); viewers=(r&&r.data)||[]; }catch(e){ viewers=[]; }
       viewers.sort(function(a,b){
-        var sa=+a.sort_order||0, sb=+b.sort_order||0;
-        if(sa!==sb) return sa-sb;
         return String(a.nickname||'').localeCompare(String(b.nickname||''),'ko');
       });
       vById={}; viewers.forEach(function(x){ vById[x.id]=x; });
@@ -825,12 +1002,23 @@
       if(ok){ setv('vw-nick',''); setv('vw-sid',''); loadAllLedgers(); }
     });
     function fillViewerSelects(){
-      ['ub-viewer','tk-viewer'].forEach(function(id){
-        var el=document.getElementById(id);
-        el.innerHTML=viewers.map(function(x){ return '<option value="'+x.id+'">'+esc(x.nickname)+'</option>'; }).join('')
-          || '<option value="">명단이 비어 있어요</option>';
+      ['ub','tk'].forEach(function(pfx){
+        var el=document.getElementById(pfx+'-viewer');
+        var q=v(pfx+'-vq').toLowerCase();
+        var list=viewers.filter(function(x){ return !q || String(x.nickname||'').toLowerCase().indexOf(q)>-1 || String(x.soop_id||'').toLowerCase().indexOf(q)>-1; });
+        var keep=el.value;
+        el.innerHTML=list.map(function(x){ return '<option value="'+x.id+'">'+esc(x.nickname)+'</option>'; }).join('')
+          || '<option value="">'+(viewers.length?'검색 결과 없음':'명단이 비어 있어요')+'</option>';
+        if(list.some(function(x){ return String(x.id)===keep; })) el.value=keep;
       });
     }
+    ['ub','tk'].forEach(function(pfx){
+      document.getElementById(pfx+'-vq').addEventListener('input',function(){
+        fillViewerSelects();
+        if(pfx==='ub' && UB) UB.rerender();
+        if(pfx==='tk' && TK) TK.rerender();
+      });
+    });
 
     function ledger(prefix, T_TYPES, T_COUNTS, unit){
       var types=[], counts=[];
@@ -860,18 +1048,32 @@
         var sel=document.getElementById(prefix+'-type');
         sel.innerHTML=types.map(function(t){ return '<option value="'+t.id+'">'+esc(t.name)+'</option>'; }).join('')
           || '<option value="">종류를 먼저 추가해 주세요</option>';
-        var list=counts.slice().sort(function(a,b){
+        var vq=v(prefix+'-vq').toLowerCase();
+        var list=counts.slice().filter(function(c){
+          if(!vq) return true;
+          var vn=(vById[c.viewer_id]||{});
+          return String(vn.nickname||'').toLowerCase().indexOf(vq)>-1 || String(vn.soop_id||'').toLowerCase().indexOf(vq)>-1;
+        }).sort(function(a,b){
           var na=(vById[a.viewer_id]||{}).nickname||'', nb=(vById[b.viewer_id]||{}).nickname||'';
           if(na!==nb) return na.localeCompare(nb,'ko');
           return String(b.updated_at||'').localeCompare(String(a.updated_at||''));
         });
+        var nowD=new Date(), curYM=nowD.getFullYear()+'-'+('0'+(nowD.getMonth()+1)).slice(-2);
+        var todayS=curYM+'-'+('0'+nowD.getDate()).slice(-2);
+        function expCell(c){
+          if(!c.expires) return '<td class="mini">무기한</td>';
+          var d=String(c.expires).slice(0,10);
+          if(d<todayS) return '<td class="mini" style="text-decoration:line-through;opacity:.6">'+esc(d)+' 만료</td>';
+          if(d.slice(0,7)===curYM) return '<td style="color:var(--point);font-weight:800;white-space:nowrap">'+esc(d)+' ⚠</td>';
+          return '<td class="mini">'+esc(d)+'</td>';
+        }
         var tb=document.getElementById(prefix+'-list');
         tb.innerHTML=list.map(function(c){
           var vn=(vById[c.viewer_id]||{}).nickname;
           return '<tr data-id="'+c.id+'"><td>'+esc(vn||'(삭제된 시청자)')+'</td>'+
             '<td>'+esc(tById(c.type_id).name||'(삭제된 항목)')+'</td>'+
             '<td style="white-space:nowrap"><button class="ic-btn" data-adj="-1">−</button> <b>'+(+c.count||0)+'</b> <button class="ic-btn" data-adj="1">＋</button></td>'+
-            '<td class="mini">'+(c.expires?esc(String(c.expires).slice(0,10)):'무기한')+'</td>'+
+            expCell(c)+
             '<td class="mini">'+esc(c.note||'')+'</td>'+
             '<td><button class="ic-btn del" data-del="1">✕</button></td></tr>';
         }).join('') || '<tr><td colspan="6" class="mini">아직 부여된 기록이 없어요</td></tr>';
@@ -910,7 +1112,7 @@
         var ok=await insertRow(T_TYPES,{name:name,category:v(prefix+'-tcat'),sort_order:maxSo+1});
         if(ok){ setv(prefix+'-tname',''); load(); }
       });
-      return {load:load};
+      return {load:load, rerender:render};
     }
     var UB=ledger('ub','upbo_types','upbo_counts','건');
     var TK=ledger('tk','ticket_types','ticket_counts','장');
@@ -1026,6 +1228,109 @@
       renderRewardEdit(); drawStamp();
     });
 
+    /* 업보/시참권 안내 문구 저장 */
+    document.getElementById('save-upbo-desc').addEventListener('click',async function(){
+      if(!guard()) return;
+      alert((await putData({'upbo-desc':v('f-upbo-desc')}))?'저장 완료 ♥':'저장 실패');
+    });
+    document.getElementById('save-ticket-desc').addEventListener('click',async function(){
+      if(!guard()) return;
+      alert((await putData({'ticket-desc':v('f-ticket-desc')}))?'저장 완료 ♥':'저장 실패');
+    });
+
+    /* ══════════ 📖 안내 게시판 ══════════ */
+    var gdPosts=[], edId=null;
+    var ed=document.getElementById('ed-body');
+    try{ document.execCommand('styleWithCSS',false,true); }catch(e){}
+    function edExec(cmd,val){
+      ed.focus();
+      document.execCommand(cmd,false,val||null);
+    }
+    document.querySelectorAll('.ed-bar [data-cmd]').forEach(function(b){
+      b.addEventListener('mousedown',function(e){ e.preventDefault(); });
+      b.addEventListener('click',function(){ edExec(b.dataset.cmd, b.dataset.val); });
+    });
+    document.querySelectorAll('.ed-bar [data-fc]').forEach(function(b){
+      b.addEventListener('mousedown',function(e){ e.preventDefault(); });
+      b.addEventListener('click',function(){ edExec('foreColor', b.dataset.fc); });
+    });
+    document.querySelectorAll('.ed-bar [data-hl]').forEach(function(b){
+      b.addEventListener('mousedown',function(e){ e.preventDefault(); });
+      b.addEventListener('click',function(){ edExec('hiliteColor', b.dataset.hl); });
+    });
+    document.getElementById('ed-toggle').addEventListener('click',function(){
+      edExec('insertHTML','<details><summary>여기를 눌러 펼치기</summary><p>접힌 내용을 여기에 적어 주세요</p></details><p><br></p>');
+    });
+    document.getElementById('ed-img').addEventListener('click',function(){
+      var u=prompt('이미지 주소를 붙여넣어 주세요 (SOOP 게시판 → 이미지 우클릭 → 이미지 주소 복사)');
+      if(u&&u.trim()) edExec('insertHTML','<img src="'+esc(u.trim())+'" referrerpolicy="no-referrer"><p><br></p>');
+    });
+    document.getElementById('ed-link').addEventListener('click',function(){
+      var u=prompt('연결할 주소(https://…)를 붙여넣어 주세요');
+      if(u&&u.trim()) edExec('createLink', u.trim());
+    });
+    function edReset(){
+      edId=null;
+      document.getElementById('ed-mode-label').textContent='WRITE · 새 글 쓰기';
+      setv('ed-title',''); document.getElementById('ed-pin').checked=false;
+      document.getElementById('ed-cat').value='가이드';
+      ed.innerHTML='';
+    }
+    document.getElementById('ed-new').addEventListener('click',edReset);
+    document.getElementById('ed-save').addEventListener('click',async function(){
+      if(!guard()) return;
+      var title=v('ed-title'); if(!title){ alert('제목을 입력해 주세요!'); return; }
+      var row={ category:document.getElementById('ed-cat').value, title:title,
+                content_html:ed.innerHTML, pinned:document.getElementById('ed-pin').checked,
+                updated_at:new Date().toISOString() };
+      var ok = edId ? await updateRow('guide_posts',edId,row) : await insertRow('guide_posts',row);
+      if(ok){ alert(edId?'수정 완료 ♥':'등록 완료 ♥'); edReset(); loadGuide(); }
+      else alert('저장 실패 — supabase_setup.sql 실행 여부를 확인해 주세요');
+    });
+    function guideUrl(id){ return new URL('../guide/?p='+id, location.href).href; }
+    async function loadGuide(){
+      try{ var r=await db.from('guide_posts').select('*'); gdPosts=(r&&r.data)||[]; }catch(e){ gdPosts=[]; }
+      gdPosts.sort(function(a,b){
+        if(!!b.pinned!==!!a.pinned) return (b.pinned?1:0)-(a.pinned?1:0);
+        return String(b.created_at||'').localeCompare(String(a.created_at||''));
+      });
+      var tb=document.getElementById('gd-plist');
+      tb.innerHTML=gdPosts.map(function(p){
+        return '<tr data-id="'+p.id+'"><td class="mini" style="white-space:nowrap">'+esc(p.category)+'</td>'+
+          '<td>'+esc(p.title)+'</td>'+
+          '<td>'+(p.pinned?'📌':'')+'</td>'+
+          '<td class="mini" style="white-space:nowrap">'+esc(String(p.updated_at||p.created_at||'').slice(0,10))+'</td>'+
+          '<td style="width:44px;text-align:center"><button class="ic-btn" data-ed="1" title="수정">✎</button></td>'+
+          '<td style="width:44px;text-align:center"><button class="ic-btn" data-lk="1" title="링크 복사">🔗</button></td>'+
+          '<td><button class="ic-btn del" data-del="1">✕</button></td></tr>';
+      }).join('') || '<tr><td colspan="7" class="mini">아직 안내 글이 없어요 — 아래에서 첫 글을 써 보세요</td></tr>';
+      tb.querySelectorAll('tr[data-id]').forEach(function(tr){
+        var p=gdPosts.find(function(x){ return String(x.id)===tr.dataset.id; });
+        tr.querySelector('[data-ed]').addEventListener('click',function(){
+          edId=p.id;
+          document.getElementById('ed-mode-label').textContent='EDIT · "'+p.title+'" 수정 중';
+          document.getElementById('ed-cat').value=p.category||'가이드';
+          setv('ed-title',p.title);
+          document.getElementById('ed-pin').checked=!!p.pinned;
+          ed.innerHTML=p.content_html||'';
+          ed.scrollIntoView({behavior:'smooth',block:'center'});
+        });
+        tr.querySelector('[data-lk]').addEventListener('click',function(){
+          var url=guideUrl(p.id);
+          if(navigator.clipboard&&navigator.clipboard.writeText)
+            navigator.clipboard.writeText(url).then(function(){ alert('링크 복사 완료 ♥\n'+url); },function(){ prompt('이 주소를 복사하세요',url); });
+          else prompt('이 주소를 복사하세요',url);
+        });
+        tr.querySelector('[data-del]').addEventListener('click',async function(){
+          if(!guard()) return;
+          if(!confirm('"'+p.title+'" 글을 지울까요?')) return;
+          await deleteRow('guide_posts',p.id);
+          if(String(edId)===String(p.id)) edReset();
+          loadGuide();
+        });
+      });
+    }
+
     /* ══════════ 📮 편지함 ══════════ */
     async function loadInbox(){
       var rows=[];
@@ -1101,6 +1406,8 @@
       var d=await getData();
       fillProfile(d);
       setv('f-stamp-desc', txt(d['stamp-desc']||''));
+      setv('f-upbo-desc', txt(d['upbo-desc']||''));
+      setv('f-ticket-desc', txt(d['ticket-desc']||''));
       if(Array.isArray(d['stamp-rewards'])&&d['stamp-rewards'].length)
         stRewards=d['stamp-rewards'].map(function(r){ return {at:+r.at||0,label:txt(r.label)}; }).filter(function(r){ return r.at>0; });
       renderRewardEdit();
@@ -1110,6 +1417,7 @@
       renderScPresets();
       loadDress();
       loadSchedule();
+      loadGuide();
       await loadAllLedgers();
       loadInbox();
       drawStamp();

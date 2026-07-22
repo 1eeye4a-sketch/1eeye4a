@@ -83,7 +83,7 @@ body.cinema-sub.day{
 .monogram{
   display:flex;align-items:center;justify-content:center;height:100%;
   border-right:1px solid var(--line);
-  font-family:var(--font-serif);font-size:25px;font-style:italic;letter-spacing:-.08em;line-height:1;
+  font-family:var(--font-serif);font-size:19px;font-style:italic;letter-spacing:-.02em;line-height:1;
 }
 .main-navigation{display:flex;justify-content:center;align-items:center;gap:clamp(18px,2.9vw,58px)}
 .main-navigation a{position:relative;padding:12px 0;font-size:11px;font-weight:750;letter-spacing:.1em}
@@ -185,6 +185,7 @@ body.day .cn-kicker{color:var(--point)}
 .cn-chips{display:flex;flex-wrap:wrap;gap:8px}
 .cn-chip{
   padding:7px 13px;border:1px solid var(--line);
+  color:var(--tx);
   font-size:12px;font-weight:650;letter-spacing:.02em;
   background:rgba(255,255,255,.04);
 }
@@ -335,7 +336,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--main);outline-offse
 @media (max-width:900px){
   body{overflow:auto}
   .site-header{grid-template-columns:76px 1fr auto}
-  .monogram{font-size:21px}
+  .monogram{font-size:16px}
   .main-navigation{
     position:fixed;z-index:40;top:clamp(74px,9.5vh,104px);right:0;left:0;
     display:grid;gap:0;padding:15px 6vw 24px;
