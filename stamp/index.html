@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="이예다 스탬프 — SCENE 05 · GUEST BOOK">
+  <meta name="description" content="이예다 스탬프 — SCENE 06 · GUEST BOOK">
   <title>LEE YEDA — 스탬프</title>
   <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,6 +80,19 @@
     }
     .gb-cell.ms.hit::before{content:"♥";color:#fff;background:var(--point);width:68%;height:68%;display:grid;place-items:center;border-radius:50%;font-size:clamp(11px,1.1vw,15px);text-shadow:none}
     .gb-cell.pop::before{animation:stpop 480ms cubic-bezier(.2,.75,.25,1)}
+    .gb-cell[data-note]{cursor:help}
+    .gb-cell[data-note]:hover{z-index:5}
+    .gb-cell[data-note]:hover::after{
+      content:attr(data-note);
+      position:absolute;z-index:30;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%);
+      width:max-content;max-width:200px;padding:8px 11px;
+      border:1px solid var(--line);background:var(--glass-deep);
+      backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      color:var(--tx);font-size:11px;font-weight:500;line-height:1.55;white-space:pre-wrap;text-align:left;
+      pointer-events:none;
+    }
+    .gb-cell:nth-child(10n+1)[data-note]:hover::after,.gb-cell:nth-child(10n+2)[data-note]:hover::after{left:0;transform:none}
+    .gb-cell:nth-child(10n)[data-note]:hover::after,.gb-cell:nth-child(10n+9)[data-note]:hover::after{left:auto;right:0;transform:none}
     @keyframes stpop{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
     .gb-hint{margin:14px 0 0;color:var(--tx-dim);font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.06em;text-align:right}
 
@@ -97,10 +110,11 @@
     <a href="../index.html" class="monogram" aria-label="LEE YEDA 홈">LY</a>
     <nav id="main-navigation" class="main-navigation" aria-label="메인 메뉴">
       <a href="../profile/"><span>01</span>프로필</a>
-      <a href="../dress/"><span>02</span>옷장</a>
-      <a href="../work/"><span>03</span>업보</a>
-      <a href="../ticket/"><span>04</span>시참권</a>
-      <a href="../stamp/" class="on"><span>05</span>스탬프</a>
+      <a href="../schedule/"><span>02</span>일정</a>
+      <a href="../dress/"><span>03</span>옷장</a>
+      <a href="../work/"><span>04</span>업보</a>
+      <a href="../ticket/"><span>05</span>시참권</a>
+      <a href="../stamp/" class="on"><span>06</span>스탬프</a>
     </nav>
     <div class="header-side">
       <a class="live-link" href="https://www.sooplive.com/station/leeyeda" target="_blank" rel="noreferrer"><i aria-hidden="true"></i>ON AIR</a>
@@ -112,7 +126,7 @@
   <main class="chapter">
     <div class="chapter-head rv">
       <div class="chapter-ghost" aria-hidden="true">Guest</div>
-      <p class="kicker">SCENE 05 · STAMP</p>
+      <p class="kicker">SCENE 06 · STAMP</p>
       <h1><em>the</em><span>guest book</span></h1>
       <p class="desc" id="gb-desc">예다의 방명록 — 방송에 함께한 날마다 도장이 하나씩 찍혀요. 이름을 검색해 내 방명록을 펼쳐 보세요.</p>
     </div>
@@ -152,7 +166,7 @@
 
     <footer class="cn-footer rv">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
-      <b>WEDDING CINEMA · SCENE 05</b>
+      <b>WEDDING CINEMA · SCENE 06</b>
       <span>CREATOR BUS</span>
     </footer>
   </main>
@@ -187,9 +201,31 @@
       {at:30, label:'일러스트'}
     ];
     var esc=CN.esc, txt=CN.txt;
-    var viewers=[], rewards=DEFAULT_REWARDS.slice(), cur=null;
+    var viewers=[], stampLog=[], rewards=DEFAULT_REWARDS.slice(), cur=null;
 
     function rewardAt(n){ var r=rewards.find(function(x){ return +x.at===n; }); return r?txt(r.label):''; }
+    function entriesOf(vid){
+      return stampLog.filter(function(e){ return String(e.viewer_id)===String(vid); })
+        .sort(function(a,b){
+          var c=String(a.created_at||'').localeCompare(String(b.created_at||''));
+          return c!==0?c:((+a.id||0)-(+b.id||0));
+        });
+    }
+    function countOf(v){
+      var list=entriesOf(v.id);
+      if(list.length) return list.reduce(function(s,e){ return s+(+e.amount||0); },0);
+      return +v.stamp_count||0;                 /* 로그 없는 옛 데이터 호환 */
+    }
+    function noteMap(vid){
+      var m={}, k=0;
+      entriesOf(vid).forEach(function(e){
+        var note=txt(e.note).trim(), d=String(e.created_at||'').slice(0,10).replace(/-/g,'.');
+        for(var i=0;i<(+e.amount||0);i++){
+          k++; if(note) m[k]=note+(d?'\n('+d+')':'');
+        }
+      });
+      return m;
+    }
 
     function renderChips(){
       var q=(document.getElementById('gb-q').value||'').trim().toLowerCase();
@@ -203,11 +239,12 @@
                String(v.soop_id||'').toLowerCase().indexOf(q)>-1;
       });
       var el=document.getElementById('gb-chips');
-      if(!viewers.length){ el.innerHTML='<span style="color:var(--tx-dim);font-size:12px">아직 명단이 비어 있어요 — admin에서 복숭이를 추가하면 여기 떠요</span>'; return; }
+      if(!q){ el.innerHTML='<span style="color:var(--tx-dim);font-size:12px">닉네임 또는 SOOP 아이디를 검색하면 내 방명록이 떠요 ♥</span>'; return; }
+      if(!viewers.length){ el.innerHTML='<span style="color:var(--tx-dim);font-size:12px">아직 명단이 비어 있어요</span>'; return; }
       if(!list.length){ el.innerHTML='<span style="color:var(--tx-dim);font-size:12px">검색 결과가 없어요</span>'; return; }
       el.innerHTML=list.map(function(v){
         return '<button class="gb-chip'+(cur&&String(cur.id)===String(v.id)?' on':'')+'" type="button" data-id="'+v.id+'">'+
-               esc(v.nickname)+'<b>'+(+v.stamp_count||0)+'</b></button>';
+               esc(v.nickname)+'<b>'+countOf(v)+'</b></button>';
       }).join('');
       el.querySelectorAll('.gb-chip').forEach(function(c){
         c.addEventListener('click',function(){ open(c.dataset.id); });
@@ -225,7 +262,7 @@
         ? '<img class="gb-av" src="'+esc(av)+'" alt="" referrerpolicy="no-referrer" onerror="this.outerHTML=\'<div class=&quot;gb-av-fb&quot;>'+esc(String(cur.nickname||'?').charAt(0))+'</div>\'">'
         : '<div class="gb-av-fb">'+esc(String(cur.nickname||'?').charAt(0))+'</div>';
       document.getElementById('gb-name').textContent=txt(cur.nickname);
-      var n=Math.max(0,Math.min(CELLS,+cur.stamp_count||0));
+      var n=Math.max(0,Math.min(CELLS,countOf(cur)));
       document.getElementById('gb-count').textContent=n;
       /* 다음 보상 */
       var next=rewards.filter(function(r){ return +r.at>n; }).sort(function(a,b){ return a.at-b.at; })[0];
@@ -245,12 +282,15 @@
         return '<div class="rw-row'+(done?' done':'')+'"><span class="at">'+r.at+'개</span>'+
                '<span class="lb">'+esc(r.label)+'</span><span class="st">'+(done?'RECEIVED ♥':'LOCKED')+'</span></div>';
       }).join('');
-      /* 판 */
+      /* 판 — 도장마다 지급 사유 툴팁 */
+      var notes=noteMap(cur.id);
       var b=document.getElementById('gb-board'), h='';
       for(var i=1;i<=CELLS;i++){
         var ms=rewardAt(i);
+        var tip=[notes[i], ms?(i+'개 — 🎁 '+ms):''].filter(Boolean).join('\n');
         h+='<div class="gb-cell'+(i<=n?' hit':'')+(ms?' ms':'')+(i===n?' pop':'')+'"'+
-           (ms?' title="'+esc(i+'개 — '+ms)+'"':'')+'><span class="no">'+i+'</span></div>';
+           (tip&&i<=n?' data-note="'+esc(tip)+'"':(ms?' title="'+esc(i+'개 — '+ms)+'"':''))+
+           '><span class="no">'+i+'</span></div>';
       }
       b.innerHTML=h;
       renderChips();
@@ -262,6 +302,8 @@
       try{
         var r1=await db.from('viewers').select('*');
         if(r1&&Array.isArray(r1.data)) viewers=r1.data;
+        var rl=await db.from('stamp_log').select('*');
+        if(rl&&Array.isArray(rl.data)) stampLog=rl.data;
         var r2=await db.from('profile').select('data').eq('id',1);
         var d=r2&&r2.data&&r2.data[0]&&r2.data[0].data;
         if(d){

@@ -127,10 +127,11 @@
     <a href="../index.html" class="monogram" aria-label="LEE YEDA 홈">LY</a>
     <nav id="main-navigation" class="main-navigation" aria-label="메인 메뉴">
       <a href="../profile/"><span>01</span>프로필</a>
-      <a href="../dress/"><span>02</span>옷장</a>
-      <a href="../work/"><span>03</span>업보</a>
-      <a href="../ticket/"><span>04</span>시참권</a>
-      <a href="../stamp/"><span>05</span>스탬프</a>
+      <a href="../schedule/"><span>02</span>일정</a>
+      <a href="../dress/"><span>03</span>옷장</a>
+      <a href="../work/"><span>04</span>업보</a>
+      <a href="../ticket/"><span>05</span>시참권</a>
+      <a href="../stamp/"><span>06</span>스탬프</a>
     </nav>
     <div class="header-side">
       <span style="font-size:10px;font-weight:900;letter-spacing:.15em;color:var(--main)">CONSOLE</span>
@@ -148,6 +149,7 @@
 
     <div class="ad-tabs" role="tablist">
       <button class="ad-tab on" data-tab="profile" type="button">🎀 프로필</button>
+      <button class="ad-tab" data-tab="schedule" type="button">📅 일정</button>
       <button class="ad-tab" data-tab="dress" type="button">👗 옷장</button>
       <button class="ad-tab" data-tab="upbo" type="button">📜 업보</button>
       <button class="ad-tab" data-tab="ticket" type="button">🎟 시참권</button>
@@ -223,6 +225,62 @@
       </div>
 
       <div class="save-bar"><button class="cn-btn-solid" id="save-profile" type="button">프로필 저장 ♥</button></div>
+    </section>
+
+    <!-- ═══════════ 📅 일정 ═══════════ -->
+    <section class="tab-panel" id="tab-schedule">
+      <div class="cn-card">
+        <p class="cn-kicker">ADD · 일정 등록</p>
+        <div class="fgrid">
+          <div class="fld"><span class="cn-label">날짜</span><input class="input" id="sc-date" type="date"></div>
+          <div class="fld"><span class="cn-label">시간 (선택)</span><input class="input" id="sc-time" placeholder="예) 19:00"><span class="hint">자유 표기 — "19시", "저녁쯤"도 OK</span></div>
+          <div class="fld full"><span class="cn-label">제목</span><input class="input" id="sc-title" placeholder="예) 롤 랭크 방송">
+            <div class="cn-chips" id="sc-presets" style="margin-top:8px"></div>
+            <span class="hint">자주 쓰는 문구를 누르면 제목에 바로 들어가요 (아래에서 목록 편집)</span></div>
+          <div class="fld full"><span class="cn-label">메모 (선택)</span><textarea class="input" id="sc-memo" style="min-height:70px" placeholder="달력에서 일정에 마우스를 올리면 보여요"></textarea></div>
+          <div class="fld"><span class="cn-label">링크 (선택)</span><input class="input" id="sc-link" placeholder="https://…"><span class="hint">합방 상대 방송국·이벤트 글 등</span></div>
+          <div class="fld"><span class="cn-label">이미지 링크 (선택)</span><input class="input" id="sc-img" placeholder="https://stimg.sooplive.com/…"><span class="hint">SOOP 게시판 이미지 우클릭 → "이미지 주소 복사"</span></div>
+        </div>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft)">
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
+            <input type="checkbox" id="sc-repeat"> 🔁 매주 반복으로 등록
+          </label>
+          <div id="sc-repeat-box" style="display:none;margin-top:12px">
+            <div class="cn-chips" id="sc-days" style="margin-bottom:10px"></div>
+            <div class="row-line">
+              <div class="fld"><span class="cn-label">반복 종료일</span><input class="input" id="sc-until" type="date"></div>
+              <span class="hint" style="align-self:center">위 날짜부터 종료일까지, 고른 요일마다 같은 일정이 등록돼요</span>
+            </div>
+          </div>
+        </div>
+        <div class="save-bar" style="margin-top:16px"><button class="cn-btn-solid" id="sc-add" type="button">등록 ♥</button></div>
+      </div>
+
+      <div class="cn-card">
+        <p class="cn-kicker">LIST · 등록된 일정</p>
+        <div class="row-line" style="margin-bottom:14px">
+          <div class="fld"><span class="cn-label">키워드 검색</span><input class="input" id="sc-q" placeholder="제목·메모 검색"></div>
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;align-self:end;padding-bottom:11px">
+            <input type="checkbox" id="sc-past"> 지난 일정도 보기
+          </label>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>날짜</th><th>시간</th><th>제목</th><th>메모</th><th>복사</th><th>삭제</th></tr></thead>
+            <tbody id="sc-list"></tbody>
+          </table>
+        </div>
+        <span class="hint" style="display:block;margin-top:8px">⧉ 복사 = 같은 내용을 다른 날짜로 하나 더 등록 · 내용 수정은 삭제 후 재등록이 깔끔해요</span>
+      </div>
+
+      <div class="cn-card">
+        <p class="cn-kicker">PRESETS · 자주 쓰는 문구</p>
+        <div class="fld">
+          <input class="input" id="sc-preset-edit" placeholder="쉼표로 구분 (예: 소통 방송, 롤 랭크, 종겜, 합방)">
+          <span class="hint">저장하면 위 "일정 등록"의 문구 버튼으로 떠요</span>
+        </div>
+        <div class="save-bar" style="margin-top:12px"><button class="cn-btn-solid" id="sc-preset-save" type="button">문구 저장 ♥</button></div>
+      </div>
     </section>
 
     <!-- ═══════════ 👗 옷장 ═══════════ -->
@@ -362,17 +420,23 @@
           <div class="fld"><span class="cn-label">시청자 찾기</span><input class="input" id="st-q" placeholder="닉네임 검색"></div>
           <div class="fld"><span class="cn-label">시청자</span><select class="input" id="st-viewer"></select></div>
         </div>
-        <div class="st-adj" style="margin-top:16px">
-          <button class="cn-btn-line ic" id="st-m10" type="button">−10</button>
-          <button class="cn-btn-line ic" id="st-m1" type="button">−1</button>
-          <input class="input" id="st-count" type="number" min="0" max="100" value="0">
-          <button class="cn-btn-line ic" id="st-p1" type="button">＋1</button>
-          <button class="cn-btn-line ic" id="st-p10" type="button">＋10</button>
-          <button class="cn-btn-line" id="st-zero" type="button">0으로</button>
-          <button class="cn-btn-solid" id="st-save" type="button">저장 ♥</button>
+        <div class="row-line" style="margin-top:16px">
+          <div class="fld sm"><span class="cn-label">개수</span><input class="input" id="st-amt" type="number" min="1" max="100" value="1"></div>
+          <div class="fld"><span class="cn-label">비고 (지급 사유)</span><input class="input" id="st-note" placeholder="예) 클립 업로드"><span class="hint">여러 개를 한 번에 지급하면 그 도장 전부에 같은 비고가 붙어요 — 페이지에서 도장에 마우스를 올리면 보여요</span></div>
+          <button class="cn-btn-solid" id="st-grant" type="button">지급 ♥</button>
         </div>
         <p class="mini" id="st-hint" style="margin:12px 0 14px"></p>
         <div class="st-board" id="st-board"></div>
+        <div style="margin-top:20px">
+          <p class="cn-kicker">HISTORY · 지급 내역</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>날짜</th><th>개수</th><th>비고</th><th>삭제</th></tr></thead>
+              <tbody id="st-log"></tbody>
+            </table>
+          </div>
+          <span class="hint" style="display:block;margin-top:8px">잘못 지급했으면 해당 내역을 삭제하면 도장도 함께 줄어요</span>
+        </div>
       </div>
       <div class="cn-card">
         <p class="cn-kicker">SETTINGS · 방명록 문구 &amp; 보상</p>
@@ -539,6 +603,117 @@
       alert(ok?'프로필 저장 완료 ♥ 페이지를 새로고침하면 반영돼요':'저장 실패 — 잠시 후 다시 시도해 주세요');
     });
 
+    /* ══════════ 📅 일정 ══════════ */
+    var scEvents=[], scPresets=['소통 방송','롤 랭크','종겜','합방'];
+    var SC_D=['월','화','수','목','금','토','일'];   /* 표시용 (JS getDay: 0=일) */
+    (function buildScDays(){
+      var el=document.getElementById('sc-days');
+      el.innerHTML=SC_D.map(function(d,i){
+        var jsDay=(i+1)%7;                            /* 월=1 … 토=6, 일=0 */
+        return '<label class="cn-chip" style="cursor:pointer;display:inline-flex;gap:6px;align-items:center">'+
+               '<input type="checkbox" data-day="'+jsDay+'" style="margin:0">'+d+'</label>';
+      }).join('');
+    })();
+    document.getElementById('sc-repeat').addEventListener('change',function(e){
+      document.getElementById('sc-repeat-box').style.display=e.target.checked?'block':'none';
+    });
+    function renderScPresets(){
+      var el=document.getElementById('sc-presets');
+      el.innerHTML=scPresets.map(function(t){
+        return '<button class="cn-chip" type="button" data-t="'+esc(t)+'" style="cursor:pointer">'+esc(t)+'</button>';
+      }).join('') || '<span class="mini">아직 문구가 없어요</span>';
+      el.querySelectorAll('[data-t]').forEach(function(b){
+        b.addEventListener('click',function(){ setv('sc-title',b.dataset.t); });
+      });
+      setv('sc-preset-edit', scPresets.join(', '));
+    }
+    async function loadSchedule(){
+      try{ var r=await db.from('schedule_events').select('*'); scEvents=(r&&r.data)||[]; }catch(e){ scEvents=[]; }
+      renderScList();
+    }
+    function renderScList(){
+      var q=v('sc-q').toLowerCase(), past=document.getElementById('sc-past').checked;
+      var today=new Date(); today=today.getFullYear()+'-'+('0'+(today.getMonth()+1)).slice(-2)+'-'+('0'+today.getDate()).slice(-2);
+      var list=scEvents.slice().filter(function(e){
+        var d=String(e.date).slice(0,10);
+        if(!past && d<today) return false;
+        if(q && (txt(e.title)+' '+txt(e.memo)).toLowerCase().indexOf(q)===-1) return false;
+        return true;
+      }).sort(function(a,b){
+        var c=String(a.date).localeCompare(String(b.date));
+        return c!==0?c:String(a.time||'').localeCompare(String(b.time||''));
+      });
+      var tb=document.getElementById('sc-list');
+      tb.innerHTML=list.map(function(e){
+        return '<tr data-id="'+e.id+'"><td class="mini" style="white-space:nowrap">'+esc(String(e.date).slice(0,10).replace(/-/g,'.'))+'</td>'+
+          '<td class="mini">'+esc(e.time||'—')+'</td>'+
+          '<td>'+esc(e.title)+'</td>'+
+          '<td class="mini">'+esc(txt(e.memo).split('\n')[0]).slice(0,26)+'</td>'+
+          '<td style="width:56px;text-align:center"><button class="ic-btn" data-copy="1" title="다른 날짜로 복사">⧉</button></td>'+
+          '<td><button class="ic-btn del" data-del="1">✕</button></td></tr>';
+      }).join('') || '<tr><td colspan="6" class="mini">'+(q?'검색 결과가 없어요':'등록된 일정이 없어요')+'</td></tr>';
+      tb.querySelectorAll('tr[data-id]').forEach(function(tr){
+        var e=scEvents.find(function(x){ return String(x.id)===tr.dataset.id; });
+        tr.querySelector('[data-copy]').addEventListener('click',async function(){
+          if(!guard()) return;
+          var d=prompt('어느 날짜로 복사할까요? (YYYY-MM-DD)', String(e.date).slice(0,10));
+          if(!d) return;
+          if(!/^\d{4}-\d{2}-\d{2}$/.test(d.trim())){ alert('YYYY-MM-DD 형식으로 적어 주세요!'); return; }
+          var ok=await insertRow('schedule_events',{date:d.trim(),time:e.time||'',title:e.title,memo:e.memo||'',link:e.link||'',image_url:e.image_url||''});
+          if(ok) loadSchedule();
+        });
+        tr.querySelector('[data-del]').addEventListener('click',async function(){
+          if(!guard()) return;
+          if(!confirm('"'+e.title+'" ('+String(e.date).slice(0,10)+') 일정을 지울까요?')) return;
+          await deleteRow('schedule_events',e.id); loadSchedule();
+        });
+      });
+    }
+    document.getElementById('sc-q').addEventListener('input',renderScList);
+    document.getElementById('sc-past').addEventListener('change',renderScList);
+    document.getElementById('sc-add').addEventListener('click',async function(){
+      if(!guard()) return;
+      var date=v('sc-date'), title=v('sc-title');
+      if(!date||!title){ alert('날짜와 제목은 필수예요!'); return; }
+      var base={time:v('sc-time'),title:title,memo:v('sc-memo'),link:v('sc-link'),image_url:v('sc-img')};
+      var dates=[date];
+      if(document.getElementById('sc-repeat').checked){
+        var days=[]; document.querySelectorAll('#sc-days [data-day]:checked').forEach(function(c){ days.push(+c.dataset.day); });
+        var until=v('sc-until');
+        if(!days.length||!until){ alert('반복 요일과 종료일을 골라 주세요!'); return; }
+        dates=[];
+        var d=new Date(date+'T00:00:00'), end=new Date(until+'T00:00:00');
+        if(end<d){ alert('종료일이 시작 날짜보다 빨라요!'); return; }
+        var cnt=0;
+        while(d<=end && cnt<200){
+          if(days.indexOf(d.getDay())>-1)
+            dates.push(d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2));
+          d.setDate(d.getDate()+1); cnt++;
+        }
+        if(!dates.length){ alert('기간 안에 고른 요일이 없어요!'); return; }
+        if(!confirm(dates.length+'건을 한 번에 등록할까요?')) return;
+      }
+      var okAll=true;
+      for(var i=0;i<dates.length;i++){
+        var ok=await insertRow('schedule_events',Object.assign({date:dates[i]},base));
+        if(!ok) okAll=false;
+      }
+      if(okAll){
+        setv('sc-title',''); setv('sc-memo',''); setv('sc-link',''); setv('sc-img','');
+        document.getElementById('sc-repeat').checked=false;
+        document.getElementById('sc-repeat-box').style.display='none';
+        alert(dates.length>1?dates.length+'건 등록 완료 ♥':'등록 완료 ♥');
+        loadSchedule();
+      }else alert('일부 등록 실패 — supabase_setup.sql 실행 여부를 확인해 주세요');
+    });
+    document.getElementById('sc-preset-save').addEventListener('click',async function(){
+      if(!guard()) return;
+      scPresets=v('sc-preset-edit').split(',').map(function(x){return x.trim();}).filter(Boolean);
+      var ok=await putData({'schedule-presets':scPresets});
+      alert(ok?'문구 저장 완료 ♥':'저장 실패');
+      renderScPresets();
+    });
+
     /* ══════════ 👗 옷장 ══════════ */
     var DRESS_CATS=['hair','outfit','lens'];      /* dress 페이지 CATS · 위 select와 동일 값 유지 */
     var DRESS_LB={hair:'헤어',outfit:'의상',lens:'렌즈'};
@@ -630,7 +805,7 @@
       var tb=document.getElementById('vw-list');
       tb.innerHTML=viewers.map(function(x){
         return '<tr data-id="'+x.id+'"><td>'+esc(x.nickname)+'</td><td class="mini">'+esc(x.soop_id||'—')+'</td>'+
-          '<td class="mini">'+(+x.stamp_count||0)+'개</td>'+
+          '<td class="mini">'+stCountOf(x)+'개</td>'+
           '<td><button class="ic-btn del" data-del="1">✕</button></td></tr>';
       }).join('') || '<tr><td colspan="4" class="mini">아직 명단이 비어 있어요</td></tr>';
       tb.querySelectorAll('tr[data-id]').forEach(function(tr){
@@ -740,26 +915,38 @@
     var UB=ledger('ub','upbo_types','upbo_counts','건');
     var TK=ledger('tk','ticket_types','ticket_counts','장');
 
-    /* ══════════ 💌 스탬프 ══════════ */
+    /* ══════════ 💌 스탬프 (지급 로그 기반) ══════════ */
     var stRewards=[{at:5,label:'움짤 프사'},{at:10,label:'방셀'},{at:20,label:'배너'},{at:30,label:'일러스트'}];
+    var stampLog=[];
+    function stEntries(vid){
+      return stampLog.filter(function(e){ return String(e.viewer_id)===String(vid); })
+        .sort(function(a,b){
+          var c=String(a.created_at||'').localeCompare(String(b.created_at||''));
+          return c!==0?c:((+a.id||0)-(+b.id||0));
+        });
+    }
+    function stCountOf(x){
+      var list=stEntries(x.id);
+      if(list.length) return list.reduce(function(s,e){ return s+(+e.amount||0); },0);
+      return +x.stamp_count||0;                 /* 로그 없는 옛 데이터 호환 */
+    }
+    async function loadStampLog(){
+      try{ var r=await db.from('stamp_log').select('*'); stampLog=(r&&r.data)||[]; }catch(e){ stampLog=[]; }
+    }
     function renderStampPicker(){
       var q=v('st-q').toLowerCase();
       var sel=document.getElementById('st-viewer');
       var list=viewers.filter(function(x){ return !q || String(x.nickname||'').toLowerCase().indexOf(q)>-1; });
       var keep=sel.value;
-      sel.innerHTML=list.map(function(x){ return '<option value="'+x.id+'">'+esc(x.nickname)+' ('+(+x.stamp_count||0)+')</option>'; }).join('')
+      sel.innerHTML=list.map(function(x){ return '<option value="'+x.id+'">'+esc(x.nickname)+' ('+stCountOf(x)+')</option>'; }).join('')
         || '<option value="">'+(viewers.length?'검색 결과 없음':'명단이 비어 있어요 — 📜 업보 탭에서 추가')+'</option>';
       if(list.some(function(x){ return String(x.id)===keep; })) sel.value=keep;
-      syncStamp();
+      drawStamp(); renderStampHistory();
     }
     function curStampViewer(){ return vById[v('st-viewer')]; }
-    function syncStamp(){
-      var x=curStampViewer();
-      setv('st-count', x?(+x.stamp_count||0):0);
-      drawStamp();
-    }
     function drawStamp(){
-      var n=Math.max(0,Math.min(100,parseInt(v('st-count'),10)||0));
+      var x=curStampViewer();
+      var n=x?Math.max(0,Math.min(100,stCountOf(x))):0;
       var b=document.getElementById('st-board'), h='';
       for(var i=1;i<=100;i++){
         var ms=stRewards.some(function(r){ return +r.at===i; });
@@ -767,27 +954,40 @@
       }
       b.innerHTML=h;
       var next=stRewards.filter(function(r){ return +r.at>n; }).sort(function(a,b){return a.at-b.at;})[0];
-      document.getElementById('st-hint').textContent = next
-        ? '다음 보상까지 '+(next.at-n)+'개 — '+next.at+'개 · '+txt(next.label)
-        : '모든 보상 달성! 🎉';
+      document.getElementById('st-hint').textContent=(x?x.nickname+' — 현재 '+n+'개 · ':'')+(next
+        ? '다음 보상까지 '+(next.at-n)+'개 ('+next.at+'개 · '+txt(next.label)+')'
+        : '모든 보상 달성! 🎉');
     }
-    ['st-m10','st-m1','st-p1','st-p10','st-zero'].forEach(function(id){
-      document.getElementById(id).addEventListener('click',function(){
-        var d={ 'st-m10':-10,'st-m1':-1,'st-p1':1,'st-p10':10,'st-zero':0 }[id];
-        var n=id==='st-zero'?0:Math.max(0,Math.min(100,(parseInt(v('st-count'),10)||0)+d));
-        setv('st-count',n); drawStamp();
+    function renderStampHistory(){
+      var x=curStampViewer();
+      var tb=document.getElementById('st-log');
+      var list=x?stEntries(x.id).slice().reverse():[];
+      tb.innerHTML=list.map(function(e){
+        return '<tr data-id="'+e.id+'"><td class="mini" style="white-space:nowrap">'+esc(String(e.created_at||'').slice(0,10))+'</td>'+
+          '<td><b>＋'+(+e.amount||0)+'</b></td>'+
+          '<td class="mini">'+esc(e.note||'')+'</td>'+
+          '<td><button class="ic-btn del" data-del="1">✕</button></td></tr>';
+      }).join('') || '<tr><td colspan="4" class="mini">아직 지급 내역이 없어요</td></tr>';
+      tb.querySelectorAll('tr[data-id]').forEach(function(tr){
+        tr.querySelector('[data-del]').addEventListener('click',async function(){
+          if(!guard()) return;
+          if(!confirm('이 지급 내역을 삭제할까요? 도장도 함께 줄어요.')) return;
+          await deleteRow('stamp_log',tr.dataset.id);
+          await loadStampLog(); renderStampPicker(); renderViewers();
+        });
       });
-    });
-    document.getElementById('st-count').addEventListener('input',drawStamp);
+    }
     document.getElementById('st-q').addEventListener('input',renderStampPicker);
-    document.getElementById('st-viewer').addEventListener('change',syncStamp);
-    document.getElementById('st-save').addEventListener('click',async function(){
+    document.getElementById('st-viewer').addEventListener('change',function(){ drawStamp(); renderStampHistory(); });
+    document.getElementById('st-grant').addEventListener('click',async function(){
       if(!guard()) return;
       var x=curStampViewer(); if(!x){ alert('시청자를 먼저 골라 주세요!'); return; }
-      var n=Math.max(0,Math.min(100,parseInt(v('st-count'),10)||0));
-      var ok=await updateRow('viewers',x.id,{stamp_count:n,updated_at:new Date().toISOString()});
-      alert(ok?('저장 완료 ♥ '+x.nickname+' — '+n+'개'):'저장 실패');
-      loadViewers();
+      var amt=Math.max(1,Math.min(100,parseInt(v('st-amt'),10)||1));
+      var ok=await insertRow('stamp_log',{viewer_id:+x.id,amount:amt,note:v('st-note')});
+      if(ok){
+        setv('st-note',''); setv('st-amt','1');
+        await loadStampLog(); renderStampPicker(); renderViewers();
+      }else alert('지급 실패 — supabase_setup.sql 실행 여부를 확인해 주세요');
     });
     function renderRewardEdit(){
       var el=document.getElementById('rw-edit');
@@ -896,7 +1096,7 @@
     });
 
     /* ══════════ 초기 로드 ══════════ */
-    async function loadAllLedgers(){ await loadViewers(); UB.load(); TK.load(); }
+    async function loadAllLedgers(){ await loadStampLog(); await loadViewers(); UB.load(); TK.load(); }
     (async function init(){
       var d=await getData();
       fillProfile(d);
@@ -905,7 +1105,11 @@
         stRewards=d['stamp-rewards'].map(function(r){ return {at:+r.at||0,label:txt(r.label)}; }).filter(function(r){ return r.at>0; });
       renderRewardEdit();
       fillTheme(d);
+      if(Array.isArray(d['schedule-presets'])&&d['schedule-presets'].length)
+        scPresets=d['schedule-presets'].map(txt).filter(Boolean);
+      renderScPresets();
       loadDress();
+      loadSchedule();
       await loadAllLedgers();
       loadInbox();
       drawStamp();

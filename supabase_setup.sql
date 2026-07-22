@@ -116,3 +116,32 @@ CREATE TABLE IF NOT EXISTS inquiries (
 ALTER TABLE inquiries ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "inquiries_all" ON inquiries;
 CREATE POLICY "inquiries_all" ON inquiries FOR ALL USING (true) WITH CHECK (true);
+
+-- ⑦ 스탬프 지급 로그 (v2 — 도장마다 비고가 붙는 구조)
+--    개수 = 로그 amount 합계 · 각 도장 칸에 지급 사유(note)가 연결돼요
+CREATE TABLE IF NOT EXISTS stamp_log (
+  id         BIGSERIAL PRIMARY KEY,
+  viewer_id  BIGINT NOT NULL,
+  amount     INT NOT NULL DEFAULT 1,
+  note       TEXT DEFAULT '',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE stamp_log ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "stamp_log_all" ON stamp_log;
+CREATE POLICY "stamp_log_all" ON stamp_log FOR ALL USING (true) WITH CHECK (true);
+
+-- ⑧ 일정 (월간 캘린더)
+CREATE TABLE IF NOT EXISTS schedule_events (
+  id         BIGSERIAL PRIMARY KEY,
+  date       DATE NOT NULL,
+  time       TEXT DEFAULT '',
+  title      TEXT NOT NULL,
+  memo       TEXT DEFAULT '',
+  link       TEXT DEFAULT '',
+  image_url  TEXT DEFAULT '',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_schedule_events_date ON schedule_events(date);
+ALTER TABLE schedule_events ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "schedule_events_all" ON schedule_events;
+CREATE POLICY "schedule_events_all" ON schedule_events FOR ALL USING (true) WITH CHECK (true);
