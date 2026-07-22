@@ -11,13 +11,13 @@
   --deep:#480c1f;
   --ink:#350917;
   --white:#ffffff;
-  --line:rgba(255,255,255,.32);
-  --line-soft:rgba(255,255,255,.14);
+  --line:rgba(255,255,255,.40);
+  --line-soft:rgba(255,255,255,.18);
   --tx:#ffffff;
-  --tx-soft:rgba(255,255,255,.72);
-  --tx-dim:rgba(255,255,255,.48);
-  --glass:rgba(89,18,39,.30);
-  --glass-deep:rgba(64,11,28,.55);
+  --tx-soft:rgba(255,255,255,.80);
+  --tx-dim:rgba(255,255,255,.56);
+  --glass:rgba(50,9,22,.55);
+  --glass-deep:rgba(38,7,17,.82);
   --font-body:"Noto Sans KR","Pretendard","Apple SD Gothic Neo","Segoe UI",sans-serif;
   --font-serif:Georgia,"Times New Roman","Noto Serif KR",serif;
 }
@@ -50,8 +50,8 @@ body.cinema-sub{
   overflow-x:hidden;
   background-color:var(--ink);
   background-image:
-    radial-gradient(circle at 74% 16%, rgba(255,177,177,.20), transparent 38%),
-    linear-gradient(135deg, rgba(111,28,49,.90), rgba(53,9,23,.94)),
+    radial-gradient(circle at 76% 12%, rgba(255,177,177,.12), transparent 34%),
+    linear-gradient(150deg, rgba(84,17,36,.94), rgba(30,5,14,.97)),
     url("../assets/yeda-hall-blur.webp");
   background-size:cover,cover,cover;
   background-position:center,center,center 40%;
@@ -70,7 +70,7 @@ body.cinema-sub.day{
    ============================================================ */
 .site-header{
   position:absolute;z-index:30;top:0;right:0;left:0;
-  display:grid;grid-template-columns:15vw 1fr 15vw;align-items:stretch;
+  display:grid;grid-template-columns:clamp(96px,8vw,150px) 1fr clamp(180px,14vw,250px);align-items:stretch;
   height:clamp(74px,9.5vh,104px);
   border-bottom:1px solid var(--line);
 }
@@ -81,9 +81,9 @@ body.cinema-sub.day{
 }
 .cinema-sub.day .site-header{background:rgba(255,246,243,.78)}
 .monogram{
-  display:grid;place-items:center;
+  display:flex;align-items:center;justify-content:center;height:100%;
   border-right:1px solid var(--line);
-  font-family:var(--font-serif);font-size:25px;font-style:italic;letter-spacing:-.08em;
+  font-family:var(--font-serif);font-size:25px;font-style:italic;letter-spacing:-.08em;line-height:1;
 }
 .main-navigation{display:flex;justify-content:center;align-items:center;gap:clamp(18px,2.9vw,58px)}
 .main-navigation a{position:relative;padding:12px 0;font-size:11px;font-weight:750;letter-spacing:.1em}
@@ -121,7 +121,7 @@ body.cinema-sub.day{
 /* ============================================================
    장(章) 헤더 — 서브 페이지 공통 (잡지 챕터 표제)
    ============================================================ */
-.chapter{min-height:100vh;padding:calc(clamp(74px,9.5vh,104px) + 54px) 7vw 90px}
+.chapter{min-height:100vh;width:100%;max-width:1360px;margin:0 auto;padding:calc(clamp(74px,9.5vh,104px) + 54px) clamp(24px,4vw,56px) 90px}
 .chapter-head{position:relative;max-width:920px;margin-bottom:56px}
 .chapter-head .kicker{
   display:flex;align-items:center;gap:13px;margin:0;
@@ -329,7 +329,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--main);outline-offse
    반응형
    ============================================================ */
 @media (max-width:1100px){
-  .site-header{grid-template-columns:20vw 1fr auto}
+  .site-header{grid-template-columns:clamp(84px,12vw,120px) 1fr auto}
   .header-side{padding:0 18px;border-left:1px solid var(--line)}
 }
 @media (max-width:900px){

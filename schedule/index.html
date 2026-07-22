@@ -32,7 +32,7 @@
     /* 달력 */
     .cal{border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
     .cal-head{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--line)}
-    .cal-head span{padding:11px 4px;text-align:center;color:var(--tx-dim);font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.14em}
+    .cal-head span{padding:11px 4px;text-align:center;color:var(--tx-soft);font-family:var(--font-serif);font-style:italic;font-size:12px;letter-spacing:.14em}
     .cal-head span:last-child{color:var(--main)}
     body.day .cal-head span:last-child{color:var(--point)}
     .cal-body{display:grid;grid-template-columns:repeat(7,1fr)}
@@ -42,21 +42,21 @@
     }
     .cal-cell:nth-child(7n){border-right:0}
     .cal-cell.out{opacity:.32}
-    .cal-cell .dn{font-family:var(--font-serif);font-style:italic;font-size:12px;color:var(--tx-dim)}
+    .cal-cell .dn{font-family:var(--font-serif);font-style:italic;font-size:13px;color:var(--tx-soft)}
     .cal-cell.today{background:rgba(255,177,177,.09)}
     .cal-cell.today .dn{color:var(--main);font-weight:700}
     body.day .cal-cell.today .dn{color:var(--point)}
     .cal-cell.hitday{box-shadow:inset 0 0 0 1px var(--main)}
     .ev{
       position:relative;display:block;width:100%;margin-top:5px;padding:4px 7px;text-align:left;
-      border:1px solid var(--line-soft);background:rgba(255,255,255,.05);
-      color:var(--tx);cursor:pointer;font-family:var(--font-body);font-size:11px;font-weight:650;line-height:1.4;
+      border:1px solid var(--line);background:rgba(255,255,255,.08);
+      color:var(--tx);cursor:pointer;font-family:var(--font-body);font-size:12px;font-weight:650;line-height:1.4;
       overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
       transition:background 140ms ease;
     }
     body.day .ev{background:rgba(255,255,255,.55)}
     .ev:hover{background:rgba(255,177,177,.16)}
-    .ev b{color:var(--main);font-family:var(--font-serif);font-style:italic;font-weight:400;font-size:10px;margin-right:5px}
+    .ev b{color:var(--main);font-family:var(--font-serif);font-style:italic;font-weight:400;font-size:11px;margin-right:5px}
     body.day .ev b{color:var(--point)}
     .ev.dim{opacity:.35}
     /* 메모 호버 툴팁 */
