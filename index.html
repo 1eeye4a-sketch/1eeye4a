@@ -1,345 +1,187 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>이예다 · DAILY</title>
-<link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Sacramento&display=swap" rel="stylesheet">
-<style>
-:root{
-  --main:#ffb1b1; --main-dark:#c62d42; --main-light:#ffe7e7;
-  --bg:#ffffff; --paper:#fff7f6; --card:#ffffff; --cream:#fdeef0;
-  --logo:#c62d42; --ink:#2e2528; --text:#3d2f33; --text-soft:#9c878c; --rule:#ead9da; --backdrop:#f2e6e6;
-  --pen:'Noto Sans KR',sans-serif; --serif:'Nanum Myeongjo',serif; --mag:'Playfair Display',serif; --script:'Sacramento',cursive; --katuri:'Jua','Noto Sans KR',sans-serif;
-}
-body.dark{
-  --main:#ffbdbd; --main-dark:#ffa3b1; --main-light:#3d2126;
-  --bg:#171012; --paper:#171012; --card:#211619; --cream:#2e1c20;
-  --logo:#ffa3b1; --ink:#f3e9eb; --text:#ece0e2; --text-soft:#958388; --rule:#332327; --backdrop:#0d0809;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--backdrop);font-family:var(--pen);color:var(--text);min-height:100vh;padding:1px 0;transition:background .2s,color .2s}
-.av{cursor:pointer}
-.wrap{max-width:1120px;margin:30px auto;padding:14px 44px 28px;background:var(--card);border-radius:0;box-shadow:0 28px 70px rgba(150,45,60,.16),0 6px 18px rgba(150,45,60,.07);position:relative;z-index:1}
-body.dark .wrap{box-shadow:0 28px 70px rgba(0,0,0,.6)}
-@media(max-width:680px){.wrap{margin:12px;padding:8px 18px 22px;border-radius:0}}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="이예다 공식 홈페이지 — 아이돌을 꿈꾸는 당신의 옆집 유부녀 예다">
+  <meta property="og:title" content="LEE YEDA — Wedding Cinema">
+  <meta property="og:description" content="아이돌을 꿈꾸는 당신의 옆집 유부녀 예다 🍑">
+  <title>LEE YEDA — Wedding Cinema</title>
+  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/cinema.css">
+  <style>
+    /* ── 메인(웨딩 시네마) 전용 — 컨펌 시안 1:1 ── */
+    body{overflow:hidden}
+    .page-shell,.wedding-cinema{position:relative;width:100%;min-width:320px;height:100vh;min-height:560px;overflow:hidden}
+    @supports (height:100svh){.page-shell,.wedding-cinema{height:100svh}}
+    .wedding-cinema{isolation:isolate;background:var(--wine);animation:page-in 560ms cubic-bezier(.2,.75,.25,1) both}
+    @keyframes page-in{from{opacity:0;transform:scale(1.012)}to{opacity:1;transform:scale(1)}}
+    .hero-background,.color-wash{position:absolute;inset:0;width:100%;height:100%}
+    .hero-background{z-index:-4;object-fit:cover;object-position:center center;filter:saturate(.88) contrast(1.04);transform:scale(1.015)}
+    .color-wash{z-index:-3;background:
+      linear-gradient(90deg,rgba(72,12,31,.94) 0%,rgba(91,16,39,.78) 24%,rgba(91,16,39,.12) 56%,rgba(59,9,25,.2) 100%),
+      linear-gradient(0deg,rgba(52,8,22,.65) 0%,transparent 36%)}
+    body.day .color-wash{background:
+      linear-gradient(90deg,rgba(255,241,238,.92) 0%,rgba(255,236,233,.72) 24%,rgba(255,236,233,.08) 56%,rgba(255,228,224,.18) 100%),
+      linear-gradient(0deg,rgba(255,238,234,.6) 0%,transparent 36%)}
+    body.day .wedding-cinema{background:#fdf1ee}
 
-/* ── 마스트헤드 ── */
-.mast{display:flex;justify-content:flex-end;padding:14px 0 4px}
-.mast .actions{display:flex;align-items:center;gap:8px;padding-bottom:8px}
-.btn-inq{background:var(--card);border:1.5px solid var(--rule);color:var(--main-dark);border-radius:999px;padding:8px 16px;font-size:12.5px;font-weight:800;cursor:pointer}
-.btn-inq:hover{background:var(--main);color:#7a2230;border-color:var(--main)}
-.tsw{width:22px;height:33px;border-radius:999px;border:1.5px solid var(--rule);background:#ffecec;cursor:pointer;position:relative;padding:0}
-.tsw .kn{position:absolute;left:1.5px;top:1.5px;width:16px;height:16px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;transition:top .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
-body.dark .tsw{background:#2a1c1f}body.dark .tsw .kn{top:14px;background:#211619}
-.logo{text-align:right;line-height:1}
-.logo .scr{font-family:var(--script);font-size:54px;color:var(--ink);display:block;line-height:1}
-.logo .sub{font-size:11px;letter-spacing:6px;font-weight:700;color:var(--text-soft);margin-top:15px}
-.navrule{border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);margin-top:4px}
-.nav{display:flex;align-items:center;gap:28px;padding:9px 2px}
-.nav .actions{margin-left:auto;display:flex;align-items:center;gap:8px}
-.nav a{font-size:13px;letter-spacing:2px;font-weight:700;color:var(--text);text-decoration:none}
-.nav a.on,.nav a:hover{color:var(--main-dark)}
+    .editorial-copy{position:absolute;z-index:3;top:22vh;left:6.3vw;width:min(39vw,700px)}
+    .volume{display:flex;align-items:center;gap:13px;margin:0 0 2.4vh;color:var(--tx-soft);font-family:var(--font-serif);font-size:10px;font-style:italic;letter-spacing:.12em}
+    .volume span{width:42px;height:1px;background:var(--line)}
+    .editorial-copy h1{margin:0;font-family:var(--font-serif);font-size:clamp(62px,6.9vw,132px);font-weight:400;line-height:.78;letter-spacing:-.075em;text-shadow:0 5px 28px rgba(53,6,22,.18)}
+    .editorial-copy h1 span{display:block;margin:0 0 .26em .08em;font-size:.42em;font-style:italic;letter-spacing:-.035em}
+    .subtitle{margin:4.2vh 0 0;font-size:clamp(16px,1.23vw,24px);font-weight:720;line-height:1.55}
+    .hero-acts{display:flex;align-items:center;gap:34px;margin-top:3.1vh}
+    .meet-button{display:inline-flex;align-items:center;gap:35px;padding:13px 0;border-bottom:1px solid var(--line);font-size:10px;font-weight:900;letter-spacing:.16em;transition:gap 180ms ease,opacity 180ms ease}
+    .meet-button:hover,.meet-button:focus-visible{gap:44px;opacity:.82}
+    .letter-button{display:inline-flex;align-items:center;gap:9px;padding:13px 0;border:0;background:none;color:var(--tx);cursor:pointer;font-size:10px;font-weight:900;letter-spacing:.16em;opacity:.85;transition:opacity 160ms ease}
+    .letter-button:hover{opacity:1}
+    .letter-button b{color:var(--main);font-weight:400}
+    body.day .letter-button b{color:var(--point)}
 
-/* ── 본문 그리드 ── */
-.grid{display:grid;grid-template-columns:1.7fr 1fr;gap:42px;margin-top:34px}
-@media(max-width:840px){.grid{grid-template-columns:1fr;gap:30px}}
+    .quote-card{position:absolute;z-index:4;right:5.5vw;bottom:13.5vh;width:min(21vw,380px);padding:22px 24px;border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+    .heart-mark{position:absolute;top:-26px;right:20px;display:grid;place-items:center;width:clamp(42px,3.1vw,62px);aspect-ratio:1;border:1px solid var(--line);border-radius:50%;background:rgba(198,45,66,.8);color:#fff;font-size:clamp(16px,1.2vw,24px);cursor:pointer;transition:transform 160ms ease}
+    .heart-mark:hover{transform:scale(1.08)}
+    .heart-mark.cn-bump{animation:hbump 480ms cubic-bezier(.2,.75,.25,1)}
+    @keyframes hbump{30%{transform:scale(1.24)}60%{transform:scale(.94)}}
+    .quote-card p{margin:0;font-family:var(--font-serif);font-size:clamp(14px,1.05vw,20px);font-weight:700;line-height:1.55}
+    .quote-card > span:last-child{display:block;margin-top:15px;color:var(--tx-soft);font-size:9px;letter-spacing:.08em}
+    .sideword{position:absolute;z-index:3;top:15vh;right:1.2vw;color:var(--tx-dim);font-size:8px;font-weight:800;letter-spacing:.25em;writing-mode:vertical-rl}
+    .site-footer{position:absolute;z-index:4;right:3vw;bottom:3.5vh;left:3vw;display:flex;justify-content:space-between;align-items:center;color:var(--tx-dim);font-size:8px;letter-spacing:.14em}
+    .site-footer b{color:var(--tx);font-size:8px}
 
-.kicker{display:flex;align-items:center;gap:10px}
-.kicker .cat{font-size:12px;letter-spacing:3px;font-weight:800;color:var(--main-dark)}
-.kicker .date{margin-left:auto;background:var(--main-dark);color:#fff;font-size:11px;font-weight:800;letter-spacing:1px;padding:4px 9px}
-body.dark .kicker .date{color:#3a151b}
-.headline{font-family:var(--pen);font-weight:800;font-size:32px;line-height:1.3;color:var(--ink);margin-top:14px;letter-spacing:-1px}
-.headline em{font-style:normal;color:var(--main-dark)}
-.byline{font-size:12px;letter-spacing:1px;font-weight:700;color:var(--text-soft);margin-top:14px}
-.byline b{color:var(--main-dark)}
-.hero{margin-top:20px;position:relative;border-radius:3px;overflow:hidden;border:1px solid var(--rule)}
-.hero img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;object-position:center 28%}
-/* 카메라 촬영 화면 오버레이 - 미니멀 (메인 히어로 사진) */
-.hero .rec{position:absolute;inset:0;z-index:2;pointer-events:none;font:700 11px/1 ui-monospace,"SFMono-Regular",Menlo,monospace;color:rgba(255,255,255,.95);letter-spacing:1px}
-.hero .rec span{position:absolute;text-shadow:0 1px 4px rgba(0,0,0,.6)}
-/* 좌상단 촬영 정보 (빨간 점 포함) */
-.hero .rec .info{top:15px;left:16px;display:flex;align-items:center;gap:7px}
-.hero .rec .info::before{content:"";width:8px;height:8px;border-radius:50%;background:#ff2d2d;box-shadow:0 0 6px rgba(255,45,45,.9)}
-/* 우상단 매수 */
-.hero .rec .meta{top:15px;right:16px}
-/* 네 모서리 ㄱ자 프레임 */
-.hero .rec .cn{position:absolute;width:24px;height:24px}
-.hero .rec .cn::before,.hero .rec .cn::after{content:"";position:absolute;background:rgba(255,255,255,.95);filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
-.hero .rec .cn::before{width:24px;height:2px}
-.hero .rec .cn::after{width:2px;height:24px}
-.hero .rec .tl{top:13px;left:13px}
-.hero .rec .tl::before{top:0;left:0}.hero .rec .tl::after{top:0;left:0}
-.hero .rec .tr{top:13px;right:13px}
-.hero .rec .tr::before{top:0;right:0}.hero .rec .tr::after{top:0;right:0}
-.hero .rec .bl{bottom:13px;left:13px}
-.hero .rec .bl::before{bottom:0;left:0}.hero .rec .bl::after{bottom:0;left:0}
-.hero .rec .br{bottom:13px;right:13px}
-.hero .rec .br::before{bottom:0;right:0}.hero .rec .br::after{bottom:0;right:0}
-/* 각 변 가운데 짧은 마커 */
-.hero .rec .mk{position:absolute;background:rgba(255,255,255,.9);filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
-.hero .rec .mk.t{top:13px;left:50%;transform:translateX(-50%);width:14px;height:2px}
-.hero .rec .mk.b{bottom:13px;left:50%;transform:translateX(-50%);width:14px;height:2px}
-.hero .rec .mk.l{left:13px;top:50%;transform:translateY(-50%);width:2px;height:14px}
-.hero .rec .mk.r{right:13px;top:50%;transform:translateY(-50%);width:2px;height:14px}
-.herocap{font-size:11px;color:var(--text-soft);font-weight:600;margin-top:7px;font-style:italic;display:flex;align-items:flex-end;justify-content:space-between;gap:14px}
-.herocap .cap{flex:1}
-.closet{font-family:var(--pen);font-style:normal;font-weight:800;font-size:13px;letter-spacing:1px;color:var(--main-dark);text-decoration:none;white-space:nowrap;padding-bottom:2px;border-bottom:1.5px solid var(--main-dark);transition:opacity .15s}
-.closet:hover{opacity:.65}
-.hero .sign{position:absolute;right:18px;bottom:12px;z-index:4;font-family:var(--script);font-size:46px;line-height:1;color:#fff0f3;text-shadow:0 2px 12px rgba(0,0,0,.5);pointer-events:none}
-.lead{margin-top:20px;font-family:var(--pen);font-size:15px;line-height:1.95;color:var(--text)}
-.lead em{font-style:normal;color:var(--main-dark);font-weight:700}
-
-.seclabel{display:flex;align-items:center;gap:12px;margin:38px 0 16px}
-.seclabel b{font-size:12px;letter-spacing:3px;font-weight:800;color:var(--main-dark);white-space:nowrap}
-.seclabel .ln{flex:1;height:1.5px;background:var(--rule)}
-
-.daycards{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
-@media(max-width:560px){.daycards{grid-template-columns:repeat(4,1fr)}}
-.dc{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:1.5px solid var(--main-light);border-radius:12px;padding:9px 4px;min-height:52px;background:var(--cream)}
-.dc .dd{font-weight:800;font-size:15px;color:var(--main-dark)}.dc .tt{font-size:11px;font-weight:700;color:var(--main-dark)}
-.schednote{margin-top:11px;font-family:var(--serif);font-size:14px;color:var(--text)}
-
-.lk{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-@media(max-width:520px){.lk{grid-template-columns:1fr}}
-.lk .t{font-size:12px;letter-spacing:1px;font-weight:800;color:var(--text-soft);margin-bottom:9px}
-.pills{display:flex;gap:7px;flex-wrap:wrap}
-.pill{border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600;background:var(--main-light);color:var(--main-dark)}
-.pill.no{background:#ffe2e2;color:#c0564f}
-body.dark .pill.no{background:#3a2222;color:#e79a94}
-.vodph{aspect-ratio:16/9;border-radius:8px;background:linear-gradient(135deg,#c62d42,#7a2230);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;cursor:pointer}
-.vodph .pl{font-size:38px}.vodph .pt{font-size:13px;font-weight:700}.vodph .pt2{font-size:11px;opacity:.85}
-
-/* ── 사이드바 ── */
-.side{display:flex;flex-direction:column;gap:22px;position:sticky;top:14px;align-self:start}
-.pbox{background:var(--card);border:1.5px solid var(--main);border-radius:4px;padding:22px 20px 20px;text-align:center}
-.pbox .lab{font-family:var(--script);font-size:32px;color:var(--main-dark);line-height:1.05;padding-top:4px}
-.pbox .avw{width:128px;height:128px;margin:20px auto 0;border-radius:50%;overflow:hidden;border:4px solid #fff;box-shadow:0 0 0 4px var(--main),0 8px 20px rgba(198,45,66,.22)}
-body.dark .pbox .avw{border-color:var(--card)}
-.pbox .avw img{width:100%;height:100%;object-fit:cover}
-.pbox .nm{font-family:var(--pen);font-weight:800;font-size:27px;color:var(--ink);margin-top:14px;line-height:1}
-.pbox .en{font-size:10px;letter-spacing:4px;font-weight:700;color:var(--text-soft);margin-top:4px}
-.pbox .tbl{margin-top:16px;text-align:left;border-top:1px solid var(--main);padding-top:4px}
-.pbox .tbl div{display:flex;justify-content:space-between;padding:9px 2px;border-bottom:1px dashed var(--main-light);font-size:13px}
-.pbox .tbl span{color:var(--text-soft);font-weight:700}.pbox .tbl b{color:var(--main-dark)}
-.pbox .ddtag{font-size:10px;background:var(--main);color:#7a2230;border-radius:6px;padding:1px 5px;margin-right:6px;font-weight:800}
-.pbox .links{display:flex;gap:6px;justify-content:center;margin-top:14px}
-.pbox .links a{flex:1;padding:8px 0;border:1.5px solid var(--main);border-radius:8px;text-decoration:none;font-size:12px;font-weight:800;color:var(--main-dark);background:var(--card)}
-.pbox .links a:hover{background:var(--main);color:#7a2230}
-.pbox .inq{display:block;width:100%;margin-top:9px;background:var(--main-dark);color:#fff;border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:800;cursor:pointer}
-body.dark .pbox .inq{color:#3a151b}
-
-.qcard{position:relative;border-radius:4px;overflow:hidden;border:1px solid var(--rule);min-height:150px;display:flex;align-items:flex-end}
-.qcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 25%}
-.qcard .ov{position:relative;width:100%;background:linear-gradient(transparent,rgba(32,10,15,.78));color:#fff;padding:16px 16px 14px}
-.qcard .ov .scr{font-family:var(--script);font-size:26px;line-height:1;color:#ffd3da}
-.qcard .ov .q{font-family:var(--serif);font-size:14px;font-weight:700;margin-top:5px;line-height:1.5}
-.kw{border:1.5px solid var(--rule);border-radius:4px;padding:16px 16px 18px}
-.kw .t{font-size:11px;letter-spacing:3px;font-weight:800;color:var(--text-soft);margin-bottom:10px}
-.kw .pill::before{content:'#';opacity:.7}
-
-footer.paperfoot{max-width:1120px;margin:16px auto 46px;text-align:center;color:var(--text-soft);font-size:12px;line-height:1.7;font-weight:600;padding:0 22px}
-
-/* 모달 */
-.modal{position:fixed;inset:0;background:rgba(46,20,26,.4);display:none;align-items:center;justify-content:center;z-index:500;padding:16px}
-.modal.on{display:flex}
-.modal .box{background:var(--card);border-radius:18px;width:100%;max-width:420px;padding:24px}
-.modal .box h4{font-family:var(--pen);font-size:18px;color:var(--main-dark);font-weight:800}
-.modal .box p{font-size:13px;color:var(--text-soft);margin:4px 0 14px}
-.modal .box input,.modal .box textarea{width:100%;padding:12px 14px;border-radius:13px;border:1.5px solid var(--rule);font-size:14px;margin-bottom:10px;font-family:inherit;background:var(--bg);color:var(--text);outline:none}
-.modal .box .bt{display:flex;gap:8px}.modal .box .bt button{flex:1;padding:12px;border-radius:13px;border:none;font-weight:800;cursor:pointer}
-.modal .box .send{background:var(--main);color:#7a2230}.modal .box .cancel{background:var(--main-light);color:var(--main-dark)}
-
-#fx{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-#fx .fxfb{position:absolute;bottom:-30px;color:var(--main-dark);opacity:.4;animation:fxfloat linear infinite}
-@keyframes fxfloat{to{transform:translateY(-112vh) rotate(40deg);opacity:0}}
-.fxpop{position:fixed;pointer-events:none;z-index:999;color:var(--main-dark);font-size:18px;animation:fxpop .7s ease-out forwards}
-@keyframes fxpop{to{transform:translate(var(--dx),var(--dy));opacity:0}}
-.headline,.hero,.lead,.grid{position:relative;z-index:1}
-@media(max-width:840px){.side{position:static}}
-@media(max-width:560px){.logo .scr{font-size:48px}.headline{font-size:30px}.nav{gap:16px;overflow-x:auto}}
-</style>
+    @media (max-width:1200px){.quote-card{right:3vw;width:24vw}}
+    @media (max-width:900px){
+      .editorial-copy{left:7vw;width:62vw}
+      .quote-card{display:none}
+    }
+    @media (max-width:620px){
+      .page-shell,.wedding-cinema{min-height:620px}
+      .hero-background{object-position:57% center}
+      .color-wash{background:linear-gradient(90deg,rgba(72,12,31,.92),rgba(72,12,31,.28))}
+      body.day .color-wash{background:linear-gradient(90deg,rgba(255,241,238,.92),rgba(255,236,233,.3))}
+      .editorial-copy{top:19vh;left:7vw;width:86vw}
+      .editorial-copy h1{font-size:clamp(58px,17vw,96px)}
+      .subtitle{margin-top:4vh}
+      .hero-acts{flex-wrap:wrap;gap:18px}
+      .site-footer span{display:none}
+      .site-footer{justify-content:flex-start}
+      .sideword{right:10px}
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
+<script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
-  <header>
-    <div class="mast">
-      <div class="logo"><span class="scr">Yeda</span><span class="sub" id="m-sub">V T U B E R · D A I L Y</span></div>
+  <main id="home" class="page-shell">
+    <section class="wedding-cinema" aria-label="LEE YEDA 웨딩 시네마 메인 화면">
+      <img class="hero-background" src="assets/yeda-wedding.webp" alt="꽃과 촛불로 장식된 홀에 선 이예다">
+      <div class="color-wash" aria-hidden="true"></div>
+
+      <header class="site-header">
+        <a href="index.html" class="monogram" aria-label="LEE YEDA 홈">LY</a>
+        <nav id="main-navigation" class="main-navigation" aria-label="메인 메뉴">
+          <a href="profile/"><span>01</span>프로필</a>
+          <a href="dress/"><span>02</span>옷장</a>
+          <a href="work/"><span>03</span>업보</a>
+          <a href="ticket/"><span>04</span>시참권</a>
+          <a href="stamp/"><span>05</span>스탬프</a>
+        </nav>
+        <div class="header-side">
+          <a class="live-link" id="live-link" href="https://www.sooplive.com/station/leeyeda" target="_blank" rel="noreferrer"><i aria-hidden="true"></i>ON AIR</a>
+          <button class="mode-toggle" type="button" aria-label="모드 전환">☀</button>
+        </div>
+        <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false" aria-label="메뉴 열기"><span></span><span></span></button>
+      </header>
+
+      <div class="editorial-copy">
+        <p class="volume">VOL. 22 <span></span> <b id="hero-date" style="font-weight:400">AUGUST 18</b></p>
+        <h1><span>the lovely</span>LEE YEDA</h1>
+        <p class="subtitle" data-hook="tagline">당신의 옆집에 사는<br>어른 여자, 이예다입니다.</p>
+        <div class="hero-acts">
+          <a class="meet-button" id="link-youtube" href="https://www.youtube.com/@leeyeda" target="_blank" rel="noreferrer">MEET YEDA <span aria-hidden="true">↗</span></a>
+          <button class="letter-button" type="button" data-letter><b>✉</b> SEND A LETTER</button>
+        </div>
+      </div>
+
+      <aside class="quote-card">
+        <button class="heart-mark" id="heart-mark" aria-label="하트" type="button">♥</button>
+        <p data-hook="quote">"거시기— 오늘도<br>복숭이랑 같이 놀아요."</p>
+        <span>communication · game · K-POP</span>
+      </aside>
+
+      <div class="sideword" aria-hidden="true">LOVELY ADULT WOMAN</div>
+
+      <footer class="site-footer">
+        <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
+        <b id="dday-strip">SCROLL TO DISCOVER</b>
+        <span>CREATOR BUS</span>
+      </footer>
+    </section>
+  </main>
+
+  <!-- 연출 레이어 + 편지 모달 -->
+  <div id="cnPetals" aria-hidden="true"></div>
+  <div id="cnFx" aria-hidden="true"></div>
+  <div id="cnMask"></div>
+  <div id="cnLetter" role="dialog" aria-modal="true" aria-label="예다에게 편지 보내기">
+    <p class="lk">SEND A LETTER · 익명</p>
+    <h3>예다에게 편지</h3>
+    <textarea id="cnTa" placeholder="하고 싶은 말을 자유롭게 적어 주세요. 익명으로 예다에게만 전달돼요 ♥"></textarea>
+    <div class="acts">
+      <button id="cnClose" type="button">CLOSE</button>
+      <button id="cnSend" class="cn-btn-solid" type="button">보내기 ♥</button>
     </div>
-    <div class="navrule"><nav class="nav">
-      <a class="on">메인</a><a href="profile/">프로필</a><a href="dress/">옷장</a><a href="work/">업보</a><a href="ticket/">시참권</a><a href="stamp/">스탬프</a>
-      <div class="actions">
-        <button class="tsw" id="tsw" type="button" aria-label="다크"><span class="kn" id="kn">🌙</span></button>
-      </div>
-    </nav></div>
-  </header>
-
-  <div class="grid">
-    <!-- 메인 기사 -->
-    <article>
-      <div class="kicker"><span class="cat" id="m-kicker">PROFILE · 🎀🍑</span><span class="date dbox"></span></div>
-      <h1 class="headline" id="m-headline">아이돌을 꿈꾸는, <em>당신의 옆집 유부녀 예다</em></h1>
-      <div class="byline" id="m-byline">BY <b>복숭이</b> · ART BY <b>이예다</b></div>
-
-      <figure class="hero"><img class="av" id="m-hero" src="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg" referrerpolicy="no-referrer" alt="이예다"><span class="sign" id="m-sign">Yeda</span><div class="rec"><span class="cn tl"></span><span class="cn tr"></span><span class="cn bl"></span><span class="cn br"></span><span class="mk t"></span><span class="mk b"></span><span class="mk l"></span><span class="mk r"></span><span class="info">F2.8 1/250 ISO100</span><span class="meta">[24]</span></div></figure>
-      <div class="herocap"><span class="cap" id="m-herocap">— 평일 저녁 7시, 오늘도 복숭이를 기다리는 예다 🍑</span><a class="closet" href="dress/">Closet →</a></div>
-
-      <p class="lead" id="m-lead">러블리하고 청초한, 그런데 어딘가 어른스러운 옆집 유부녀 버추얼, <em>이예다</em>예요. 평일 저녁 7시(주말은 낮 1시)에 만나서 소통하고, 롤하고, 종겜도 해요 🎀🍑</p>
-
-      <div class="seclabel"><b>이번 주 일정</b><span class="ln"></span></div>
-      <div class="daycards day7"></div>
-    </article>
-
-    <!-- 사이드바 -->
-    <aside class="side">
-      <div class="pbox">
-        <div class="lab" id="m-plabel">Profile</div>
-        <div class="avw av"><img id="m-avatar" src="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg" referrerpolicy="no-referrer" alt="이예다"></div>
-        <div class="nm" id="m-name">이예다</div><div class="en" id="m-en">L E E · Y E D A</div>
-        <div class="tbl" id="m-tbl"></div>
-        <div class="links" id="m-links"></div>
-        <button class="inq" onclick="openInq()">✉️ 문의하기</button>
-      </div>
-
-      <div class="qcard">
-        <img id="m-qimg" src="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg" referrerpolicy="no-referrer" alt="">
-        <div class="ov"><div class="scr" id="m-qlabel">Today's words</div><div class="q" id="m-quote">“복숭이를 세상에서 제일 사랑하는 예다 🍑”</div></div>
-      </div>
-    </aside>
+    <p class="ok-msg">편지가 잘 도착했어요. 고마워요 ♥</p>
   </div>
 
-</div>
-
-<footer class="paperfoot">© 2026 이예다 Official.<br>비즈니스 문의 — 1eeye4a@gmail.com</footer>
-
-<div class="modal" id="inq" onclick="if(event.target===this)closeInq()">
-  <div class="box"><h4>✉️ 문의하기</h4><p>이예다에게 하고 싶은 말을 남겨주세요 🍑</p>
-  <input id="iq-nick" placeholder="닉네임 (필수)"><textarea id="iq-msg" rows="4" placeholder="문의 내용을 적어주세요"></textarea>
-  <div class="bt"><button class="cancel" onclick="closeInq()">취소</button><button class="send" onclick="sendInq()">보내기 💗</button></div></div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="supabase.js"></script>
-<script>
-  function openInq(){document.getElementById('inq').classList.add('on')}
-  function closeInq(){document.getElementById('inq').classList.remove('on')}
-  async function sendInq(){
-    var nick=(document.getElementById('iq-nick').value||'').trim();
-    var msg=(document.getElementById('iq-msg').value||'').trim();
-    if(!nick){ alert('닉네임을 입력해 주세요'); return; }
-    if(!msg){ alert('문의 내용을 입력해 주세요'); return; }
-    try{
-      var ok = await insertRow('inquiries',{nickname:nick, message:msg});
-      if(ok){ alert('문의가 전송됐어요 💗'); document.getElementById('iq-nick').value=''; document.getElementById('iq-msg').value=''; closeInq(); }
-      else alert('전송 실패 — 잠시 후 다시 시도해 주세요');
-    }catch(e){ alert('전송 실패 — 네트워크를 확인해 주세요'); }
-  }
-  // 다크모드
-  (function(){var sw=document.getElementById('tsw'),kn=document.getElementById('kn');function r(){kn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';}if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');sw.addEventListener('click',function(){document.body.classList.toggle('dark');localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');r();});r();})();
-  // 상단 날짜
-  (function(){var M=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];var t=new Date();var s=t.getFullYear()+' · '+M[t.getMonth()]+' '+t.getDate();document.querySelectorAll('.dbox').forEach(function(e){e.textContent=s});})();
-
-  /* ── 메인 콘텐츠 기본값 (admin '메인' 탭이 data.main 으로 덮어씀) ── */
-  var MD = {
-    brand:'Yeda',
-    masthead_sub:'V T U B E R · D A I L Y',
-    kicker:'PROFILE · 🎀🍑',
-    headline:'아이돌을 꿈꾸는,',
-    headline_em:'당신의 옆집 유부녀 예다',
-    byline_by:'복숭이', byline_art:'이예다',
-    hero_img:'', hero_sign:'Yeda',
-    herocap:'— 평일 저녁 7시, 오늘도 복숭이를 기다리는 예다 🍑',
-    lead:'러블리하고 청초한, 그런데 어딘가 어른스러운 옆집 유부녀 버추얼, 이예다예요. 평일 저녁 7시(주말은 낮 1시)에 만나서 소통하고, 롤하고, 종겜도 해요 🎀🍑',
-    week:['13:00','19:00','19:00','19:00','19:00','19:00','13:00'],
-    pbox_label:'Profile',
-    quote_label:"Today's words",
-    quote:'복숭이를 세상에서 제일 사랑하는 예다 🍑',
-    quote_img:''
-  };
-  /* ── 신원 기본값 (프로필 탭과 공유: 이름/생일/데뷔/소속/팬닉/링크/프사) ── */
-  var DI = {
-    name:'이예다', name_en:'LEE YEDA', soop_id:'leeyeda', avatar:'',
-    birthday:'08-18', debut:'2022.12.17', agency:'유부녀즈 · 크리에이터 버스', fan_name:'복숭이',
-    links:{ soop:'https://www.sooplive.com/station/leeyeda', youtube:'https://www.youtube.com/@leeyeda', x:'https://x.com/1eeye4a', cafe:'https://cafe.naver.com/soldoutvtuber' }
-  };
-  var esc=function(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
-  function avatarUrl(d){ if(d.avatar) return d.avatar; var id=d.soop_id||''; if(!id) return ''; return 'https://profile.img.sooplive.co.kr/LOGO/'+id.slice(0,2)+'/'+id+'/'+id+'.jpg'; }
-  function dday(mmdd){ if(!mmdd) return null; var p=mmdd.split('-'),m=+p[0],dd=+p[1],now=new Date();now.setHours(0,0,0,0);var nx=new Date(now.getFullYear(),m-1,dd);if(nx<now)nx=new Date(now.getFullYear()+1,m-1,dd);return Math.round((nx-now)/86400000); }
-  function daysSince(s){ if(!s) return null; var t=String(s).replace(/[.]/g,'-').replace(/[^0-9-]/g,''); var d=new Date(t); if(isNaN(d)) return null; var now=new Date(); now.setHours(0,0,0,0); d.setHours(0,0,0,0); var n=Math.floor((now-d)/86400000); return n; }
-  function setText(id,t){ var e=document.getElementById(id); if(e) e.textContent=t; }
-
-  function renderMain(M, I){
-    setText('m-sub', M.masthead_sub);
-    setText('m-kicker', M.kicker);
-    document.getElementById('m-sign').textContent = M.hero_sign || M.brand || '';
-    var logo=document.querySelector('.logo .scr'); if(logo && M.brand) logo.textContent=M.brand;
-    document.getElementById('m-headline').innerHTML = esc(M.headline) + (M.headline_em?' <em>'+esc(M.headline_em)+'</em>':'');
-    var blEl=document.getElementById('m-byline'); var blParts=[];
-    if(M.byline_by) blParts.push('BY <b>'+esc(M.byline_by)+'</b>');
-    if(M.byline_art) blParts.push('ART BY <b>'+esc(M.byline_art)+'</b>');
-    blEl.style.display = blParts.length ? '' : 'none';
-    blEl.innerHTML = blParts.join(' · ');
-    if(M.hero_img){ var hi=document.getElementById('m-hero'); hi.src=M.hero_img; hi.setAttribute('referrerpolicy','no-referrer'); }
-    setText('m-herocap', M.herocap);
-    document.getElementById('m-lead').textContent = M.lead;
-    // 이번 주 일정
-    /* 월요일 시작 표시 (데이터 인덱스는 0=일 그대로) */
-    var dn={1:'월',2:'화',3:'수',4:'목',5:'금',6:'토',0:'일'}; var ORDER=[1,2,3,4,5,6,0]; var wk=M.week||[];
-    document.querySelector('.day7').innerHTML = ORDER.map(function(i){ return '<div class="dc"><div class="dd">'+dn[i]+'</div><div class="tt">'+esc(wk[i]||'')+'</div></div>'; }).join('');
-    // 사이드 신원
-    setText('m-plabel', M.pbox_label);
-    var av=avatarUrl(I); if(av){ var ae=document.getElementById('m-avatar'); ae.src=av; }
-    setText('m-name', I.name); setText('m-en', (I.name_en||'').split('').join(' '));
-    var n=dday(I.birthday); var ddtag=(n===0?'오늘! 🎉':(n!=null?'D-'+n:''));
-    var bday=(I.birthday||'').replace('-','.');
-    var rows=[];
-    if(I.birthday) rows.push(['생일', (ddtag?'<em class="ddtag">'+ddtag+'</em>':'')+esc(bday)]);
-    if(I.debut){ var ds=daysSince(I.debut); var dplus=(ds!=null&&ds>=0?'D+'+ds:''); rows.push(['데뷔', (dplus?'<em class="ddtag">'+dplus+'</em>':'')+esc(I.debut)]); }
-    if(I.agency) rows.push(['소속', esc(I.agency)]);
-    if(I.fan_name) rows.push(['팬닉', esc(I.fan_name)]);
-    document.getElementById('m-tbl').innerHTML = rows.map(function(r){return '<div><span>'+r[0]+'</span><b>'+r[1]+'</b></div>';}).join('');
-    var L=I.links||{}; var defs=[['SOOP',L.soop],['YouTube',L.youtube],['X',L.x],['CAFE',L.cafe]];
-    var live=defs.filter(function(d){return d[1];});
-    var mlEl=document.getElementById('m-links');
-    mlEl.style.display = live.length ? '' : 'none';
-    mlEl.innerHTML = live.map(function(d){ return '<a href="'+esc(d[1])+'" target="_blank" rel="noreferrer">'+d[0]+'</a>'; }).join('');
-    // 인용 카드
-    setText('m-qlabel', M.quote_label);
-    document.getElementById('m-quote').textContent = '“'+(M.quote||'')+'”';
-    if(M.quote_img){ var qi=document.getElementById('m-qimg'); qi.src=M.quote_img; qi.setAttribute('referrerpolicy','no-referrer'); }
-  }
-
-  (async function(){
-    // admin에 저장된 값이면 빈 값도 그대로 반영(칸을 비우고 저장 = 그 요소 지우기)
-    function mt(base,ov){ if(!ov||typeof ov!=='object') return base; Object.keys(ov).forEach(function(k){ var val=ov[k]; if(val==null) return; base[k]=val; }); return base; }
-    var M=Object.assign({},MD), I=Object.assign({},DI);
-    try{
-      var rows=await fetchAll('profile');
-      var row=(rows||[]).find(function(r){return r.id===1;})||(rows||[])[0];
-      if(row && row.data && typeof row.data==='object'){
-        mt(I,row.data);
-        I.links=mt(Object.assign({},DI.links), row.data.links);
-        if(row.data.main) M=mt(M, row.data.main);
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase.js"></script>
+  <script src="js/cinema.js"></script>
+  <script>
+  /* ── 메인 DB 로더 (§2-B.2) ── */
+  (function(){
+    var MON=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+    function setHook(k,v){
+      var el=document.querySelector('[data-hook="'+k+'"]');
+      if(el && v!=null && CN.txt(v).trim()!=='') el.innerHTML=CN.esc(v).replace(/\n/g,'<br>');
+    }
+    function applyBirthday(md){
+      var p=String(md||'').split('-');
+      if(p.length===2){
+        var el=document.getElementById('hero-date');
+        if(el) el.textContent=(MON[+p[0]-1]||'')+' '+(+p[1]);
+        var n=CN.dday(md), strip=document.getElementById('dday-strip');
+        if(strip && n!=null) strip.textContent = n===0 ? 'HAPPY BIRTHDAY ♥ TODAY' : 'BIRTHDAY D-'+n+' · SCROLL TO DISCOVER';
       }
-    }catch(e){}
-    renderMain(M,I);
+    }
+    async function load(){
+      try{
+        var res=await db.from('profile').select('data').eq('id',1);
+        var d=res && res.data && res.data[0] && res.data[0].data;
+        if(d){
+          setHook('tagline', d.tagline);
+          setHook('quote', d.quote);
+          applyBirthday(d.birthday||'08-18');
+          var L=d.links||{};
+          if(L.youtube){var yb=document.getElementById('link-youtube'); if(yb) yb.href=CN.txt(L.youtube);}
+          if(L.soop){var lv=document.getElementById('live-link'); if(lv) lv.href=CN.txt(L.soop);}
+        } else applyBirthday('08-18');
+      }catch(e){ applyBirthday('08-18'); }
+      finally{ CN.ready(); }
+    }
+    load();
+    var hm=document.getElementById('heart-mark');
+    if(hm) hm.addEventListener('click',function(e){
+      CN.bump(hm);
+      var r=hm.getBoundingClientRect();
+      CN.pop(r.left+r.width/2, r.top+r.height/2, 4);
+    });
   })();
-</script>
-
-<script src="fx.js"></script>
-<!-- fx.js \uc5c6\uc744 \ub54c(\ub2e8\ub3c5 \ubbf8\ub9ac\ubcf4\uae30)\ub9cc \ub3c4\ub294 \ud3f4\ubc31 -->
-<script>
-(function(){
-  if(typeof window.fxHearts==='function')return;
-  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var FLOAT=['♡','🎀','♡','🍑','✧'],CLICK='♡';
-  var fx=document.createElement('div');fx.id='fx';document.body.appendChild(fx);
-  if(!reduce){for(var i=0;i<12;i++){var p=document.createElement('span');p.className='fxfb';p.textContent=FLOAT[i%FLOAT.length];p.style.left=(Math.random()*100)+'%';p.style.fontSize=(12+Math.random()*14)+'px';p.style.animationDuration=(8+Math.random()*8)+'s';p.style.animationDelay=(-Math.random()*10)+'s';fx.appendChild(p);}}
-  window.fxHearts=function(x,y,n){for(var i=0;i<(n||6);i++){var s=document.createElement('span');s.className='fxpop';s.textContent=CLICK;s.style.left=x+'px';s.style.top=y+'px';var a=Math.random()*6.28,d=30+Math.random()*45;s.style.setProperty('--dx',(Math.cos(a)*d)+'px');s.style.setProperty('--dy',(Math.sin(a)*d-30)+'px');document.body.appendChild(s);(function(el){setTimeout(function(){el.remove()},720)})(s);}};
-  document.addEventListener('click',function(e){var av=e.target.closest('.av');if(av){window.fxHearts(e.clientX,e.clientY,10);if(!reduce)av.animate([{transform:'scale(1)'},{transform:'scale(.92)'},{transform:'scale(1.05)'},{transform:'scale(1)'}],{duration:420,easing:'ease-out'});return;}if(e.target.closest('input,textarea,button,a,.modal,.nav'))return;window.fxHearts(e.clientX,e.clientY,4);});
-})();
-</script>
+  </script>
 </body>
 </html>

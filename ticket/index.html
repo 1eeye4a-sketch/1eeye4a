@@ -1,174 +1,278 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>이예다 · 시참권</title>
-<link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Sacramento&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css">
-<style>
-  .upbo-head{display:flex;justify-content:flex-end;margin-bottom:10px}
-  .upbo-update{font-size:12px;color:var(--text-soft);background:var(--card);border:1px solid var(--rule);padding:6px 14px;border-radius:999px}
-  .search-box{width:100%;padding:13px 18px;border-radius:999px;border:1.5px solid var(--rule);font-size:14px;outline:none;background:var(--bg);color:var(--text);margin:0 0 18px}
-  .search-box:focus{border-color:var(--main)}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="이예다 시참권 — SCENE 04 · INVITATION">
+  <title>LEE YEDA — 시참권</title>
+  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/cinema.css">
+  <style>
+    /* ── 명부(업보/시참권 공용 골격) ── */
+    .vw-bar{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin:0 0 22px}
+    .vw-search{flex:1;min-width:220px;display:flex;align-items:center;gap:10px;padding:0 16px;border:1px solid var(--line);background:var(--glass)}
+    .vw-search i{font-style:normal;color:var(--tx-dim);font-size:12px}
+    .vw-search input{
+      flex:1;padding:13px 0;border:0;background:none;color:var(--tx);
+      font-family:var(--font-body);font-size:13.5px;
+    }
+    .vw-search input::placeholder{color:var(--tx-dim)}
+    .vw-search input:focus{outline:none}
+    .vw-note{color:var(--tx-dim);font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.08em}
 
-  .viewer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  @media(max-width:680px){.viewer-grid{grid-template-columns:repeat(2,1fr);gap:9px}}
-  @media(max-width:380px){.viewer-grid{grid-template-columns:repeat(2,1fr);gap:8px}.viewer-card{padding:14px 8px}.viewer-av,.viewer-av-fb{width:52px;height:52px}}
-  .viewer-card{background:var(--card);border:1.5px solid var(--rule);border-radius:16px;padding:20px 14px;text-align:center;cursor:pointer;transition:all .2s}
-  .viewer-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);border-color:var(--main)}
-  .viewer-av{width:62px;height:62px;border-radius:50%;object-fit:cover;margin:0 auto 10px;display:block;border:3px solid var(--main-light);background:var(--main-light)}
-  .viewer-av-fb{width:62px;height:62px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--main),var(--main-dark));color:#fff;font-size:24px;font-weight:700;border:3px solid var(--main-light)}
-  .viewer-nick{font-size:14px;font-weight:700;color:var(--ink)}
-  .viewer-id{font-size:11px;color:var(--text-soft);margin:2px 0 8px}
-  .viewer-total{display:inline-block;background:var(--main);color:#7a2230;border-radius:999px;padding:3px 14px;font-size:12px;font-weight:800}
-  body.dark .viewer-total{color:#3a151b}
+    .vw-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .vw-card{
+      display:grid;justify-items:center;gap:8px;padding:24px 12px 20px;
+      border:1px solid var(--line);background:var(--glass);cursor:pointer;
+      backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+      transition:background 160ms ease,transform 160ms ease;
+    }
+    .vw-card:hover{background:rgba(255,177,177,.1);transform:translateY(-3px)}
+    .vw-av,.vw-av-fb{width:64px;height:64px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--wine)}
+    .vw-av-fb{display:grid;place-items:center;color:#ffd9d9;font-family:var(--font-serif);font-style:italic;font-size:24px}
+    .vw-nick{font-size:13.5px;font-weight:800;letter-spacing:.02em;text-align:center}
+    .vw-id{margin-top:-4px;color:var(--tx-dim);font-size:10px;letter-spacing:.06em}
+    .vw-total{
+      margin-top:2px;padding:4px 14px;border:1px solid var(--line);
+      color:var(--main);font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.08em;
+    }
+    body.day .vw-total{color:var(--point)}
 
-  .ov{position:absolute;left:0;right:0;background:rgba(22,26,12,.35);display:none;align-items:flex-start;justify-content:center;z-index:500;padding:16px}
-  .ov.show{display:flex}
-  .wmodal{background:var(--card);border-radius:20px;width:100%;max-width:420px;max-height:84vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(46,20,26,.3);animation:pop .22s ease}
-  @keyframes pop{from{transform:scale(.94);opacity:0}to{transform:scale(1);opacity:1}}
-  .modal-top{display:flex;align-items:center;gap:12px;padding:20px 22px 16px;border-bottom:1px solid var(--rule);position:relative}
-  .modal-av{width:52px;height:52px;border-radius:50%;object-fit:cover;border:3px solid var(--main-light);background:var(--main-light);flex-shrink:0}
-  .modal-av-fb{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--main),var(--main-dark));color:#fff;font-size:20px;font-weight:700;border:3px solid var(--main-light);flex-shrink:0}
-  .modal-nick{font-size:18px;font-weight:800;color:var(--main-dark);line-height:1.2}
-  .modal-id{font-size:12px;color:var(--text-soft)}
-  .modal-x{position:absolute;top:16px;right:18px;background:none;border:none;font-size:22px;color:var(--text-soft);cursor:pointer;line-height:1}
-  .modal-body{padding:14px 18px 20px;overflow-y:auto}
-  .upbo-row{display:flex;align-items:center;gap:10px;padding:11px 14px;margin-bottom:7px;background:var(--main-light);border-radius:12px}
-  .upbo-row .nm{flex:1;font-size:14px;color:var(--text);font-weight:500}
-  .upbo-row .ev{font-size:10px;font-weight:700;color:#b07d18;background:#fff0d6;padding:2px 8px;border-radius:999px}
-  .upbo-row .ct{font-size:13px;font-weight:800;color:var(--main-dark);background:var(--card);border:1.5px solid var(--rule);border-radius:999px;padding:3px 12px;min-width:42px;text-align:center}
-  .modal-empty{text-align:center;color:var(--text-soft);padding:30px;font-size:14px}
-  .upbo-row .memo{display:block;font-size:11px;font-weight:500;color:var(--text-soft);margin-top:2px}
-  .upbo-row .exp{flex:none;font-size:10.5px;font-weight:800;color:#b0355c;background:#ffe3ec;border-radius:20px;padding:2px 8px;margin-left:6px}
-  .upbo-row .exp.out{color:#8a8a8a;background:#efefef}
-  .upbo-row.expired{opacity:.5}
-  .upbo-row.expired .nm{text-decoration:line-through}
-</style>
+    /* 서약서 모달 */
+    #vwModal{
+      position:fixed;inset:0;z-index:85;display:none;place-items:center;padding:5vh 4vw;
+      background:rgba(30,4,14,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    }
+    #vwModal.on{display:grid}
+    #vwModal .box{
+      position:relative;width:min(94vw,560px);max-height:88vh;overflow:auto;
+      border:1px solid var(--line);background:var(--glass-deep);
+      backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+      padding:30px 30px 26px;
+    }
+    #vwModal .x{position:absolute;top:16px;right:16px;border:0;background:none;color:var(--tx-dim);cursor:pointer;font-size:10px;font-weight:900;letter-spacing:.14em}
+    #vwModal .x:hover{color:var(--tx)}
+    #vwModal .vk{margin:0 0 4px;color:var(--main);font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.14em}
+    body.day #vwModal .vk{color:var(--point)}
+    #vwModal h3{margin:0 0 4px;font-family:var(--font-serif);font-weight:400;font-size:28px;letter-spacing:-.02em}
+    #vwModal .vid{margin:0 0 18px;color:var(--tx-dim);font-size:11px;letter-spacing:.06em}
+    .vow-row{
+      display:grid;grid-template-columns:1fr auto;gap:4px 14px;align-items:center;
+      padding:13px 2px;border-bottom:1px solid var(--line-soft);
+    }
+    .vow-row:last-child{border-bottom:0}
+    .vow-row .nm{font-size:14px;font-weight:700;line-height:1.5}
+    .vow-row .nm .ev{
+      margin-left:8px;padding:2px 8px;border:1px solid var(--line);
+      color:var(--main);font-size:9px;font-weight:900;letter-spacing:.12em;vertical-align:1px;
+    }
+    body.day .vow-row .nm .ev{color:var(--point)}
+    .vow-row .ct{font-family:var(--font-serif);font-style:italic;font-size:16px;color:var(--main);white-space:nowrap}
+    body.day .vow-row .ct{color:var(--point)}
+    .vow-row .sub{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:12px;color:var(--tx-dim);font-size:11px;letter-spacing:.03em}
+    .vow-row .sub .exp b{color:var(--main);font-weight:700}
+    body.day .vow-row .sub .exp b{color:var(--point)}
+    .vow-row.expired{opacity:.5}
+    .vow-row.expired .nm{text-decoration:line-through;text-decoration-color:var(--point);text-decoration-thickness:1px}
+    .vow-row.expired .sub .exp b{color:var(--tx-dim)}
+    .vow-sum{
+      display:flex;justify-content:space-between;align-items:baseline;
+      margin-top:16px;padding-top:14px;border-top:1px solid var(--line);
+    }
+    .vow-sum span{color:var(--tx-dim);font-size:10px;font-weight:800;letter-spacing:.18em}
+    .vow-sum b{font-family:var(--font-serif);font-style:italic;font-weight:400;font-size:24px;color:var(--main)}
+    body.day .vow-sum b{color:var(--point)}
+
+    @media (max-width:900px){.vw-grid{grid-template-columns:repeat(3,1fr)}}
+    @media (max-width:620px){
+      .vw-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+      .vw-card{padding:18px 8px 16px}
+      .vw-av,.vw-av-fb{width:54px;height:54px}
+      #vwModal .box{padding:24px 20px 20px}
+    }
+  </style>
 </head>
-<body>
-<div class="wrap">
-  <header>
-    <div class="mast"><div class="logo"><span class="scr">Yeda</span><span class="sub">Y E D A · D A I L Y</span></div></div>
-    <div class="navrule"><nav class="nav">
-      <a href="../index.html">메인</a>
-      <a href="../profile/">프로필</a>
-      <a href="../dress/">옷장</a>
-      <a href="../work/">업보</a>
-      <a href="index.html" class="on">시참권</a>
-      <a href="../stamp/">스탬프</a>
-      <div class="actions"><button class="tsw" id="tsw" type="button" aria-label="다크"><span class="kn" id="kn">🌙</span></button></div>
-    </nav></div>
+<body class="cinema-sub">
+<script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
+
+  <header class="site-header">
+    <a href="../index.html" class="monogram" aria-label="LEE YEDA 홈">LY</a>
+    <nav id="main-navigation" class="main-navigation" aria-label="메인 메뉴">
+      <a href="../profile/"><span>01</span>프로필</a>
+      <a href="../dress/"><span>02</span>옷장</a>
+      <a href="../work/"><span>03</span>업보</a>
+      <a href="../ticket/" class="on"><span>04</span>시참권</a>
+      <a href="../stamp/"><span>05</span>스탬프</a>
+    </nav>
+    <div class="header-side">
+      <a class="live-link" href="https://www.sooplive.com/station/leeyeda" target="_blank" rel="noreferrer"><i aria-hidden="true"></i>ON AIR</a>
+      <button class="mode-toggle" type="button" aria-label="모드 전환">☀</button>
+    </div>
+    <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false" aria-label="메뉴 열기"><span></span><span></span></button>
   </header>
 
-  <div class="kicker"><span class="cat">TICKET · 🎟️</span><span class="date dbox"></span></div>
-  <h1 class="headline">시참권 현황</h1>
-  <div class="byline">복숭이들의 시참권을 기록해두는 곳이에요. 카드를 누르면 상세가 떠요 🎟️</div>
+  <main class="chapter">
+    <div class="chapter-head rv">
+      <div class="chapter-ghost" aria-hidden="true">Invite</div>
+      <p class="kicker">SCENE 04 · TICKET</p>
+      <h1><em>the</em><span>invitation · 시참권</span></h1>
+      <p class="desc">예다의 방송에 함께할 수 있는 초대장 — 갖고 있는 시참권이 여기 기록돼요. 이름을 눌러 초대장을 펼쳐 보세요.</p>
+    </div>
 
-  <div class="card">
-    <div class="upbo-head"><span class="upbo-update" id="update-date"></span></div>
-    <input class="search-box" id="search" placeholder="🔍 닉네임 또는 아이디 검색...">
-    <div class="viewer-grid" id="grid"><div class="spinner"></div></div>
+    <div class="vw-bar rv">
+      <label class="vw-search">
+        <i>♥</i>
+        <input id="vw-q" type="search" placeholder="닉네임 또는 SOOP 아이디로 찾기" autocomplete="off">
+      </label>
+      <span class="vw-note" id="vw-note">GUEST LIST — 0 names</span>
+    </div>
+
+    <div id="vw-grid" class="vw-grid rv"></div>
+
+    <footer class="cn-footer rv">
+      <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
+      <b>WEDDING CINEMA · SCENE 04</b>
+      <span>CREATOR BUS</span>
+    </footer>
+  </main>
+
+  <!-- 서약서 모달 -->
+  <div id="vwModal" role="dialog" aria-modal="true" aria-label="초대장">
+    <div class="box">
+      <button class="x" id="vwX" type="button">CLOSE</button>
+      <p class="vk">INVITATION · 초대장</p>
+      <h3 id="vw-name"></h3>
+      <p class="vid" id="vw-sid"></p>
+      <div id="vw-rows"></div>
+      <div class="vow-sum"><span>TOTAL TICKETS</span><b id="vw-sum">0</b></div>
+    </div>
   </div>
 
-</div>
-
-<footer class="paperfoot">© 2026 이예다 Official.<br>비즈니스 문의 — 1eeye4a@gmail.com</footer>
-
-<div class="ov" id="ov" onclick="if(event.target===this)closeModal()">
-  <div class="wmodal">
-    <div class="modal-top" id="modal-top"></div>
-    <div class="modal-body" id="modal-body"></div>
+  <!-- 연출 레이어 + 편지 모달 -->
+  <div id="cnPetals" aria-hidden="true"></div>
+  <div id="cnFx" aria-hidden="true"></div>
+  <div id="cnMask"></div>
+  <div id="cnLetter" role="dialog" aria-modal="true" aria-label="예다에게 편지 보내기">
+    <p class="lk">SEND A LETTER · 익명</p>
+    <h3>예다에게 편지</h3>
+    <textarea id="cnTa" placeholder="하고 싶은 말을 자유롭게 적어 주세요. 익명으로 예다에게만 전달돼요 ♥"></textarea>
+    <div class="acts">
+      <button id="cnClose" type="button">CLOSE</button>
+      <button id="cnSend" class="cn-btn-solid" type="button">보내기 ♥</button>
+    </div>
+    <p class="ok-msg">편지가 잘 도착했어요. 고마워요 ♥</p>
   </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="../supabase.js"></script>
-<script>
-  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  function soopAvatar(id){ if(!id) return null; id=String(id).trim().toLowerCase(); if(id.length<2) return null; return `https://profile.img.sooplive.co.kr/LOGO/${id.slice(0,2)}/${id}/${id}.jpg`; }
-  let viewers=[], types=[], counts=[];
-  async function init(){
-    [viewers, types, counts] = await Promise.all([
-      fetchAll('viewers', { order:'sort_order', asc:true }),
-      fetchAll('ticket_types', { order:'sort_order', asc:true }),
-      fetchAll('ticket_counts', { order:'id', asc:true })
-    ]);
-    let latest = counts.reduce((m,c)=> c.updated_at && c.updated_at>m ? c.updated_at : m, '');
-    document.getElementById('update-date').textContent = latest ? '갱신일: ' + latest.slice(0,10) : '';
-    render(viewers);
-    if (typeof enableIframeAutoHeight==='function') enableIframeAutoHeight();
-  }
-  function isExpired(c){ if(!c.expires) return false; var t=new Date(c.expires+'T23:59:59'); return !isNaN(t) && t < new Date(); }
-  function viewerTotal(vid){ return counts.filter(c=>c.viewer_id===vid && c.count>0 && !isExpired(c)).reduce((s,c)=>s+c.count,0); }
-  function fmtExp(d){ if(!d) return ''; var p=String(d).split('-'); return p.length===3 ? (+p[1])+'/'+(+p[2]) : d; }
-  function render(list){
-    const grid=document.getElementById('grid');
-    if(!list.length){ grid.innerHTML='<div style="grid-column:1/-1"><div class="empty"><div class="empty-icon">⚡</div>시청자가 없어요</div></div>'; if(typeof enableIframeAutoHeight==='function')enableIframeAutoHeight(); return; }
-    grid.innerHTML = list.map(v=>{
-      const av=soopAvatar(v.soop_id); const ini=(v.nickname||'?').charAt(0);
-      const avHtml = av ? `<img class="viewer-av" src="${av}" referrerpolicy="no-referrer" onerror="this.outerHTML='<div class=\\'viewer-av-fb\\'>${ini}</div>'">` : `<div class="viewer-av-fb">${ini}</div>`;
-      const total=viewerTotal(v.id);
-      return `<div class="viewer-card" onclick="openModal(${v.id})">
-        ${avHtml}
-        <div class="viewer-nick">${esc(v.nickname)}</div>
-        ${v.soop_id?`<div class="viewer-id">(${esc(v.soop_id)})</div>`:'<div class="viewer-id">&nbsp;</div>'}
-        <span class="viewer-total">시참권 ${total}</span>
-      </div>`;
-    }).join('');
-    if(typeof enableIframeAutoHeight==='function')enableIframeAutoHeight();
-  }
-  function openModal(vid){
-    const v=viewers.find(x=>x.id===vid); if(!v) return;
-    const av=soopAvatar(v.soop_id); const ini=(v.nickname||'?').charAt(0);
-    const avHtml = av ? `<img class="modal-av" src="${av}" referrerpolicy="no-referrer" onerror="this.outerHTML='<div class=\\'modal-av-fb\\'>${ini}</div>'">` : `<div class="modal-av-fb">${ini}</div>`;
-    document.getElementById('modal-top').innerHTML = `
-      ${avHtml}
-      <div><div class="modal-nick">${esc(v.nickname)}</div>${v.soop_id?`<div class="modal-id">(${esc(v.soop_id)})</div>`:''}</div>
-      <button class="modal-x" onclick="closeModal()">✕</button>`;
-    const mine = counts.filter(c=>c.viewer_id===vid && c.count>0)
-      .slice().sort((a,b)=>{ const ea=isExpired(a)?1:0, eb=isExpired(b)?1:0; if(ea!==eb) return ea-eb; const xa=a.expires||'9999-99-99', xb=b.expires||'9999-99-99'; return xa<xb?-1:xa>xb?1:0; });
-    const rows = mine.map(c=>{
-      const t = types.find(x=>x.id===c.type_id); if(!t) return '';
-      const exp = isExpired(c);
-      return `
-      <div class="upbo-row${exp?' expired':''}">
-        <span class="nm">${esc(t.name)}${c.note?`<small class="memo">${esc(c.note)}</small>`:''}</span>
-        ${t.category==='이벤트'?'<span class="ev">이벤트</span>':''}
-        ${c.expires?`<span class="exp${exp?' out':''}">${exp?'기한 지남':'~'+fmtExp(c.expires)}</span>`:''}
-        <span class="ct">×${c.count}</span>
-      </div>`;}).join('');
-    document.getElementById('modal-body').innerHTML = rows || '<div class="modal-empty">아직 시참권이 없어요 ♡</div>';
-    const ov = document.getElementById('ov');
-    const e = window.event; let y = 200;
-    if (e) { y = (e.pageY != null ? e.pageY : (e.clientY||0)); }
-    ov.style.top = Math.max(10, y - 80) + 'px';
-    ov.classList.add('show');
-  }
-  function closeModal(){ document.getElementById('ov').classList.remove('show'); }
-  document.getElementById('search').addEventListener('input', e=>{
-    const q=e.target.value.trim().toLowerCase();
-    render(viewers.filter(v=> (v.nickname||'').toLowerCase().includes(q) || (v.soop_id||'').toLowerCase().includes(q)));
-  });
-  init();
-  (function(){var M=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];var t=new Date();var s=t.getFullYear()+' · '+M[t.getMonth()]+' '+t.getDate();document.querySelectorAll('.dbox').forEach(function(e){e.textContent=s});})();
-</script>
-<script>
-(function(){if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');var sw=document.getElementById('tsw'),kn=document.getElementById('kn');function r(){if(kn)kn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';}if(sw)sw.addEventListener('click',function(){document.body.classList.toggle('dark');localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');r();});r();})();
-</script>
-<script>
-/* 상단 로고·소제목 = admin 메인 탭(data.main)과 연동 */
-(async function(){ try{
-  const { data: rows } = await db.from('profile').select('data').eq('id', 1);
-  const m = rows && rows[0] && rows[0].data && rows[0].data.main;
-  if(m){
-    if(m.brand){ const e=document.querySelector('.logo .scr'); if(e) e.textContent=m.brand; }
-    if(m.masthead_sub!==undefined){ const e=document.querySelector('.logo .sub'); if(e) e.textContent=m.masthead_sub; }
-  }
-}catch(e){} })();
-</script>
-<script src="../fx.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../supabase.js"></script>
+  <script src="../js/cinema.js"></script>
+  <script>
+  (function(){
+    /* ── 시참권(초대장) 명부 — viewers × ticket_types × ticket_counts (기한·비고) ── */
+    var T_TYPES='ticket_types', T_COUNTS='ticket_counts';
+    var WORD={ unit:'장', empty:'아직 도착한 초대장이 없어요', none:'아직 명부에 오른 복숭이가 없어요' };
+    var esc=CN.esc, txt=CN.txt;
+    var viewers=[], types=[], counts=[], typeById={};
+
+    function today(){ var n=new Date(); return new Date(n.getFullYear(),n.getMonth(),n.getDate()); }
+    function isExpired(e){
+      if(!e || !e.expires) return false;
+      var p=String(e.expires).slice(0,10).split('-'); if(p.length<3) return false;
+      return new Date(+p[0],+p[1]-1,+p[2]) < today();
+    }
+    function expLabel(e){
+      if(!e.expires) return '무기한';
+      var s=String(e.expires).slice(0,10).replace(/-/g,'.');
+      if(isExpired(e)) return s+' · 만료';
+      var p=s.split('.'), d=new Date(+p[0],+p[1]-1,+p[2]);
+      var n=Math.round((d-today())/864e5);
+      return s+' · <b>D-'+n+'</b>';
+    }
+    function entriesOf(vid){
+      return counts.filter(function(c){ return String(c.viewer_id)===String(vid); })
+        .sort(function(a,b){
+          var ea=isExpired(a)?1:0, eb=isExpired(b)?1:0;
+          if(ea!==eb) return ea-eb;
+          return String(b.updated_at||'').localeCompare(String(a.updated_at||''));
+        });
+    }
+    function activeTotal(vid){
+      return entriesOf(vid).reduce(function(s,c){ return s+(isExpired(c)?0:(+c.count||0)); },0);
+    }
+
+    function renderGrid(){
+      var q=(document.getElementById('vw-q').value||'').trim().toLowerCase();
+      var list=viewers.slice().sort(function(a,b){
+        var sa=a.sort_order==null?0:+a.sort_order, sb=b.sort_order==null?0:+b.sort_order;
+        if(sa!==sb) return sa-sb;
+        return String(a.nickname||'').localeCompare(String(b.nickname||''),'ko');
+      }).filter(function(v){
+        if(!q) return true;
+        return String(v.nickname||'').toLowerCase().indexOf(q)>-1 ||
+               String(v.soop_id||'').toLowerCase().indexOf(q)>-1;
+      });
+      document.getElementById('vw-note').textContent='GUEST LIST — '+list.length+' names';
+      var el=document.getElementById('vw-grid');
+      if(!list.length){ el.innerHTML='<div class="cn-empty" style="grid-column:1/-1">'+(q?'검색 결과가 없어요':WORD.none)+'</div>'; return; }
+      el.innerHTML=list.map(function(v){
+        var av=CN.soopAvatar(v.soop_id);
+        var avatar=av
+          ? '<img class="vw-av" src="'+esc(av)+'" alt="" referrerpolicy="no-referrer" onerror="this.outerHTML=\'<div class=&quot;vw-av-fb&quot;>'+esc(String(v.nickname||'?').charAt(0))+'</div>\'">'
+          : '<div class="vw-av-fb">'+esc(String(v.nickname||'?').charAt(0))+'</div>';
+        return '<div class="vw-card" data-id="'+v.id+'">'+avatar+
+          '<b class="vw-nick">'+esc(v.nickname)+'</b>'+
+          (v.soop_id?'<span class="vw-id">'+esc(v.soop_id)+'</span>':'')+
+          '<span class="vw-total">'+activeTotal(v.id)+' '+WORD.unit+'</span></div>';
+      }).join('');
+      el.querySelectorAll('.vw-card').forEach(function(c){
+        c.addEventListener('click',function(){ openModal(c.dataset.id); });
+      });
+    }
+
+    var modal=document.getElementById('vwModal');
+    function openModal(vid){
+      var v=viewers.find(function(x){ return String(x.id)===String(vid); });
+      if(!v) return;
+      document.getElementById('vw-name').textContent=txt(v.nickname);
+      document.getElementById('vw-sid').textContent=v.soop_id?('SOOP · '+txt(v.soop_id)):'';
+      var list=entriesOf(vid);
+      var rows=list.map(function(e){
+        var t=typeById[e.type_id]||{};
+        var evb=(t.category==='이벤트')?'<span class="ev">EVENT</span>':'';
+        var note=txt(e.note).trim();
+        return '<div class="vow-row'+(isExpired(e)?' expired':'')+'">'+
+          '<span class="nm">'+esc(t.name||'(삭제된 항목)')+evb+'</span>'+
+          '<span class="ct">×'+(+e.count||0)+'</span>'+
+          '<span class="sub"><span class="exp">'+expLabel(e)+'</span>'+
+          (note?'<span>'+esc(note)+'</span>':'')+'</span></div>';
+      }).join('');
+      document.getElementById('vw-rows').innerHTML=rows||'<div class="cn-empty">'+WORD.empty+'</div>';
+      document.getElementById('vw-sum').textContent=activeTotal(vid)+' '+WORD.unit;
+      modal.classList.add('on');
+    }
+    document.getElementById('vwX').addEventListener('click',function(){ modal.classList.remove('on'); });
+    modal.addEventListener('click',function(e){ if(e.target===modal) modal.classList.remove('on'); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') modal.classList.remove('on'); });
+    document.getElementById('vw-q').addEventListener('input',renderGrid);
+
+    async function load(){
+      try{
+        var r1=await db.from('viewers').select('*');
+        var r2=await db.from(T_TYPES).select('*');
+        var r3=await db.from(T_COUNTS).select('*');
+        if(r1&&Array.isArray(r1.data)) viewers=r1.data;
+        if(r2&&Array.isArray(r2.data)) types=r2.data;
+        if(r3&&Array.isArray(r3.data)) counts=r3.data;
+        typeById={}; types.forEach(function(t){ typeById[t.id]=t; });
+      }catch(e){}
+      finally{ renderGrid(); CN.ready(); CN.reveal(); }
+    }
+    renderGrid();
+    load();
+  })();
+  </script>
 </body>
 </html>
