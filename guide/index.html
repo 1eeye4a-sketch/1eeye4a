@@ -21,6 +21,7 @@
     body.day .gd-cat{background:rgba(255,255,255,.5)}
     .gd-cat:hover{background:rgba(255,177,177,.12)}
     .gd-cat.on{background:var(--point);border-color:var(--line);color:#fff}
+    body.day .gd-cat.on{background:var(--point);color:#fff}
 
     /* 목록 */
     .gd-list{border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
@@ -61,7 +62,7 @@
     /* 본문 타이포 (에디터 산출물) */
     .art-content{font-size:14.5px;line-height:1.95;color:var(--tx-soft);word-break:keep-all;overflow-wrap:anywhere}
     .art-content p{margin:0 0 .5em}
-    .art-content h2{margin:1.5em 0 .5em;font-family:var(--font-serif);font-weight:600;font-size:1.5em;letter-spacing:-.02em;color:var(--tx)}
+    .art-content h2{margin:1.5em 0 .5em;font-family:var(--font-body);font-weight:800;font-size:1.4em;letter-spacing:-.01em;color:var(--tx)}
     .art-content h3{margin:1.3em 0 .4em;font-weight:800;font-size:1.13em;color:var(--tx)}
     .art-content hr{margin:1.6em 0;border:0;border-top:1px solid var(--line)}
     .art-content blockquote{
@@ -88,6 +89,10 @@
     .art-content details > *:last-child{padding-bottom:12px}
     .art-content mark{padding:.05em .15em;color:inherit}
     .art-content b,.art-content strong{color:var(--tx)}
+    .art-content table{width:100%;margin:.8em 0;border-collapse:collapse;font-size:.95em}
+    .art-content th,.art-content td{padding:9px 12px;border:1px solid var(--line-soft);text-align:left;vertical-align:top}
+    .art-content th{background:rgba(255,177,177,.1);color:var(--tx);font-weight:800}
+    body.day .art-content th{background:rgba(198,45,66,.07)}
 
     @media (max-width:620px){
       .gd-row{grid-template-columns:1fr auto;padding:14px 16px}
@@ -126,7 +131,14 @@
 
     <!-- 목록 -->
     <div id="gd-list-wrap">
-      <div class="gd-cats rv" id="gd-cats"></div>
+      <div class="rv" style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin-bottom:18px">
+        <div class="gd-cats" id="gd-cats" style="margin:0"></div>
+        <label style="display:flex;align-items:center;gap:9px;min-width:220px;padding:0 14px;border:1px solid var(--line);background:var(--glass)">
+          <i style="font-style:normal;color:var(--tx-dim);font-size:12px">♥</i>
+          <input id="gd-q" type="search" placeholder="안내 글 검색 (제목·내용)" autocomplete="off"
+                 style="flex:1;padding:11px 0;border:0;background:none;color:var(--tx);font-family:var(--font-body);font-size:13px;outline:none">
+        </label>
+      </div>
       <div class="gd-list rv" id="gd-list"></div>
     </div>
 
@@ -172,7 +184,12 @@
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
-    var CATS=['전체','방송 규칙','시참 규칙','가이드'];
+    var CATS=['전체','규칙','예다의 TMI','가이드','기타'];
+    function normCat(c){
+      c=txt(c).trim();
+      if(c==='방송 규칙'||c==='시참 규칙') return '규칙';
+      return CATS.indexOf(c)>0 ? c : '기타';
+    }
     var posts=[], curCat='전체', curPost=null;
 
     function byOrder(a,b){
@@ -194,13 +211,21 @@
     }
     function renderList(){
       var el=document.getElementById('gd-list');
-      var list=posts.filter(function(p){ return curCat==='전체'||p.category===curCat; }).sort(byOrder);
+      var q=(document.getElementById('gd-q').value||'').trim().toLowerCase();
+      var list=posts.filter(function(p){
+        if(curCat!=='전체' && normCat(p.category)!==curCat) return false;
+        if(q){
+          var plain=(txt(p.title)+' '+String(p.content_html||'').replace(/<[^>]*>/g,' ')).toLowerCase();
+          if(plain.indexOf(q)===-1) return false;
+        }
+        return true;
+      }).sort(byOrder);
       if(!list.length){
-        el.innerHTML='<div class="cn-empty">아직 등록된 안내가 없어요</div>'; return;
+        el.innerHTML='<div class="cn-empty">'+(q?'검색 결과가 없어요':'아직 등록된 안내가 없어요')+'</div>'; return;
       }
       el.innerHTML=list.map(function(p){
         return '<button class="gd-row" type="button" data-id="'+p.id+'">'+
-          '<span class="c">'+esc(p.category)+'</span>'+
+          '<span class="c">'+esc(normCat(p.category))+'</span>'+
           '<span class="t">'+(p.pinned?'<span class="pin">📌</span>':'')+esc(p.title)+'</span>'+
           '<span class="d">'+fmtDate(p.updated_at||p.created_at)+'</span></button>';
       }).join('');
@@ -212,7 +237,7 @@
       var p=posts.find(function(x){ return String(x.id)===String(id); });
       if(!p) return;
       curPost=p;
-      document.getElementById('art-cat').textContent=txt(p.category);
+      document.getElementById('art-cat').textContent=normCat(p.category);
       document.getElementById('art-title').textContent=txt(p.title);
       document.getElementById('art-date').textContent=fmtDate(p.updated_at||p.created_at)+' 업데이트';
       document.getElementById('art-content').innerHTML=p.content_html||'';
@@ -234,6 +259,7 @@
       var id=new URLSearchParams(location.search).get('p');
       if(id) openPost(id,false); else closePost(false);
     });
+    document.getElementById('gd-q').addEventListener('input',renderList);
     document.getElementById('gd-share').addEventListener('click',function(){
       if(!curPost) return;
       var url=location.origin+location.pathname+'?p='+curPost.id;

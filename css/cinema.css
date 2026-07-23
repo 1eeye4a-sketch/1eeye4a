@@ -324,6 +324,9 @@ body:not(.ready) .rv{transition-delay:9999s}
 }
 .cn-footer b{color:var(--tx);font-size:8px}
 
+.cn-link{color:var(--main);text-decoration:underline;text-underline-offset:3px;word-break:break-all}
+body.day .cn-link{color:var(--point)}
+
 a:focus-visible,button:focus-visible{outline:2px solid var(--main);outline-offset:4px}
 
 /* ============================================================

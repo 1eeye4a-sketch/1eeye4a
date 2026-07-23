@@ -134,7 +134,7 @@
       <div class="chapter-ghost" aria-hidden="true">Dress</div>
       <p class="kicker">SCENE 03 · CLOSET</p>
       <h1><em>the</em><span>dress room</span></h1>
-      <p class="desc">예다가 입어 온 드레스들의 기록 — 새 드레스는 포스터로, 지난 드레스는 아카이브로 걸려 있어요.</p>
+      <p class="desc" id="pg-desc">예다가 입어 온 드레스들의 기록 — 새 드레스는 포스터로, 지난 드레스는 아카이브로 걸려 있어요.</p>
     </div>
 
     <div class="dr-hero rv">
@@ -199,6 +199,7 @@
   (function(){
     /* ── 분류 (admin select + admin DRESS_CATS와 같은 값 유지 — 세 곳 동기화) ── */
     var CATS = [
+      { key:'all',    label:'전체' },
       { key:'hair',   label:'헤어' },
       { key:'outfit', label:'의상' },
       { key:'lens',   label:'악세사리' }
@@ -206,7 +207,7 @@
     var LABELS = {}; CATS.forEach(function(c){ LABELS[c.key]=c.label; });
     var esc=CN.esc, txt=CN.txt;
 
-    var items=[], curMode='new', curCat=CATS[0].key, curPage=1;
+    var items=[], curMode='new', curCat='all', curPage=1;
     var PER = { new:6, old:12 };
 
     function isNew(it){ 
@@ -241,7 +242,7 @@
 
     function pool(){
       return items.filter(function(it){
-        if(it.category!==curCat) return false;
+        if(curCat!=='all' && it.category!==curCat) return false;
         return curMode==='new' ? isNew(it) : !isNew(it);
       }).sort(byOrder);
     }
@@ -267,9 +268,10 @@
       var all=pool(), total=all.length;
       var start=(curPage-1)*PER[curMode], page=all.slice(start,start+PER[curMode]);
       if(!total){
+        var cl=curCat==='all'?'':esc(LABELS[curCat]||'')+' ';
         el.innerHTML = curMode==='new'
-          ? '<div class="cn-empty">'+esc(LABELS[curCat]||'')+' 새 드레스가 아직 걸려 있지 않아요<br><span style="font-size:11.5px;opacity:.8;font-style:normal">admin에서 "✦ 새 옷으로 올리기"를 체크하면 여기 포스터로 떠요</span></div>'
-          : '<div class="cn-empty">'+esc(LABELS[curCat]||'')+' 아카이브가 아직 비어 있어요</div>';
+          ? '<div class="cn-empty">'+cl+'새 드레스가 아직 걸려 있지 않아요<br><span style="font-size:11.5px;opacity:.8;font-style:normal">admin에서 "✦ 새 옷으로 올리기"를 체크하면 여기 포스터로 떠요</span></div>'
+          : '<div class="cn-empty">'+cl+'아카이브가 아직 비어 있어요</div>';
         renderPager(0); return;
       }
       if(curMode==='new'){
@@ -301,7 +303,7 @@
       im.src=u||''; im.style.display=u?'block':'none';
       document.getElementById('drCat').textContent=(LABELS[it.category]||'')+' · '+fmtDate(it.created_at);
       document.getElementById('drName').textContent=txt(it.name);
-      document.getElementById('drDesc').textContent=txt(it.description);
+      document.getElementById('drDesc').innerHTML=CN.linkify(it.description);
       view.classList.add('on');
     }
     document.getElementById('drX').addEventListener('click',function(){ view.classList.remove('on'); });
@@ -310,23 +312,22 @@
 
     async function load(){
       try{
+        var rp=await db.from('profile').select('data').eq('id',1);
+        var pd=rp&&rp.data&&rp.data[0]&&rp.data[0].data;
+        if(pd && CN.txt(pd['dress-desc']).trim())
+          document.getElementById('pg-desc').innerHTML=CN.linkify(pd['dress-desc']);
         var res=await db.from('dress_items').select('*');
         if(res && Array.isArray(res.data)) items=res.data;
       }catch(e){}
       finally{
-        /* 현재 보기(새옷·헤어)가 비었으면 옷이 있는 모드/분류로 자동 이동 — "등록했는데 안 보임" 방지 */
+        /* 현재 모드가 비었으면 옷이 있는 모드로 자동 전환 — "등록했는데 안 보임" 방지 */
         if(items.length && !pool().length){
-          outer:
-          for(var mi=0; mi<2; mi++){
-            var m=[curMode, curMode==='new'?'old':'new'][mi];
-            for(var ci=0; ci<CATS.length; ci++){
-              var has=items.some(function(it){
-                return it.category===CATS[ci].key && (m==='new'?isNew(it):!isNew(it));
-              });
-              if(has){ curMode=m; curCat=CATS[ci].key; break outer; }
-            }
+          var other=curMode==='new'?'old':'new';
+          var hasOther=items.some(function(it){ return other==='new'?isNew(it):!isNew(it); });
+          if(hasOther){
+            curMode=other;
+            document.querySelectorAll('#mode-seg .seg-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.mode===curMode); });
           }
-          document.querySelectorAll('#mode-seg .seg-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.mode===curMode); });
         }
         renderTabs(); renderList(); CN.ready(); CN.reveal();
       }

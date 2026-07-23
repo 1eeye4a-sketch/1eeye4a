@@ -23,7 +23,13 @@
     .ad-banner{display:none;margin:0 0 18px;padding:13px 18px;border:1px solid var(--point);background:rgba(198,45,66,.15);color:var(--tx);font-size:13px;line-height:1.6}
     .ad-banner.on{display:block}
 
-    .ad-tabs{display:flex;flex-wrap:wrap;border:1px solid var(--line);margin-bottom:26px}
+    .ad-tabs{
+      position:sticky;top:calc(clamp(74px,9.5vh,104px) + 10px);z-index:26;
+      display:flex;flex-wrap:wrap;border:1px solid var(--line);margin-bottom:26px;
+      background:rgba(64,11,28,.94);
+      backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    }
+    body.day .ad-tabs{background:rgba(255,244,241,.95)}
     .ad-tab{
       flex:1;min-width:110px;padding:13px 8px;border:0;background:transparent;color:var(--tx-dim);
       cursor:pointer;font-size:11px;font-weight:800;letter-spacing:.08em;white-space:nowrap;
@@ -113,7 +119,7 @@
     }
     body.day #ed-body{background:rgba(255,255,255,.7)}
     #ed-body:focus{outline:1px solid var(--main)}
-    #ed-body h2{margin:.9em 0 .4em;font-family:var(--font-serif);font-weight:600;font-size:1.45em;color:var(--tx)}
+    #ed-body h2{margin:.9em 0 .4em;font-weight:800;font-size:1.35em;color:var(--tx)}
     #ed-body h3{margin:.8em 0 .3em;font-weight:800;font-size:1.12em;color:var(--tx)}
     #ed-body hr{margin:1.2em 0;border:0;border-top:1px solid var(--line)}
     #ed-body blockquote{margin:.8em 0;padding:10px 15px;border-left:3px solid var(--main);background:rgba(255,177,177,.08);color:var(--tx)}
@@ -122,6 +128,9 @@
     #ed-body details{margin:.7em 0;border:1px solid var(--line-soft)}
     #ed-body summary{padding:9px 13px;cursor:pointer;font-weight:750;color:var(--tx)}
     #ed-body b,#ed-body strong{color:var(--tx)}
+    #ed-body table{width:100%;margin:.7em 0;border-collapse:collapse;font-size:.95em}
+    #ed-body th,#ed-body td{padding:8px 11px;border:1px solid var(--line-soft);text-align:left;min-width:40px}
+    #ed-body th{background:rgba(255,177,177,.1);color:var(--tx);font-weight:800}
 
     /* 로그인 */
     #adLogin{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:linear-gradient(135deg,#5b1027,#350917)}
@@ -349,6 +358,11 @@
     <!-- ═══════════ 👗 옷장 ═══════════ -->
     <section class="tab-panel" id="tab-dress">
       <div class="cn-card">
+        <p class="cn-kicker">NOTICE · 옷장 페이지 안내 문구</p>
+        <div class="fld"><textarea class="input" id="f-dress-desc" placeholder="옷장 페이지 제목 아래에 표시돼요 (줄바꿈 가능 · 링크는 자동으로 눌리는 링크가 돼요)"></textarea></div>
+        <div class="save-bar" style="margin-top:12px"><button class="cn-btn-solid" id="save-dress-desc" type="button">안내 문구 저장 ♥</button></div>
+      </div>
+      <div class="cn-card">
         <p class="cn-kicker">ADD · 새 옷 걸기</p>
         <div class="fgrid">
           <div class="fld"><span class="cn-label">분류</span>
@@ -393,7 +407,7 @@
         </div>
         <div class="table-wrap" style="margin-top:16px">
           <table>
-            <thead><tr><th>닉네임</th><th>SOOP 아이디</th><th>스탬프</th><th>삭제</th></tr></thead>
+            <thead><tr><th>닉네임</th><th>SOOP 아이디</th><th>스탬프</th><th>수정</th><th>삭제</th></tr></thead>
             <tbody id="vw-list"></tbody>
           </table>
         </div>
@@ -402,7 +416,7 @@
 
       <div class="cn-card">
         <p class="cn-kicker">NOTICE · 업보 페이지 안내 문구</p>
-        <div class="fld"><textarea class="input" id="f-upbo-desc" placeholder="업보 페이지 제목 아래에 표시돼요 (줄바꿈 가능)"></textarea></div>
+        <div class="fld"><textarea class="input" id="f-upbo-desc" placeholder="업보 페이지 제목 아래에 표시돼요 (줄바꿈 가능 · https:// 링크는 자동으로 눌리는 링크가 돼요)"></textarea></div>
         <div class="save-bar" style="margin-top:12px"><button class="cn-btn-solid" id="save-upbo-desc" type="button">안내 문구 저장 ♥</button></div>
       </div>
 
@@ -448,7 +462,7 @@
     <section class="tab-panel" id="tab-ticket">
       <div class="cn-card">
         <p class="cn-kicker">NOTICE · 시참권 페이지 안내 문구</p>
-        <div class="fld"><textarea class="input" id="f-ticket-desc" placeholder="시참권 페이지 제목 아래에 표시돼요 (줄바꿈 가능)"></textarea></div>
+        <div class="fld"><textarea class="input" id="f-ticket-desc" placeholder="시참권 페이지 제목 아래에 표시돼요 (줄바꿈 가능 · https:// 링크는 자동으로 눌리는 링크가 돼요)"></textarea></div>
         <div class="save-bar" style="margin-top:12px"><button class="cn-btn-solid" id="save-ticket-desc" type="button">안내 문구 저장 ♥</button></div>
       </div>
 
@@ -519,7 +533,7 @@
         <p class="cn-kicker">SETTINGS · 방명록 문구 &amp; 보상</p>
         <div class="fld">
           <span class="cn-label">스탬프 페이지 안내 문구</span>
-          <textarea class="input" id="f-stamp-desc" placeholder="스탬프 페이지 상단에 표시돼요 (줄바꿈 가능)"></textarea>
+          <textarea class="input" id="f-stamp-desc" placeholder="스탬프 페이지 상단에 표시돼요 (줄바꿈 가능 · https:// 링크는 자동으로 눌리는 링크가 돼요)"></textarea>
         </div>
         <div style="margin-top:16px">
           <span class="cn-label">보상 목록 (도달 개수 · 보상 이름)</span>
@@ -534,6 +548,9 @@
     <section class="tab-panel" id="tab-guide">
       <div class="cn-card">
         <p class="cn-kicker">POSTS · 등록된 안내 글</p>
+        <div class="row-line" style="margin-bottom:12px">
+          <div class="fld"><span class="cn-label">글 검색</span><input class="input" id="gd-pq" placeholder="제목·내용 검색"></div>
+        </div>
         <div class="table-wrap">
           <table>
             <thead><tr><th>분류</th><th>제목</th><th>📌</th><th>날짜</th><th>수정</th><th>링크</th><th>삭제</th></tr></thead>
@@ -548,9 +565,10 @@
         <div class="row-line" style="margin-bottom:12px">
           <div class="fld sm" style="flex:0 0 150px"><span class="cn-label">분류</span>
             <select class="input" id="ed-cat">
-              <option>방송 규칙</option>
-              <option>시참 규칙</option>
+              <option>규칙</option>
+              <option>예다의 TMI</option>
               <option selected>가이드</option>
+              <option>기타</option>
             </select>
           </div>
           <div class="fld"><span class="cn-label">제목</span><input class="input" id="ed-title" placeholder="예) 예다 방송 5계명"></div>
@@ -574,6 +592,8 @@
           <button class="ed-dot" data-fc="#3fb58e" style="background:#3fb58e" type="button" title="글자색 민트"></button>
           <button class="ed-dot" data-fc="#6f8fe8" style="background:#6f8fe8" type="button" title="글자색 블루"></button>
           <button class="ed-dot" data-fc="#a97fe0" style="background:#a97fe0" type="button" title="글자색 라벤더"></button>
+          <button class="ed-dot" data-fc="#1c1c1c" style="background:#1c1c1c" type="button" title="글자색 검정"></button>
+          <button class="ed-dot" data-fc="#ffffff" style="background:#ffffff" type="button" title="글자색 흰색"></button>
           <span class="ed-sep"></span>
           <button class="ed-dot" data-hl="rgba(255,143,163,.35)" style="background:linear-gradient(0deg,rgba(255,143,163,.55),rgba(255,143,163,.55)),#fff" type="button" title="형광펜 핑크"></button>
           <button class="ed-dot" data-hl="rgba(232,176,75,.35)" style="background:linear-gradient(0deg,rgba(232,176,75,.55),rgba(232,176,75,.55)),#fff" type="button" title="형광펜 골드"></button>
@@ -583,6 +603,7 @@
           <button class="ed-btn" data-cmd="insertHorizontalRule" type="button" title="구분선">─</button>
           <button class="ed-btn" data-cmd="formatBlock" data-val="blockquote" type="button" title="인용">❝</button>
           <button class="ed-btn" id="ed-toggle" type="button" title="접었다 펴는 토글">▸토글</button>
+          <button class="ed-btn" id="ed-table" type="button" title="표 넣기">⊞표</button>
           <button class="ed-btn" id="ed-img" type="button" title="이미지 넣기">🖼</button>
           <button class="ed-btn" id="ed-link" type="button" title="링크 걸기">🔗</button>
           <button class="ed-btn" data-cmd="removeFormat" type="button" title="서식 지우기">지우개</button>
@@ -983,12 +1004,23 @@
       tb.innerHTML=viewers.map(function(x){
         return '<tr data-id="'+x.id+'"><td>'+esc(x.nickname)+'</td><td class="mini">'+esc(x.soop_id||'—')+'</td>'+
           '<td class="mini">'+stCountOf(x)+'개</td>'+
+          '<td style="width:44px;text-align:center"><button class="ic-btn" data-edit="1" title="닉네임 수정">✎</button></td>'+
           '<td><button class="ic-btn del" data-del="1">✕</button></td></tr>';
-      }).join('') || '<tr><td colspan="4" class="mini">아직 명단이 비어 있어요</td></tr>';
+      }).join('') || '<tr><td colspan="5" class="mini">아직 명단이 비어 있어요</td></tr>';
       tb.querySelectorAll('tr[data-id]').forEach(function(tr){
+        var x=vById[tr.dataset.id];
+        tr.querySelector('[data-edit]').addEventListener('click',async function(){
+          if(!guard()) return;
+          var nick=prompt('새 닉네임을 적어 주세요', x.nickname||'');
+          if(nick===null) return;
+          nick=nick.trim(); if(!nick){ alert('닉네임은 비울 수 없어요!'); return; }
+          var sid=prompt('SOOP 아이디 (비우면 프사 자동 연동 없음)', x.soop_id||'');
+          if(sid===null) sid=x.soop_id||'';
+          var ok=await updateRow('viewers',x.id,{nickname:nick,soop_id:sid.trim(),updated_at:new Date().toISOString()});
+          if(ok) loadAllLedgers();
+        });
         tr.querySelector('[data-del]').addEventListener('click',async function(){
           if(!guard()) return;
-          var x=vById[tr.dataset.id];
           if(!confirm('"'+x.nickname+'" 을(를) 명단에서 지울까요?\n업보·시참권 기록도 함께 안 보이게 돼요.')) return;
           await deleteRow('viewers',x.id); loadAllLedgers();
         });
@@ -1027,7 +1059,7 @@
           var r1=await db.from(T_TYPES).select('*'); types=(r1&&r1.data)||[];
           var r2=await db.from(T_COUNTS).select('*'); counts=(r2&&r2.data)||[];
         }catch(e){ types=[]; counts=[]; }
-        types.sort(function(a,b){ return (+a.sort_order||0)-(+b.sort_order||0); });
+        types.sort(function(a,b){ return String(a.name||'').localeCompare(String(b.name||''),'ko'); });
         render();
       }
       function tById(id){ return types.find(function(t){ return String(t.id)===String(id); })||{}; }
@@ -1054,6 +1086,8 @@
           var vn=(vById[c.viewer_id]||{});
           return String(vn.nickname||'').toLowerCase().indexOf(vq)>-1 || String(vn.soop_id||'').toLowerCase().indexOf(vq)>-1;
         }).sort(function(a,b){
+          var ta=(tById(a.type_id).name||''), tb2=(tById(b.type_id).name||'');
+          if(ta!==tb2) return ta.localeCompare(tb2,'ko');           /* 업보 이름순 */
           var na=(vById[a.viewer_id]||{}).nickname||'', nb=(vById[b.viewer_id]||{}).nickname||'';
           if(na!==nb) return na.localeCompare(nb,'ko');
           return String(b.updated_at||'').localeCompare(String(a.updated_at||''));
@@ -1074,7 +1108,7 @@
             '<td>'+esc(tById(c.type_id).name||'(삭제된 항목)')+'</td>'+
             '<td style="white-space:nowrap"><button class="ic-btn" data-adj="-1">−</button> <b>'+(+c.count||0)+'</b> <button class="ic-btn" data-adj="1">＋</button></td>'+
             expCell(c)+
-            '<td class="mini">'+esc(c.note||'')+'</td>'+
+            '<td class="mini">'+CN.linkify(c.note||'')+'</td>'+
             '<td><button class="ic-btn del" data-del="1">✕</button></td></tr>';
         }).join('') || '<tr><td colspan="6" class="mini">아직 부여된 기록이 없어요</td></tr>';
         tb.querySelectorAll('tr[data-id]').forEach(function(tr){
@@ -1237,6 +1271,10 @@
       if(!guard()) return;
       alert((await putData({'ticket-desc':v('f-ticket-desc')}))?'저장 완료 ♥':'저장 실패');
     });
+    document.getElementById('save-dress-desc').addEventListener('click',async function(){
+      if(!guard()) return;
+      alert((await putData({'dress-desc':v('f-dress-desc')}))?'저장 완료 ♥':'저장 실패');
+    });
 
     /* ══════════ 📖 안내 게시판 ══════════ */
     var gdPosts=[], edId=null;
@@ -1261,6 +1299,17 @@
     document.getElementById('ed-toggle').addEventListener('click',function(){
       edExec('insertHTML','<details><summary>여기를 눌러 펼치기</summary><p>접힌 내용을 여기에 적어 주세요</p></details><p><br></p>');
     });
+    document.getElementById('ed-table').addEventListener('click',function(){
+      var r=parseInt(prompt('행(줄) 수를 적어 주세요 (제목줄 제외)','3'),10);
+      var c=parseInt(prompt('열(칸) 수를 적어 주세요','2'),10);
+      if(!r||!c||r<1||c<1||r>30||c>8){ if(r||c) alert('행 1~30 · 열 1~8 사이로 적어 주세요!'); return; }
+      var h='<table><tr>';
+      for(var j=0;j<c;j++) h+='<th>제목'+(j+1)+'</th>';
+      h+='</tr>';
+      for(var i=0;i<r;i++){ h+='<tr>'; for(var j2=0;j2<c;j2++) h+='<td><br></td>'; h+='</tr>'; }
+      h+='</table><p><br></p>';
+      edExec('insertHTML',h);
+    });
     document.getElementById('ed-img').addEventListener('click',function(){
       var u=prompt('이미지 주소를 붙여넣어 주세요 (SOOP 게시판 → 이미지 우클릭 → 이미지 주소 복사)');
       if(u&&u.trim()) edExec('insertHTML','<img src="'+esc(u.trim())+'" referrerpolicy="no-referrer"><p><br></p>');
@@ -1277,6 +1326,7 @@
       ed.innerHTML='';
     }
     document.getElementById('ed-new').addEventListener('click',edReset);
+    document.getElementById('gd-pq').addEventListener('input',function(){ loadGuideRender(); });
     document.getElementById('ed-save').addEventListener('click',async function(){
       if(!guard()) return;
       var title=v('ed-title'); if(!title){ alert('제목을 입력해 주세요!'); return; }
@@ -1288,28 +1338,42 @@
       else alert('저장 실패 — supabase_setup.sql 실행 여부를 확인해 주세요');
     });
     function guideUrl(id){ return new URL('../guide/?p='+id, location.href).href; }
+    function gdNormCat(c){
+      c=txt(c).trim();
+      if(c==='방송 규칙'||c==='시참 규칙') return '규칙';
+      return ['규칙','예다의 TMI','가이드','기타'].indexOf(c)>-1 ? c : '기타';
+    }
     async function loadGuide(){
       try{ var r=await db.from('guide_posts').select('*'); gdPosts=(r&&r.data)||[]; }catch(e){ gdPosts=[]; }
+      loadGuideRender();
+    }
+    function loadGuideRender(){
       gdPosts.sort(function(a,b){
         if(!!b.pinned!==!!a.pinned) return (b.pinned?1:0)-(a.pinned?1:0);
         return String(b.created_at||'').localeCompare(String(a.created_at||''));
       });
+      var pq=(v('gd-pq')||'').toLowerCase();
+      var shown=gdPosts.filter(function(p){
+        if(!pq) return true;
+        var plain=(txt(p.title)+' '+String(p.content_html||'').replace(/<[^>]*>/g,' ')).toLowerCase();
+        return plain.indexOf(pq)>-1;
+      });
       var tb=document.getElementById('gd-plist');
-      tb.innerHTML=gdPosts.map(function(p){
-        return '<tr data-id="'+p.id+'"><td class="mini" style="white-space:nowrap">'+esc(p.category)+'</td>'+
+      tb.innerHTML=shown.map(function(p){
+        return '<tr data-id="'+p.id+'"><td class="mini" style="white-space:nowrap">'+esc(gdNormCat(p.category))+'</td>'+
           '<td>'+esc(p.title)+'</td>'+
           '<td>'+(p.pinned?'📌':'')+'</td>'+
           '<td class="mini" style="white-space:nowrap">'+esc(String(p.updated_at||p.created_at||'').slice(0,10))+'</td>'+
           '<td style="width:44px;text-align:center"><button class="ic-btn" data-ed="1" title="수정">✎</button></td>'+
           '<td style="width:44px;text-align:center"><button class="ic-btn" data-lk="1" title="링크 복사">🔗</button></td>'+
           '<td><button class="ic-btn del" data-del="1">✕</button></td></tr>';
-      }).join('') || '<tr><td colspan="7" class="mini">아직 안내 글이 없어요 — 아래에서 첫 글을 써 보세요</td></tr>';
+      }).join('') || '<tr><td colspan="7" class="mini">'+(pq?'검색 결과가 없어요':'아직 안내 글이 없어요 — 아래에서 첫 글을 써 보세요')+'</td></tr>';
       tb.querySelectorAll('tr[data-id]').forEach(function(tr){
         var p=gdPosts.find(function(x){ return String(x.id)===tr.dataset.id; });
         tr.querySelector('[data-ed]').addEventListener('click',function(){
           edId=p.id;
           document.getElementById('ed-mode-label').textContent='EDIT · "'+p.title+'" 수정 중';
-          document.getElementById('ed-cat').value=p.category||'가이드';
+          document.getElementById('ed-cat').value=gdNormCat(p.category);
           setv('ed-title',p.title);
           document.getElementById('ed-pin').checked=!!p.pinned;
           ed.innerHTML=p.content_html||'';
@@ -1407,6 +1471,7 @@
       fillProfile(d);
       setv('f-stamp-desc', txt(d['stamp-desc']||''));
       setv('f-upbo-desc', txt(d['upbo-desc']||''));
+      setv('f-dress-desc', txt(d['dress-desc']||''));
       setv('f-ticket-desc', txt(d['ticket-desc']||''));
       if(Array.isArray(d['stamp-rewards'])&&d['stamp-rewards'].length)
         stRewards=d['stamp-rewards'].map(function(r){ return {at:+r.at||0,label:txt(r.label)}; }).filter(function(r){ return r.at>0; });

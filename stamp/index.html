@@ -30,6 +30,8 @@
     .gb-chip:hover{background:rgba(255,177,177,.12);color:var(--tx)}
     .gb-chip.on{border-color:var(--line);background:var(--point);color:#fff}
     .gb-chip.on b{color:#fff}
+    body.day .gb-chip.on{background:var(--point);color:#fff}
+    body.day .gb-chip.on b{color:#fff}
 
     .gb-wrap{display:grid;grid-template-columns:minmax(280px,340px) 1fr;gap:22px;align-items:start}
 
@@ -308,7 +310,7 @@
         var d=r2&&r2.data&&r2.data[0]&&r2.data[0].data;
         if(d){
           if(txt(d['stamp-desc']).trim())
-            document.getElementById('gb-desc').innerHTML=esc(d['stamp-desc']).replace(/\n/g,'<br>');
+            document.getElementById('gb-desc').innerHTML=CN.linkify(d['stamp-desc']);
           if(Array.isArray(d['stamp-rewards'])&&d['stamp-rewards'].length)
             rewards=d['stamp-rewards'].map(function(r){ return {at:+r.at||0,label:txt(r.label)}; }).filter(function(r){ return r.at>0; });
         }

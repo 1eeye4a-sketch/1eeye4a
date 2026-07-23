@@ -139,9 +139,26 @@ CREATE TABLE IF NOT EXISTS schedule_events (
   memo       TEXT DEFAULT '',
   link       TEXT DEFAULT '',
   image_url  TEXT DEFAULT '',
+  color      TEXT DEFAULT '',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE schedule_events ADD COLUMN IF NOT EXISTS color TEXT DEFAULT '';
 CREATE INDEX IF NOT EXISTS idx_schedule_events_date ON schedule_events(date);
 ALTER TABLE schedule_events ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "schedule_events_all" ON schedule_events;
 CREATE POLICY "schedule_events_all" ON schedule_events FOR ALL USING (true) WITH CHECK (true);
+
+-- ⑨ 안내 게시판 (방송 규칙 / 시참 규칙 / 가이드)
+CREATE TABLE IF NOT EXISTS guide_posts (
+  id           BIGSERIAL PRIMARY KEY,
+  category     TEXT DEFAULT '가이드',       -- 방송 규칙 / 시참 규칙 / 가이드
+  title        TEXT NOT NULL,
+  content_html TEXT DEFAULT '',
+  pinned       BOOLEAN DEFAULT FALSE,
+  sort_order   INT DEFAULT 0,
+  updated_at   TIMESTAMPTZ DEFAULT NOW(),
+  created_at   TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE guide_posts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "guide_posts_all" ON guide_posts;
+CREATE POLICY "guide_posts_all" ON guide_posts FOR ALL USING (true) WITH CHECK (true);

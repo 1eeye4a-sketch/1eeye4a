@@ -144,7 +144,6 @@
   <div id="vwModal" role="dialog" aria-modal="true" aria-label="서약서">
     <div class="box">
       <button class="x" id="vwX" type="button">CLOSE</button>
-      <p class="vk">WEDDING VOWS · 서약서</p>
       <h3 id="vw-name"></h3>
       <p class="vid" id="vw-sid"></p>
       <div id="vw-rows"></div>
@@ -174,7 +173,7 @@
   (function(){
     /* ── 업보(서약) 명부 — viewers × upbo_types × upbo_counts (기한·비고 v2) ── */
     var T_TYPES='upbo_types', T_COUNTS='upbo_counts';
-    var WORD={ unit:'건', empty:'아직 기록된 서약이 없어요', none:'아직 명부에 오른 복숭이가 없어요' };
+    var WORD={ unit:'건', empty:'아직 기록된 업보가 없어요', none:'아직 명부에 오른 복숭이가 없어요' };
     var esc=CN.esc, txt=CN.txt;
     var viewers=[], types=[], counts=[], typeById={};
 
@@ -252,7 +251,7 @@
           '<span class="nm">'+esc(t.name||'(삭제된 항목)')+evb+'</span>'+
           '<span class="ct">×'+(+e.count||0)+'</span>'+
           '<span class="sub"><span class="exp">'+expLabel(e)+'</span>'+
-          (note?'<span>'+esc(note)+'</span>':'')+'</span></div>';
+          (note?'<span>'+CN.linkify(note)+'</span>':'')+'</span></div>';
       }).join('');
       document.getElementById('vw-rows').innerHTML=rows||'<div class="cn-empty">'+WORD.empty+'</div>';
       document.getElementById('vw-sum').textContent=activeTotal(vid)+' '+WORD.unit;
@@ -268,7 +267,7 @@
         var rp=await db.from('profile').select('data').eq('id',1);
         var pd=rp&&rp.data&&rp.data[0]&&rp.data[0].data;
         if(pd && CN.txt(pd['upbo-desc']).trim()){
-          document.getElementById('pg-desc').innerHTML=CN.esc(pd['upbo-desc']).replace(/\n/g,'<br>');
+          document.getElementById('pg-desc').innerHTML=CN.linkify(pd['upbo-desc']);
         }
         var r1=await db.from('viewers').select('*');
         var r2=await db.from(T_TYPES).select('*');

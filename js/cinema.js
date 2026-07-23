@@ -77,6 +77,12 @@
   CN.esc = function (s) {
     return CN.txt(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   };
+  /* 이스케이프 + URL 자동 링크 + 줄바꿈 (\n→<br>) */
+  CN.linkify = function (s) {
+    return CN.esc(s)
+      .replace(/(https?:\/\/[^\s<>"']+)/g, '<a class="cn-link" href="$1" target="_blank" rel="noreferrer">$1</a>')
+      .replace(/\n/g, '<br>');
+  };
 
   /* ---- 꽃잎 ---- */
   var petals = $('#cnPetals');
