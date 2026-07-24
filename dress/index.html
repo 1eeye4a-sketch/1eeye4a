@@ -329,7 +329,7 @@
             document.querySelectorAll('#mode-seg .seg-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.mode===curMode); });
           }
         }
-        renderTabs(); renderList(); CN.ready(); CN.reveal();
+        renderTabs(); renderList(); CN.dataReady(); CN.reveal();
       }
     }
     renderTabs(); renderList();

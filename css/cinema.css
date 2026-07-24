@@ -311,6 +311,14 @@ body.day .cn-pop{color:var(--point)}
 #cnCover .in i::after{content:"";position:absolute;inset:0;background:#ffb1b1;transform:translateX(-100%);animation:cnload 1s ease infinite}
 @keyframes cnload{to{transform:translateX(100%)}}
 
+/* ── FOUC 게이트: DB 값 도착(=body.ready) 전엔 콘텐츠를 감춘다 ──
+   ready는 각 페이지 로더 finally + 1600ms 타임아웃 폴백에서 반드시 붙음 */
+.chapter,.editorial-copy,.quote-card,.ad-wrap{transition:opacity 260ms ease}
+body:not(.dataready) .chapter,
+body:not(.dataready) .editorial-copy,
+body:not(.dataready) .quote-card,
+body:not(.dataready) .ad-wrap{opacity:0}
+
 /* ── 스크롤 리빌 + FOUC 게이트 ── */
 .rv{opacity:0;transform:translateY(16px);transition:opacity 640ms ease,transform 640ms cubic-bezier(.2,.75,.25,1)}
 body.ready .rv.in{opacity:1;transform:none}

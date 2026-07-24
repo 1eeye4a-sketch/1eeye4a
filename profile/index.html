@@ -394,7 +394,7 @@
         var d=res && res.data && res.data[0] && res.data[0].data;
         applyAll(d||{});
       }catch(e){ applyAll({}); }
-      finally{ CN.ready(); CN.reveal(); }
+      finally{ CN.dataReady(); CN.reveal(); }
     }
     applyAll({});   /* 즉시 기본값 렌더 → DB 값으로 덮기 */
     load();

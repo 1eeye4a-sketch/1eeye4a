@@ -315,7 +315,7 @@
             rewards=d['stamp-rewards'].map(function(r){ return {at:+r.at||0,label:txt(r.label)}; }).filter(function(r){ return r.at>0; });
         }
       }catch(e){}
-      finally{ renderChips(); CN.ready(); CN.reveal(); }
+      finally{ renderChips(); CN.dataReady(); CN.reveal(); }
     }
     renderChips();
     load();

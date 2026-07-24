@@ -183,7 +183,14 @@
   };
   CN.reveal();
 
-  /* ---- FOUC 게이트 ---- */
+  /* ---- FOUC 게이트 ----
+     ready      = 애니메이션 시작 신호 (load 이벤트로도 붙음)
+     dataready  = DB 값 반영 완료 신호 (각 페이지 로더 finally + 1600ms 폴백에서만)
+     화면 가림(opacity)은 dataready 기준이라 "옛 기본값이 잠깐 보이는" 현상이 없다 */
+  CN.dataReady = function () {
+    document.body.classList.add('dataready');
+    CN.ready();
+  };
   CN.ready = function () {
     if (document.body.classList.contains('ready')) return;
     document.body.classList.add('ready');
@@ -194,7 +201,7 @@
   };
   if (document.readyState === 'complete') CN.ready();
   else window.addEventListener('load', CN.ready);
-  setTimeout(CN.ready, 1600);
+  setTimeout(function () { CN.dataReady(); }, 1600);   /* 오프라인·응답 없음 대비 폴백 */
 
   /* ---- 🎨 테마 적용 — profile.data의 theme-* 키를 전 페이지 CSS 변수로 ---- */
   var THEME_MAP={ 'theme-main':'--main','theme-point':'--point','theme-wine':'--wine','theme-deep':'--deep','theme-ink':'--ink' };

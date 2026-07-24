@@ -119,7 +119,7 @@
     }
     body.day #ed-body{background:rgba(255,255,255,.7)}
     #ed-body:focus{outline:1px solid var(--main)}
-    #ed-body h2{margin:.9em 0 .4em;font-weight:800;font-size:1.35em;color:var(--tx)}
+    #ed-body h2{margin:.9em 0 .4em;font-family:var(--font-body);font-weight:800;font-size:1.35em;letter-spacing:-.01em;color:var(--tx)}
     #ed-body h3{margin:.8em 0 .3em;font-weight:800;font-size:1.12em;color:var(--tx)}
     #ed-body hr{margin:1.2em 0;border:0;border-top:1px solid var(--line)}
     #ed-body blockquote{margin:.8em 0;padding:10px 15px;border-left:3px solid var(--main);background:rgba(255,177,177,.08);color:var(--tx)}
@@ -127,6 +127,10 @@
     #ed-body img{max-width:100%;border:1px solid var(--line-soft);display:block;margin:.5em 0}
     #ed-body details{margin:.7em 0;border:1px solid var(--line-soft)}
     #ed-body summary{padding:9px 13px;cursor:pointer;font-weight:750;color:var(--tx)}
+    #ed-body details > *:not(summary){margin-left:14px;margin-right:14px}
+    #ed-body details > *:last-child{margin-bottom:10px}
+    #ed-body details details{background:rgba(255,255,255,.04)}
+    body.day #ed-body details details{background:rgba(255,255,255,.45)}
     #ed-body b,#ed-body strong{color:var(--tx)}
     #ed-body table{width:100%;margin:.7em 0;border-collapse:collapse;font-size:.95em}
     #ed-body th,#ed-body td{padding:8px 11px;border:1px solid var(--line-soft);text-align:left;min-width:40px}
@@ -566,8 +570,9 @@
           <div class="fld sm" style="flex:0 0 150px"><span class="cn-label">분류</span>
             <select class="input" id="ed-cat">
               <option>규칙</option>
-              <option>예다의 TMI</option>
               <option selected>가이드</option>
+              <option>예다의 TMI</option>
+              <option>예다의 LOOK</option>
               <option>기타</option>
             </select>
           </div>
@@ -1284,6 +1289,44 @@
       ed.focus();
       document.execCommand(cmd,false,val||null);
     }
+    /* 블록 요소(토글·표·이미지)를 커서 위치의 "같은 층"에 안전하게 넣는다.
+       execCommand('insertHTML')는 <details> 안에서 부모를 쪼개 빈 토글을 만들어 버림 → 직접 삽입 */
+    function edInsertBlock(html){
+      ed.focus();
+      var sel=window.getSelection();
+      var range=(sel && sel.rangeCount) ? sel.getRangeAt(0) : null;
+      if(!range || !ed.contains(range.startContainer)){
+        range=document.createRange(); range.selectNodeContents(ed); range.collapse(false);
+      }
+      /* 커서가 속한 블록 찾기 (ed 바로 아래층까지 올라가되 details 안이면 그 안에서 멈춤) */
+      var node=range.startContainer;
+      if(node.nodeType===3) node=node.parentNode;
+      var block=node;
+      while(block && block!==ed && block.parentNode!==ed &&
+            !(block.parentNode && block.parentNode.tagName==='DETAILS')) block=block.parentNode;
+      if(!block || block===ed) block=null;
+      if(block && block.tagName==='SUMMARY'){                /* 요약줄이면 그 아래로 */
+        var d=block.parentNode;
+        block=block.nextElementSibling || block;
+        if(block===d.firstElementChild) block=d.lastElementChild;
+      }
+      var wrap=document.createElement('div');
+      wrap.innerHTML=html;
+      var nodes=Array.prototype.slice.call(wrap.childNodes);
+      var parent=block?block.parentNode:ed;
+      var ref=block?block.nextSibling:null;
+      nodes.forEach(function(n){ parent.insertBefore(n,ref); });
+      /* 빈 문단만 남은 블록이면 정리 */
+      if(block && block.tagName==='P' && !block.textContent.trim() && !block.querySelector('img,table,details'))
+        block.remove();
+      /* 새로 넣은 첫 편집 지점에 커서 */
+      var first=nodes[0];
+      if(first && first.nodeType===1){
+        var target=first.querySelector('p,td,summary')||first;
+        var r2=document.createRange(); r2.selectNodeContents(target); r2.collapse(false);
+        sel.removeAllRanges(); sel.addRange(r2);
+      }
+    }
     document.querySelectorAll('.ed-bar [data-cmd]').forEach(function(b){
       b.addEventListener('mousedown',function(e){ e.preventDefault(); });
       b.addEventListener('click',function(){ edExec(b.dataset.cmd, b.dataset.val); });
@@ -1297,7 +1340,7 @@
       b.addEventListener('click',function(){ edExec('hiliteColor', b.dataset.hl); });
     });
     document.getElementById('ed-toggle').addEventListener('click',function(){
-      edExec('insertHTML','<details><summary>여기를 눌러 펼치기</summary><p>접힌 내용을 여기에 적어 주세요</p></details><p><br></p>');
+      edInsertBlock('<details open><summary>여기를 눌러 펼치기</summary><p>접힌 내용을 여기에 적어 주세요</p></details><p><br></p>');
     });
     document.getElementById('ed-table').addEventListener('click',function(){
       var r=parseInt(prompt('행(줄) 수를 적어 주세요 (제목줄 제외)','3'),10);
@@ -1308,11 +1351,11 @@
       h+='</tr>';
       for(var i=0;i<r;i++){ h+='<tr>'; for(var j2=0;j2<c;j2++) h+='<td><br></td>'; h+='</tr>'; }
       h+='</table><p><br></p>';
-      edExec('insertHTML',h);
+      edInsertBlock(h);
     });
     document.getElementById('ed-img').addEventListener('click',function(){
       var u=prompt('이미지 주소를 붙여넣어 주세요 (SOOP 게시판 → 이미지 우클릭 → 이미지 주소 복사)');
-      if(u&&u.trim()) edExec('insertHTML','<img src="'+esc(u.trim())+'" referrerpolicy="no-referrer"><p><br></p>');
+      if(u&&u.trim()) edInsertBlock('<img src="'+esc(u.trim())+'" referrerpolicy="no-referrer"><p><br></p>');
     });
     document.getElementById('ed-link').addEventListener('click',function(){
       var u=prompt('연결할 주소(https://…)를 붙여넣어 주세요');
@@ -1330,8 +1373,11 @@
     document.getElementById('ed-save').addEventListener('click',async function(){
       if(!guard()) return;
       var title=v('ed-title'); if(!title){ alert('제목을 입력해 주세요!'); return; }
+      var clean=document.createElement('div');
+      clean.innerHTML=ed.innerHTML;
+      clean.querySelectorAll('details[open]').forEach(function(d){ d.removeAttribute('open'); });
       var row={ category:document.getElementById('ed-cat').value, title:title,
-                content_html:ed.innerHTML, pinned:document.getElementById('ed-pin').checked,
+                content_html:clean.innerHTML, pinned:document.getElementById('ed-pin').checked,
                 updated_at:new Date().toISOString() };
       var ok = edId ? await updateRow('guide_posts',edId,row) : await insertRow('guide_posts',row);
       if(ok){ alert(edId?'수정 완료 ♥':'등록 완료 ♥'); edReset(); loadGuide(); }
@@ -1341,7 +1387,7 @@
     function gdNormCat(c){
       c=txt(c).trim();
       if(c==='방송 규칙'||c==='시참 규칙') return '규칙';
-      return ['규칙','예다의 TMI','가이드','기타'].indexOf(c)>-1 ? c : '기타';
+      return ['규칙','가이드','예다의 TMI','예다의 LOOK','기타'].indexOf(c)>-1 ? c : '기타';
     }
     async function loadGuide(){
       try{ var r=await db.from('guide_posts').select('*'); gdPosts=(r&&r.data)||[]; }catch(e){ gdPosts=[]; }
@@ -1377,6 +1423,7 @@
           setv('ed-title',p.title);
           document.getElementById('ed-pin').checked=!!p.pinned;
           ed.innerHTML=p.content_html||'';
+          ed.querySelectorAll('details').forEach(function(d){ d.setAttribute('open',''); });
           ed.scrollIntoView({behavior:'smooth',block:'center'});
         });
         tr.querySelector('[data-lk]').addEventListener('click',function(){
@@ -1467,6 +1514,7 @@
     /* ══════════ 초기 로드 ══════════ */
     async function loadAllLedgers(){ await loadStampLog(); await loadViewers(); UB.load(); TK.load(); }
     (async function init(){
+      try{
       var d=await getData();
       fillProfile(d);
       setv('f-stamp-desc', txt(d['stamp-desc']||''));
@@ -1486,7 +1534,8 @@
       await loadAllLedgers();
       loadInbox();
       drawStamp();
-      CN.ready();
+      }catch(e){ console.error(e); }
+      finally{ CN.dataReady(); }
     })();
   })();
   </script>

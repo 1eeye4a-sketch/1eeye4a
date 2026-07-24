@@ -277,7 +277,7 @@
         if(r3&&Array.isArray(r3.data)) counts=r3.data;
         typeById={}; types.forEach(function(t){ typeById[t.id]=t; });
       }catch(e){}
-      finally{ renderGrid(); CN.ready(); CN.reveal(); }
+      finally{ renderGrid(); CN.dataReady(); CN.reveal(); }
     }
     renderGrid();
     load();

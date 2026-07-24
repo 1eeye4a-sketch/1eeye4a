@@ -335,7 +335,7 @@
         var r=await db.from('schedule_events').select('*');
         if(r&&Array.isArray(r.data)) events=r.data;
       }catch(e){}
-      finally{ render(); CN.ready(); CN.reveal(); }
+      finally{ render(); CN.dataReady(); CN.reveal(); }
     }
     render();
     load();
