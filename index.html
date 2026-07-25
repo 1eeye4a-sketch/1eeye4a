@@ -11,7 +11,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/cinema.css">
+  <link rel="stylesheet" href="css/cinema.css?v=20260725a">
+  <style>
+    /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
+    body:not(.dataready) .chapter,
+    body:not(.dataready) .editorial-copy,
+    body:not(.dataready) .quote-card,
+    body:not(.dataready) .ad-wrap,
+    body:not(.dataready) .hero-background{opacity:0}
+    .chapter,.editorial-copy,.quote-card,.ad-wrap,.hero-background{transition:opacity 260ms ease}
+  </style>
   <style>
     /* ── 메인(웨딩 시네마) 전용 — 컨펌 시안 1:1 ── */
     body{overflow:hidden}
@@ -75,7 +84,7 @@
     }
   </style>
 </head>
-<body>
+<body data-build="20260725a">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <main id="home" class="page-shell">
@@ -143,8 +152,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="supabase.js"></script>
-  <script src="js/cinema.js"></script>
+  <script src="supabase.js?v=20260725a"></script>
+  <script src="js/cinema.js?v=20260725a"></script>
   <script>
   /* ── 메인 DB 로더 (§2-B.2) ── */
   (function(){

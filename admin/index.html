@@ -9,7 +9,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260725a">
+  <style>
+    /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
+    body:not(.dataready) .chapter,
+    body:not(.dataready) .editorial-copy,
+    body:not(.dataready) .quote-card,
+    body:not(.dataready) .ad-wrap,
+    body:not(.dataready) .hero-background{opacity:0}
+    .chapter,.editorial-copy,.quote-card,.ad-wrap,.hero-background{transition:opacity 260ms ease}
+  </style>
   <style>
     /* ── 콘솔 전용 ── */
     body.cinema-sub{padding-bottom:60px}
@@ -127,6 +136,8 @@
     #ed-body img{max-width:100%;border:1px solid var(--line-soft);display:block;margin:.5em 0}
     #ed-body details{margin:.7em 0;border:1px solid var(--line-soft)}
     #ed-body summary{padding:9px 13px;cursor:pointer;font-weight:750;color:var(--tx)}
+    #ed-body summary.sz-h2{font-size:1.3em;font-weight:800}
+    #ed-body summary.sz-h3{font-size:1.12em;font-weight:800}
     #ed-body details > *:not(summary){margin-left:14px;margin-right:14px}
     #ed-body details > *:last-child{margin-bottom:10px}
     #ed-body details details{background:rgba(255,255,255,.04)}
@@ -149,7 +160,7 @@
     }
   </style>
 </head>
-<body class="cinema-sub">
+<body data-build="20260725a" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <!-- 로그인 -->
@@ -614,7 +625,7 @@
           <button class="ed-btn" data-cmd="removeFormat" type="button" title="서식 지우기">지우개</button>
         </div>
         <div id="ed-body" contenteditable="true"></div>
-        <span class="hint" style="display:block;margin-top:8px">글자를 드래그로 선택한 뒤 버튼을 누르면 그 부분에 적용돼요 · 이미지는 SOOP 게시판 "이미지 주소 복사" 링크로</span>
+        <span class="hint" style="display:block;margin-top:8px">글자를 드래그로 선택한 뒤 버튼을 누르면 그 부분에 적용돼요 · 이미지는 SOOP 게시판 "이미지 주소 복사" 링크로<br>토글 제목줄에 커서를 두고 <b>제목/소제목/본문</b>을 누르면 그 <b>토글 제목의 글자 크기</b>가 바뀌어요</span>
         <div class="save-bar" style="margin-top:14px">
           <button class="cn-btn-line" id="ed-new" type="button">새 글</button>
           <button class="cn-btn-solid" id="ed-save" type="button">글 저장 ♥</button>
@@ -650,7 +661,7 @@
 
     <footer class="cn-footer">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
-      <b>PRIVATE CONSOLE</b>
+      <b>PRIVATE CONSOLE · BUILD 20260725a</b>
       <span>YBNZ</span>
     </footer>
   </main>
@@ -659,8 +670,8 @@
   <div id="cnPetals" aria-hidden="true"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js"></script>
-  <script src="../js/cinema.js"></script>
+  <script src="../supabase.js?v=20260725a"></script>
+  <script src="../js/cinema.js?v=20260725a"></script>
   <script>
   (function(){
     var ADMIN_PASSWORD='1234';
@@ -1327,10 +1338,59 @@
         sel.removeAllRanges(); sel.addRange(r2);
       }
     }
+    /* 커서가 놓인 summary 찾기 */
+    function edCurSummary(){
+      var sel=window.getSelection();
+      if(!sel || !sel.rangeCount) return null;
+      var n=sel.getRangeAt(0).startContainer;
+      if(n.nodeType===3) n=n.parentNode;
+      while(n && n!==ed){ if(n.tagName==='SUMMARY') return n; n=n.parentNode; }
+      return null;
+    }
+    /* 블록 서식: summary 안에서는 formatBlock 금지(브라우저가 details를 쪼개 "세부정보" 사고)
+       → 대신 토글 제목 글자 크기를 클래스로 바꾼다 */
+    function edBlockFormat(tag){
+      var sum=edCurSummary();
+      if(sum){
+        sum.classList.remove('sz-h2','sz-h3');
+        if(tag==='h2') sum.classList.add('sz-h2');
+        else if(tag==='h3') sum.classList.add('sz-h3');
+        return;
+      }
+      if(tag==='blockquote' || tag==='h2' || tag==='h3' || tag==='p'){
+        edExec('formatBlock', tag);
+      }
+    }
     document.querySelectorAll('.ed-bar [data-cmd]').forEach(function(b){
       b.addEventListener('mousedown',function(e){ e.preventDefault(); });
-      b.addEventListener('click',function(){ edExec(b.dataset.cmd, b.dataset.val); });
+      b.addEventListener('click',function(){
+        if(b.dataset.cmd==='formatBlock') edBlockFormat(b.dataset.val);
+        else edExec(b.dataset.cmd, b.dataset.val);
+      });
     });
+    /* 깨진 토글 구조 복구 — 예전에 저장된 글도 열면 자동으로 정상화 */
+    function edRepair(root){
+      /* h2/h3/blockquote가 details를 통째로 감싼 경우 → 껍데기 벗기기 */
+      root.querySelectorAll('h2 > details, h3 > details, blockquote > details').forEach(function(d){
+        var w=d.parentNode;
+        w.parentNode.insertBefore(d, w);
+        if(!w.textContent.trim() && !w.querySelector('img,table')) w.remove();
+      });
+      /* summary 없는 details → 바로 앞 details에 도로 합치기, 없으면 summary 새로 달기 */
+      root.querySelectorAll('details').forEach(function(d){
+        if(d.querySelector(':scope > summary')) return;
+        var prev=d.previousElementSibling;
+        if(prev && prev.tagName==='DETAILS' && prev.querySelector(':scope > summary')){
+          while(d.firstChild) prev.appendChild(d.firstChild);
+          d.remove();
+        }else{
+          var sm=document.createElement('summary');
+          sm.textContent='펼치기';
+          d.insertBefore(sm, d.firstChild);
+        }
+      });
+      return root;
+    }
     document.querySelectorAll('.ed-bar [data-fc]').forEach(function(b){
       b.addEventListener('mousedown',function(e){ e.preventDefault(); });
       b.addEventListener('click',function(){ edExec('foreColor', b.dataset.fc); });
@@ -1373,6 +1433,7 @@
     document.getElementById('ed-save').addEventListener('click',async function(){
       if(!guard()) return;
       var title=v('ed-title'); if(!title){ alert('제목을 입력해 주세요!'); return; }
+      edRepair(ed);
       var clean=document.createElement('div');
       clean.innerHTML=ed.innerHTML;
       clean.querySelectorAll('details[open]').forEach(function(d){ d.removeAttribute('open'); });
@@ -1423,6 +1484,7 @@
           setv('ed-title',p.title);
           document.getElementById('ed-pin').checked=!!p.pinned;
           ed.innerHTML=p.content_html||'';
+          edRepair(ed);
           ed.querySelectorAll('details').forEach(function(d){ d.setAttribute('open',''); });
           ed.scrollIntoView({behavior:'smooth',block:'center'});
         });

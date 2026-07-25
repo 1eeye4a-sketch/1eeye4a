@@ -9,7 +9,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260725a">
+  <style>
+    /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
+    body:not(.dataready) .chapter,
+    body:not(.dataready) .editorial-copy,
+    body:not(.dataready) .quote-card,
+    body:not(.dataready) .ad-wrap,
+    body:not(.dataready) .hero-background{opacity:0}
+    .chapter,.editorial-copy,.quote-card,.ad-wrap,.hero-background{transition:opacity 260ms ease}
+  </style>
   <style>
     /* ── 안내 게시판 전용 ── */
     .gd-cats{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
@@ -82,6 +91,8 @@
     .art-content summary{
       padding:12px 16px;cursor:pointer;font-weight:750;color:var(--tx);list-style:none;
     }
+    .art-content summary.sz-h2{font-size:1.3em;font-weight:800}
+    .art-content summary.sz-h3{font-size:1.12em;font-weight:800}
     .art-content summary::before{content:"▸";margin-right:9px;color:var(--main);display:inline-block;transition:transform 160ms ease}
     body.day .art-content summary::before{color:var(--point)}
     .art-content details[open] summary::before{transform:rotate(90deg)}
@@ -103,7 +114,7 @@
     }
   </style>
 </head>
-<body class="cinema-sub">
+<body data-build="20260725a" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
@@ -181,8 +192,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js"></script>
-  <script src="../js/cinema.js"></script>
+  <script src="../supabase.js?v=20260725a"></script>
+  <script src="../js/cinema.js?v=20260725a"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
@@ -242,7 +253,24 @@
       document.getElementById('art-cat').textContent=normCat(p.category);
       document.getElementById('art-title').textContent=txt(p.title);
       document.getElementById('art-date').textContent=fmtDate(p.updated_at||p.created_at)+' 업데이트';
-      document.getElementById('art-content').innerHTML=p.content_html||'';
+      var ac=document.getElementById('art-content');
+      ac.innerHTML=p.content_html||'';
+      /* 예전에 깨진 채로 저장된 토글도 보기 화면에선 정상으로 보정 */
+      ac.querySelectorAll('h2 > details, h3 > details, blockquote > details').forEach(function(d){
+        var w=d.parentNode; w.parentNode.insertBefore(d,w);
+        if(!w.textContent.trim() && !w.querySelector('img,table')) w.remove();
+      });
+      ac.querySelectorAll('details').forEach(function(d){
+        if(d.querySelector(':scope > summary')) return;
+        var prev=d.previousElementSibling;
+        if(prev && prev.tagName==='DETAILS' && prev.querySelector(':scope > summary')){
+          while(d.firstChild) prev.appendChild(d.firstChild);
+          d.remove();
+        }else{
+          var sm=document.createElement('summary'); sm.textContent='펼치기';
+          d.insertBefore(sm,d.firstChild);
+        }
+      });
       document.getElementById('gd-list-wrap').classList.add('off');
       document.getElementById('gd-article').classList.add('on');
       window.scrollTo({top:0});
