@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260725a">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260726b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -103,7 +103,7 @@
     #drView .info .c{color:var(--main);font-family:var(--font-serif);font-style:italic;font-size:10px;letter-spacing:.14em}
     body.day #drView .info .c{color:var(--point)}
     #drView .info b{display:block;margin:5px 0 4px;font-family:var(--font-serif);font-weight:400;font-size:22px}
-    #drView .info p{margin:0;color:var(--tx-soft);font-size:13px;line-height:1.7}
+    #drView .info p{margin:0;color:var(--tx-soft);font-size:13px;line-height:1.75;white-space:normal}
     #drView .x{
       position:absolute;top:-14px;right:-14px;width:34px;height:34px;border-radius:50%;
       border:1px solid var(--line);background:var(--point);color:#fff;cursor:pointer;font-size:14px;line-height:1;
@@ -117,7 +117,7 @@
     }
   </style>
 </head>
-<body data-build="20260725a" class="cinema-sub">
+<body data-build="20260726b" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
@@ -202,8 +202,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260725a"></script>
-  <script src="../js/cinema.js?v=20260725a"></script>
+  <script src="../supabase.js?v=20260726b"></script>
+  <script src="../js/cinema.js?v=20260726b"></script>
   <script>
   (function(){
     /* ── 분류 (admin select + admin DRESS_CATS와 같은 값 유지 — 세 곳 동기화) ── */

@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260725a">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260726b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -143,7 +143,7 @@
     #ed-body details details{background:rgba(255,255,255,.04)}
     body.day #ed-body details details{background:rgba(255,255,255,.45)}
     #ed-body b,#ed-body strong{color:var(--tx)}
-    #ed-body table{width:100%;margin:.7em 0;border-collapse:collapse;font-size:.95em}
+    #ed-body table{width:100%;margin:.7em 0;border-collapse:collapse;font-size:.95em;table-layout:fixed}
     #ed-body th,#ed-body td{padding:8px 11px;border:1px solid var(--line-soft);text-align:left;min-width:40px}
     #ed-body th{background:rgba(255,177,177,.1);color:var(--tx);font-weight:800}
 
@@ -160,7 +160,7 @@
     }
   </style>
 </head>
-<body data-build="20260725a" class="cinema-sub">
+<body data-build="20260726b" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <!-- 로그인 -->
@@ -213,6 +213,20 @@
     <!-- ═══════════ 🎀 프로필 ═══════════ -->
     <section class="tab-panel on" id="tab-profile">
       <div class="cn-card">
+        <p class="cn-kicker">SHOWTIME · 주간 상영표</p>
+        <div class="week-grid" id="week-grid"></div>
+        <span class="hint" style="display:block;margin-top:10px">시간을 적으면 방송, <b>비우거나 "휴방"</b>이라 적으면 휴방으로 표시돼요 (예: 19:00)</span>
+      </div>
+
+      <div class="cn-card">
+        <p class="cn-kicker">FILMOGRAPHY · 진행 · 참여한 컨텐츠</p>
+        <div class="fld">
+          <textarea class="input" id="f-contents" style="min-height:130px" placeholder="2026.07.01|합방 왕게임|https://..."></textarea>
+          <span class="hint">한 줄에 하나씩 <b>날짜|제목|링크</b> — 링크는 비워도 돼요 (예: 2026.07.01|합방 왕게임)</span>
+        </div>
+      </div>
+
+      <div class="cn-card">
         <p class="cn-kicker">BASIC · 기본 정보</p>
         <div class="fgrid">
           <div class="fld"><span class="cn-label">이름</span><input class="input" id="f-name"></div>
@@ -250,20 +264,6 @@
         <div class="fld">
           <textarea class="input" id="f-stats" style="min-height:150px"></textarea>
           <span class="hint">한 줄에 하나씩 <b>이름:숫자</b> (0~100). 예) 애교:95 — 줄 순서대로 표시돼요</span>
-        </div>
-      </div>
-
-      <div class="cn-card">
-        <p class="cn-kicker">SHOWTIME · 주간 상영표</p>
-        <div class="week-grid" id="week-grid"></div>
-        <span class="hint" style="display:block;margin-top:10px">시간을 적으면 방송, <b>비우거나 "휴방"</b>이라 적으면 휴방으로 표시돼요 (예: 19:00)</span>
-      </div>
-
-      <div class="cn-card">
-        <p class="cn-kicker">FILMOGRAPHY · 진행 · 참여한 컨텐츠</p>
-        <div class="fld">
-          <textarea class="input" id="f-contents" style="min-height:130px" placeholder="2026.07.01|합방 왕게임|https://..."></textarea>
-          <span class="hint">한 줄에 하나씩 <b>날짜|제목|링크</b> — 링크는 비워도 돼요 (예: 2026.07.01|합방 왕게임)</span>
         </div>
       </div>
 
@@ -390,7 +390,7 @@
           <div class="fld"><span class="cn-label">이름</span><input class="input" id="dr-name" placeholder="예) 화이트 브라이덜"></div>
           <div class="fld full"><span class="cn-label">이미지 링크</span><input class="input" id="dr-img" placeholder="https://stimg.sooplive.com/…">
             <span class="hint">SOOP 비공개 게시판에 올린 뒤 이미지 <b>우클릭 → "이미지 주소 복사"</b> (글 주소 ✕). 세로 3:4 권장 (900×1200)</span></div>
-          <div class="fld full"><span class="cn-label">설명 (선택)</span><input class="input" id="dr-desc"></div>
+          <div class="fld full"><span class="cn-label">설명 (선택)</span><textarea class="input" id="dr-desc" style="min-height:74px" placeholder="줄바꿈(엔터) 가능 · https:// 링크는 자동으로 눌리는 링크가 돼요"></textarea></div>
           <div class="fld full" style="grid-auto-flow:column;justify-content:start;align-items:center;gap:10px;display:flex">
             <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
               <input type="checkbox" id="dr-new" checked> ✦ 새 옷으로 올리기 (포스터에 표시)
@@ -465,11 +465,11 @@
         </div>
         <div class="table-wrap" style="margin-top:16px">
           <table>
-            <thead><tr><th>시청자</th><th>업보</th><th>개수</th><th>기한</th><th>비고</th><th>삭제</th></tr></thead>
+            <thead><tr><th>시청자</th><th>업보</th><th>개수</th><th>기한 ↑</th><th>비고</th><th>삭제</th></tr></thead>
             <tbody id="ub-list"></tbody>
           </table>
         </div>
-        <span class="hint" style="display:block;margin-top:10px">개수는 −/＋로 바로 조절돼요 · 0이 되면 항목을 지워 주세요 · 기한이 지난 항목은 페이지에서 "만료"로 표시되고 합계에서 빠져요</span>
+        <span class="hint" style="display:block;margin-top:10px">기한이 임박한 순으로 정렬돼요 (무기한 → 만료는 뒤로) · 개수는 −/＋로 바로 조절되며 순서는 그대로 유지돼요 · 기한이 지난 항목은 페이지에서 "만료"로 표시되고 합계에서 빠져요</span>
       </div>
     </section>
 
@@ -511,7 +511,7 @@
         </div>
         <div class="table-wrap" style="margin-top:16px">
           <table>
-            <thead><tr><th>시청자</th><th>시참권</th><th>장수</th><th>기한</th><th>비고</th><th>삭제</th></tr></thead>
+            <thead><tr><th>시청자</th><th>시참권</th><th>장수</th><th>기한 ↑</th><th>비고</th><th>삭제</th></tr></thead>
             <tbody id="tk-list"></tbody>
           </table>
         </div>
@@ -568,11 +568,11 @@
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>분류</th><th>제목</th><th>📌</th><th>날짜</th><th>수정</th><th>링크</th><th>삭제</th></tr></thead>
+            <thead><tr><th>순서</th><th>분류</th><th>제목</th><th>📌</th><th>날짜</th><th>수정</th><th>링크</th><th>삭제</th></tr></thead>
             <tbody id="gd-plist"></tbody>
           </table>
         </div>
-        <span class="hint" style="display:block;margin-top:8px">🔗 = 이 글로 바로 가는 주소 복사 (SOOP 공지·채팅에 붙여넣기용) · 📌 고정글은 목록 맨 위에 떠요</span>
+        <span class="hint" style="display:block;margin-top:8px">▲▼ = 같은 그룹(고정글끼리 / 일반글끼리) 안에서 순서 바꾸기 · 🔗 = 이 글로 바로 가는 주소 복사 (SOOP 공지·채팅에 붙여넣기용) · 📌 고정글은 목록 맨 위에 떠요</span>
       </div>
 
       <div class="cn-card">
@@ -610,6 +610,7 @@
           <button class="ed-dot" data-fc="#a97fe0" style="background:#a97fe0" type="button" title="글자색 라벤더"></button>
           <button class="ed-dot" data-fc="#1c1c1c" style="background:#1c1c1c" type="button" title="글자색 검정"></button>
           <button class="ed-dot" data-fc="#ffffff" style="background:#ffffff" type="button" title="글자색 흰색"></button>
+          <button class="ed-btn" id="ed-color-reset" type="button" title="기본 글자색(라이트·다크 자동)">색기본</button>
           <span class="ed-sep"></span>
           <button class="ed-dot" data-hl="rgba(255,143,163,.35)" style="background:linear-gradient(0deg,rgba(255,143,163,.55),rgba(255,143,163,.55)),#fff" type="button" title="형광펜 핑크"></button>
           <button class="ed-dot" data-hl="rgba(232,176,75,.35)" style="background:linear-gradient(0deg,rgba(232,176,75,.55),rgba(232,176,75,.55)),#fff" type="button" title="형광펜 골드"></button>
@@ -622,7 +623,28 @@
           <button class="ed-btn" id="ed-table" type="button" title="표 넣기">⊞표</button>
           <button class="ed-btn" id="ed-img" type="button" title="이미지 넣기">🖼</button>
           <button class="ed-btn" id="ed-link" type="button" title="링크 걸기">🔗</button>
+          <span class="ed-sep"></span>
+          <button class="ed-btn" data-cmd="justifyLeft" type="button" title="왼쪽 정렬">⯇</button>
+          <button class="ed-btn" data-cmd="justifyCenter" type="button" title="가운데 정렬">≡</button>
+          <button class="ed-btn" data-cmd="justifyRight" type="button" title="오른쪽 정렬">⯈</button>
+          <span class="ed-sep"></span>
+          <button class="ed-btn" id="ed-para" type="button" title="이 블록 뒤에 새 문단 (토글 밖으로 나올 때)">⏎문단</button>
           <button class="ed-btn" data-cmd="removeFormat" type="button" title="서식 지우기">지우개</button>
+        </div>
+        <div class="ed-bar" id="ed-tablebar" style="display:none;border-top:0">
+          <span class="ed-btn" style="border:0;background:none;cursor:default;color:var(--main)">⊞ 표 편집</span>
+          <button class="ed-btn" data-tb="row-above" type="button">행↑추가</button>
+          <button class="ed-btn" data-tb="row-below" type="button">행↓추가</button>
+          <button class="ed-btn" data-tb="row-del" type="button">행 삭제</button>
+          <span class="ed-sep"></span>
+          <button class="ed-btn" data-tb="col-left" type="button">열←추가</button>
+          <button class="ed-btn" data-tb="col-right" type="button">열→추가</button>
+          <button class="ed-btn" data-tb="col-del" type="button">열 삭제</button>
+          <span class="ed-sep"></span>
+          <button class="ed-btn" data-tb="col-narrow" type="button" title="이 열 좁게">폭 −</button>
+          <button class="ed-btn" data-tb="col-wide" type="button" title="이 열 넓게">폭 ＋</button>
+          <span class="ed-sep"></span>
+          <button class="ed-btn" data-tb="table-del" type="button">표 삭제</button>
         </div>
         <div id="ed-body" contenteditable="true"></div>
         <span class="hint" style="display:block;margin-top:8px">글자를 드래그로 선택한 뒤 버튼을 누르면 그 부분에 적용돼요 · 이미지는 SOOP 게시판 "이미지 주소 복사" 링크로<br>토글 제목줄에 커서를 두고 <b>제목/소제목/본문</b>을 누르면 그 <b>토글 제목의 글자 크기</b>가 바뀌어요</span>
@@ -661,7 +683,7 @@
 
     <footer class="cn-footer">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
-      <b>PRIVATE CONSOLE · BUILD 20260725a</b>
+      <b>PRIVATE CONSOLE · BUILD 20260726b</b>
       <span>YBNZ</span>
     </footer>
   </main>
@@ -670,8 +692,8 @@
   <div id="cnPetals" aria-hidden="true"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260725a"></script>
-  <script src="../js/cinema.js?v=20260725a"></script>
+  <script src="../supabase.js?v=20260726b"></script>
+  <script src="../js/cinema.js?v=20260726b"></script>
   <script>
   (function(){
     var ADMIN_PASSWORD='1234';
@@ -1102,11 +1124,17 @@
           var vn=(vById[c.viewer_id]||{});
           return String(vn.nickname||'').toLowerCase().indexOf(vq)>-1 || String(vn.soop_id||'').toLowerCase().indexOf(vq)>-1;
         }).sort(function(a,b){
-          var ta=(tById(a.type_id).name||''), tb2=(tById(b.type_id).name||'');
-          if(ta!==tb2) return ta.localeCompare(tb2,'ko');           /* 업보 이름순 */
-          var na=(vById[a.viewer_id]||{}).nickname||'', nb=(vById[b.viewer_id]||{}).nickname||'';
-          if(na!==nb) return na.localeCompare(nb,'ko');
-          return String(b.updated_at||'').localeCompare(String(a.updated_at||''));
+          /* 기한순: 임박 → 무기한 → 만료 (개수 ±로 정렬이 흔들리지 않게 tiebreak은 고정값 id) */
+          var nowS=new Date(); nowS=nowS.getFullYear()+'-'+('0'+(nowS.getMonth()+1)).slice(-2)+'-'+('0'+nowS.getDate()).slice(-2);
+          function key(c){
+            if(!c.expires) return ['1','9999-12-31'];
+            var d=String(c.expires).slice(0,10);
+            return d<nowS ? ['2',d] : ['0',d];
+          }
+          var ka=key(a), kb=key(b);
+          if(ka[0]!==kb[0]) return ka[0]<kb[0]?-1:1;
+          if(ka[1]!==kb[1]) return ka[1]<kb[1]?-1:1;
+          return (+a.id||0)-(+b.id||0);
         });
         var nowD=new Date(), curYM=nowD.getFullYear()+'-'+('0'+(nowD.getMonth()+1)).slice(-2);
         var todayS=curYM+'-'+('0'+nowD.getDate()).slice(-2);
@@ -1296,17 +1324,34 @@
     var gdPosts=[], edId=null;
     var ed=document.getElementById('ed-body');
     try{ document.execCommand('styleWithCSS',false,true); }catch(e){}
-    function edExec(cmd,val){
+    /* 마지막 커서 위치 기억 — 버튼 클릭으로 포커스가 빠져도 "그 자리"에 삽입 */
+    var edRange=null;
+    function edSaveRange(){
+      var sel=window.getSelection();
+      if(sel && sel.rangeCount && ed.contains(sel.getRangeAt(0).startContainer)) edRange=sel.getRangeAt(0).cloneRange();
+    }
+    function edRestoreRange(){
       ed.focus();
+      if(!edRange) return;
+      var sel=window.getSelection();
+      sel.removeAllRanges(); sel.addRange(edRange);
+    }
+    ['keyup','mouseup','input','focus'].forEach(function(ev){ ed.addEventListener(ev,edSaveRange); });
+    document.addEventListener('selectionchange',function(){
+      if(document.activeElement===ed) edSaveRange();
+    });
+    function edExec(cmd,val){
+      edRestoreRange();
       document.execCommand(cmd,false,val||null);
+      edSaveRange();
     }
     /* 블록 요소(토글·표·이미지)를 커서 위치의 "같은 층"에 안전하게 넣는다.
        execCommand('insertHTML')는 <details> 안에서 부모를 쪼개 빈 토글을 만들어 버림 → 직접 삽입 */
     function edInsertBlock(html){
-      ed.focus();
+      edRestoreRange();
       var sel=window.getSelection();
-      var range=(sel && sel.rangeCount) ? sel.getRangeAt(0) : null;
-      if(!range || !ed.contains(range.startContainer)){
+      var range=(sel && sel.rangeCount && ed.contains(sel.getRangeAt(0).startContainer)) ? sel.getRangeAt(0) : null;
+      if(!range){
         range=document.createRange(); range.selectNodeContents(ed); range.collapse(false);
       }
       /* 커서가 속한 블록 찾기 (ed 바로 아래층까지 올라가되 details 안이면 그 안에서 멈춤) */
@@ -1336,7 +1381,24 @@
         var target=first.querySelector('p,td,summary')||first;
         var r2=document.createRange(); r2.selectNodeContents(target); r2.collapse(false);
         sel.removeAllRanges(); sel.addRange(r2);
+        edSaveRange();
       }
+      edEnsureTail();
+      if(typeof edSyncTableBar==='function') edSyncTableBar();
+    }
+    /* 편집 영역 마지막이 토글/표면 그 뒤에 빈 문단을 둬서 "밖으로 커서가 나올 곳"을 항상 확보 */
+    function edEnsureTail(){
+      var last=ed.lastElementChild;
+      if(!last || last.tagName==='DETAILS' || last.tagName==='TABLE' || last.tagName==='HR'){
+        var p=document.createElement('p'); p.innerHTML='<br>'; ed.appendChild(p);
+      }
+      /* 토글 안에서도 마지막이 토글이면 문단 하나 확보 */
+      ed.querySelectorAll('details').forEach(function(d){
+        var l=d.lastElementChild;
+        if(l && (l.tagName==='DETAILS'||l.tagName==='TABLE')){
+          var q=document.createElement('p'); q.innerHTML='<br>'; d.appendChild(q);
+        }
+      });
     }
     /* 커서가 놓인 summary 찾기 */
     function edCurSummary(){
@@ -1361,6 +1423,9 @@
         edExec('formatBlock', tag);
       }
     }
+    document.querySelectorAll('.ed-bar button').forEach(function(b){
+      b.addEventListener('mousedown',function(e){ e.preventDefault(); });
+    });
     document.querySelectorAll('.ed-bar [data-cmd]').forEach(function(b){
       b.addEventListener('mousedown',function(e){ e.preventDefault(); });
       b.addEventListener('click',function(){
@@ -1413,6 +1478,124 @@
       h+='</table><p><br></p>';
       edInsertBlock(h);
     });
+    /* 기본 글자색으로 되돌리기 (라이트/다크 자동) — 선택 안의 color 인라인 스타일만 제거 */
+    document.getElementById('ed-color-reset').addEventListener('click',function(){
+      var SENT='rgb(1, 2, 3)';
+      edExec('foreColor','#010203');
+      Array.prototype.forEach.call(ed.querySelectorAll('[style*="color"], font[color]'),function(el){
+        var c=(el.style && el.style.color)||'';
+        if(c.replace(/\s/g,'')===SENT.replace(/\s/g,'') || (el.getAttribute&&el.getAttribute('color')==='#010203')){
+          if(el.style) el.style.removeProperty('color');
+          if(el.removeAttribute) el.removeAttribute('color');
+          if(el.tagName==='FONT' || (el.tagName==='SPAN' && !el.getAttribute('style') && !el.className)){
+            var par=el.parentNode;
+            while(el.firstChild) par.insertBefore(el.firstChild, el);
+            par.removeChild(el);
+          }
+        }
+      });
+      edSaveRange();
+    });
+    /* 현재 블록(토글 포함) 뒤에 새 문단 — 토글 사이/밖으로 커서를 빼낼 때 */
+    document.getElementById('ed-para').addEventListener('click',function(){
+      edRestoreRange();
+      var sel=window.getSelection();
+      var n=(sel&&sel.rangeCount)?sel.getRangeAt(0).startContainer:ed.lastChild;
+      if(n && n.nodeType===3) n=n.parentNode;
+      /* 한 겹만 빠져나온다: 토글 안이면 그 토글 "뒤"(부모 층)에 문단 생성 → 여러 번 누르면 단계적으로 탈출 */
+      var block=n;
+      while(block && block!==ed && block.parentNode!==ed && block.parentNode.tagName!=='DETAILS') block=block.parentNode;
+      if(block && block!==ed && block.tagName!=='DETAILS' && block.parentNode.tagName==='DETAILS'){
+        /* 토글 내부의 문단에서 눌렀다면 그 토글 자체를 기준으로 바깥에 생성 */
+        block=block.parentNode;
+      }
+      var pnew=document.createElement('p'); pnew.innerHTML='<br>';
+      if(block && block!==ed && block.parentNode) block.parentNode.insertBefore(pnew, block.nextSibling);
+      else ed.appendChild(pnew);
+      var r=document.createRange(); r.selectNodeContents(pnew); r.collapse(true);
+      sel.removeAllRanges(); sel.addRange(r); edSaveRange(); ed.focus();
+    });
+    /* 인용/제목 안에서 Enter → 다음 줄은 일반 문단으로 빠져나오기 */
+    ed.addEventListener('keydown',function(e){
+      if(e.key!=='Enter' || e.shiftKey) return;
+      var sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+      var n=sel.getRangeAt(0).startContainer;
+      if(n.nodeType===3) n=n.parentNode;
+      var host=null, cur=n;
+      while(cur && cur!==ed){
+        if(cur.tagName==='BLOCKQUOTE'||cur.tagName==='H2'||cur.tagName==='H3'){ host=cur; break; }
+        if(cur.tagName==='SUMMARY'||cur.tagName==='TD'||cur.tagName==='TH') return;   /* 표·토글제목은 기본 동작 */
+        cur=cur.parentNode;
+      }
+      if(!host) return;
+      e.preventDefault();
+      var pnew=document.createElement('p'); pnew.innerHTML='<br>';
+      host.parentNode.insertBefore(pnew, host.nextSibling);
+      var r=document.createRange(); r.selectNodeContents(pnew); r.collapse(true);
+      sel.removeAllRanges(); sel.addRange(r); edSaveRange();
+    });
+
+    /* ── 표 편집 ── */
+    function edCurCell(){
+      var sel=window.getSelection();
+      var n=(sel&&sel.rangeCount)?sel.getRangeAt(0).startContainer:null;
+      if(!n) return null;
+      if(n.nodeType===3) n=n.parentNode;
+      while(n && n!==ed){ if(n.tagName==='TD'||n.tagName==='TH') return n; n=n.parentNode; }
+      return null;
+    }
+    function edSyncTableBar(){
+      var cell=edCurCell();
+      document.getElementById('ed-tablebar').style.display=cell?'flex':'none';
+    }
+    ['keyup','mouseup','focus'].forEach(function(ev){ ed.addEventListener(ev,edSyncTableBar); });
+    document.getElementById('ed-tablebar').addEventListener('mousedown',function(e){ e.preventDefault(); });
+    document.getElementById('ed-tablebar').addEventListener('click',function(e){
+      var b=e.target.closest('[data-tb]'); if(!b) return;
+      edRestoreRange();
+      var cell=edCurCell(); if(!cell){ alert('표 안에 커서를 두고 눌러 주세요!'); return; }
+      var row=cell.parentNode, table=cell.closest('table'), idx=Array.prototype.indexOf.call(row.children,cell);
+      var rows=Array.prototype.slice.call(table.querySelectorAll('tr'));
+      var act=b.dataset.tb;
+      function newRow(after){
+        var tr=document.createElement('tr');
+        for(var i=0;i<row.children.length;i++){ var td=document.createElement('td'); td.innerHTML='<br>'; tr.appendChild(td); }
+        row.parentNode.insertBefore(tr, after?row.nextSibling:row);
+      }
+      if(act==='row-above') newRow(false);
+      else if(act==='row-below') newRow(true);
+      else if(act==='row-del'){ if(rows.length<=1){ alert('마지막 행은 지울 수 없어요 — 표 삭제를 눌러 주세요.'); return; } row.remove(); }
+      else if(act==='col-left'||act==='col-right'){
+        rows.forEach(function(tr){
+          var ref=tr.children[idx];
+          var c=document.createElement(tr.querySelector('th')?(tr.children[idx]&&tr.children[idx].tagName==='TH'?'th':'td'):'td');
+          c.innerHTML= c.tagName==='TH' ? '제목' : '<br>';
+          if(ref) tr.insertBefore(c, act==='col-left'?ref:ref.nextSibling); else tr.appendChild(c);
+        });
+      }
+      else if(act==='col-del'){
+        if(row.children.length<=1){ alert('마지막 열은 지울 수 없어요 — 표 삭제를 눌러 주세요.'); return; }
+        rows.forEach(function(tr){ if(tr.children[idx]) tr.children[idx].remove(); });
+      }
+      else if(act==='col-narrow'||act==='col-wide'){
+        var cur=parseFloat(cell.style.width)||Math.round(cell.getBoundingClientRect().width/table.getBoundingClientRect().width*100);
+        var next=Math.max(8,Math.min(80, cur+(act==='col-wide'?8:-8)));
+        rows.forEach(function(tr){ if(tr.children[idx]) tr.children[idx].style.width=next+'%'; });
+      }
+      else if(act==='table-del'){ if(confirm('표를 지울까요?')){ table.remove(); edSyncTableBar(); edEnsureTail(); return; } }
+      /* 편집 후 커서를 표 안에 다시 놓아 표 편집바가 유지되게 */
+      var live=table.isConnected ? (row.isConnected ? row : table.querySelector('tr')) : null;
+      if(live){
+        var target=live.children[Math.min(idx, live.children.length-1)] || live.children[0];
+        if(target){
+          var r2=document.createRange(); r2.selectNodeContents(target); r2.collapse(false);
+          var sel2=window.getSelection(); sel2.removeAllRanges(); sel2.addRange(r2);
+          edSaveRange(); ed.focus();
+        }
+      }
+      edSyncTableBar();
+    });
+
     document.getElementById('ed-img').addEventListener('click',function(){
       var u=prompt('이미지 주소를 붙여넣어 주세요 (SOOP 게시판 → 이미지 우클릭 → 이미지 주소 복사)');
       if(u&&u.trim()) edInsertBlock('<img src="'+esc(u.trim())+'" referrerpolicy="no-referrer"><p><br></p>');
@@ -1426,7 +1609,7 @@
       document.getElementById('ed-mode-label').textContent='WRITE · 새 글 쓰기';
       setv('ed-title',''); document.getElementById('ed-pin').checked=false;
       document.getElementById('ed-cat').value='가이드';
-      ed.innerHTML='';
+      ed.innerHTML='<p><br></p>';
     }
     document.getElementById('ed-new').addEventListener('click',edReset);
     document.getElementById('gd-pq').addEventListener('input',function(){ loadGuideRender(); });
@@ -1436,10 +1619,18 @@
       edRepair(ed);
       var clean=document.createElement('div');
       clean.innerHTML=ed.innerHTML;
+      /* 맨 끝의 빈 문단들은 저장 시 정리 (편집용으로만 필요) */
+      while(clean.lastElementChild && clean.lastElementChild.tagName==='P' &&
+            !clean.lastElementChild.textContent.trim() && !clean.lastElementChild.querySelector('img,table,details'))
+        clean.lastElementChild.remove();
       clean.querySelectorAll('details[open]').forEach(function(d){ d.removeAttribute('open'); });
       var row={ category:document.getElementById('ed-cat').value, title:title,
                 content_html:clean.innerHTML, pinned:document.getElementById('ed-pin').checked,
                 updated_at:new Date().toISOString() };
+      if(!edId){
+        var maxSo=gdPosts.reduce(function(m,x){ return Math.max(m,+x.sort_order||0); },0);
+        row.sort_order=maxSo+1;
+      }
       var ok = edId ? await updateRow('guide_posts',edId,row) : await insertRow('guide_posts',row);
       if(ok){ alert(edId?'수정 완료 ♥':'등록 완료 ♥'); edReset(); loadGuide(); }
       else alert('저장 실패 — supabase_setup.sql 실행 여부를 확인해 주세요');
@@ -1457,6 +1648,8 @@
     function loadGuideRender(){
       gdPosts.sort(function(a,b){
         if(!!b.pinned!==!!a.pinned) return (b.pinned?1:0)-(a.pinned?1:0);
+        var sa=+a.sort_order||0, sb=+b.sort_order||0;
+        if(sa!==sb) return sa-sb;
         return String(b.created_at||'').localeCompare(String(a.created_at||''));
       });
       var pq=(v('gd-pq')||'').toLowerCase();
@@ -1466,17 +1659,35 @@
         return plain.indexOf(pq)>-1;
       });
       var tb=document.getElementById('gd-plist');
-      tb.innerHTML=shown.map(function(p){
-        return '<tr data-id="'+p.id+'"><td class="mini" style="white-space:nowrap">'+esc(gdNormCat(p.category))+'</td>'+
+      tb.innerHTML=shown.map(function(p,i){
+        var prev=shown[i-1], next=shown[i+1];
+        var canUp=prev && !!prev.pinned===!!p.pinned, canDn=next && !!next.pinned===!!p.pinned;
+        return '<tr data-id="'+p.id+'">'+
+          '<td style="width:58px;white-space:nowrap"><button class="ic-btn" data-mv="up" '+(canUp?'':'disabled style="opacity:.3"')+'>▲</button>'+
+          '<button class="ic-btn" data-mv="dn" '+(canDn?'':'disabled style="opacity:.3"')+'>▼</button></td>'+
+          '<td class="mini" style="white-space:nowrap">'+esc(gdNormCat(p.category))+'</td>'+
           '<td>'+esc(p.title)+'</td>'+
           '<td>'+(p.pinned?'📌':'')+'</td>'+
           '<td class="mini" style="white-space:nowrap">'+esc(String(p.updated_at||p.created_at||'').slice(0,10))+'</td>'+
           '<td style="width:44px;text-align:center"><button class="ic-btn" data-ed="1" title="수정">✎</button></td>'+
           '<td style="width:44px;text-align:center"><button class="ic-btn" data-lk="1" title="링크 복사">🔗</button></td>'+
           '<td><button class="ic-btn del" data-del="1">✕</button></td></tr>';
-      }).join('') || '<tr><td colspan="7" class="mini">'+(pq?'검색 결과가 없어요':'아직 안내 글이 없어요 — 아래에서 첫 글을 써 보세요')+'</td></tr>';
-      tb.querySelectorAll('tr[data-id]').forEach(function(tr){
+      }).join('') || '<tr><td colspan="8" class="mini">'+(pq?'검색 결과가 없어요':'아직 안내 글이 없어요 — 아래에서 첫 글을 써 보세요')+'</td></tr>';
+      tb.querySelectorAll('tr[data-id]').forEach(function(tr,i){
         var p=gdPosts.find(function(x){ return String(x.id)===tr.dataset.id; });
+        tr.querySelectorAll('[data-mv]').forEach(function(mb){
+          mb.addEventListener('click',async function(){
+            if(!guard()||mb.disabled) return;
+            var group=shown.filter(function(x){ return !!x.pinned===!!p.pinned; });
+            var gi=group.indexOf(p), other=group[gi+(mb.dataset.mv==='up'?-1:1)];
+            if(!other) return;
+            var so=+p.sort_order||0, oo=+other.sort_order||0;
+            if(so===oo){ so=gi; oo=gi+(mb.dataset.mv==='up'?-1:1); }
+            await updateRow('guide_posts',p.id,{sort_order:oo});
+            await updateRow('guide_posts',other.id,{sort_order:so});
+            loadGuide();
+          });
+        });
         tr.querySelector('[data-ed]').addEventListener('click',function(){
           edId=p.id;
           document.getElementById('ed-mode-label').textContent='EDIT · "'+p.title+'" 수정 중';
@@ -1485,6 +1696,7 @@
           document.getElementById('ed-pin').checked=!!p.pinned;
           ed.innerHTML=p.content_html||'';
           edRepair(ed);
+          edEnsureTail();
           ed.querySelectorAll('details').forEach(function(d){ d.setAttribute('open',''); });
           ed.scrollIntoView({behavior:'smooth',block:'center'});
         });

@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260725a">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260726b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -42,8 +42,8 @@
     .cal{border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
     .cal-head{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--line)}
     .cal-head span{padding:11px 4px;text-align:center;color:var(--tx-soft);font-family:var(--font-serif);font-style:italic;font-size:12px;letter-spacing:.14em}
-    .cal-head span:last-child{color:var(--main)}
-    body.day .cal-head span:last-child{color:var(--point)}
+    .cal-head span:first-child{color:var(--main)}
+    body.day .cal-head span:first-child{color:var(--point)}
     .cal-body{display:grid;grid-template-columns:repeat(7,1fr)}
     .cal-cell{
       position:relative;min-height:96px;padding:8px 8px 6px;
@@ -123,7 +123,7 @@
     }
   </style>
 </head>
-<body data-build="20260725a" class="cinema-sub">
+<body data-build="20260726b" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
@@ -167,7 +167,7 @@
 
     <div class="cal rv">
       <div class="cal-head">
-        <span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span>
+        <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
       </div>
       <div class="cal-body" id="cal-body"></div>
     </div>
@@ -210,8 +210,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260725a"></script>
-  <script src="../js/cinema.js?v=20260725a"></script>
+  <script src="../supabase.js?v=20260726b"></script>
+  <script src="../js/cinema.js?v=20260726b"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
@@ -236,7 +236,7 @@
       document.getElementById('cal-ym').textContent=curY+'. '+pad(curM+1);
       document.getElementById('cal-ym-en').textContent=MON_EN[curM];
       var first=new Date(curY,curM,1);
-      var startOffset=(first.getDay()+6)%7;              /* 월요일 시작 */
+      var startOffset=first.getDay();                    /* 일요일 시작 */
       var start=new Date(curY,curM,1-startOffset);
       var tIso=todayIso(), h='';
       for(var i=0;i<42;i++){

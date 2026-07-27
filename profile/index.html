@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260725a">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260726b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -71,10 +71,10 @@
 
     /* 주간 상영표 */
     .week-strip{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--line-soft)}
-    .week-cell{display:grid;gap:7px;justify-items:center;padding:16px 4px 14px;border-right:1px solid var(--line-soft)}
+    .week-cell{display:grid;gap:6px;justify-items:center;padding:14px 2px 12px;border-right:1px solid var(--line-soft);min-width:0}
     .week-cell:last-child{border-right:0}
     .week-cell .d{font-family:var(--font-serif);font-style:italic;font-size:11px;color:var(--tx-dim)}
-    .week-cell .t{font-size:12.5px;font-weight:800;letter-spacing:.02em}
+    .week-cell .t{font-size:12px;font-weight:800;letter-spacing:0;white-space:nowrap}
     .week-cell.off .t{color:var(--tx-dim);font-weight:500}
     .week-cell.today{background:rgba(255,177,177,.1)}
     .week-cell.today .d{color:var(--main)}
@@ -116,7 +116,7 @@
     }
   </style>
 </head>
-<body data-build="20260725a" class="cinema-sub">
+<body data-build="20260726b" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
@@ -219,17 +219,16 @@
         </section>
 
         <section class="cn-card rv">
+          <p class="cn-kicker">WEEKLY SHOWTIME · 이번 주 상영 시간표</p>
+          <div class="week-strip" id="week"></div>
+        </section>
+
+        <section class="cn-card rv">
           <p class="cn-kicker">ABILITY SCORE</p>
           <div class="stats-grid" id="stats"></div>
         </section>
       </div>
     </div>
-
-    <!-- 주간 상영표 -->
-    <section class="cn-card rv" style="margin-top:22px">
-      <p class="cn-kicker">WEEKLY SHOWTIME · 이번 주 상영 시간표</p>
-      <div class="week-strip" id="week"></div>
-    </section>
 
     <!-- 진행 · 참여한 컨텐츠 -->
     <section class="cn-card rv" style="margin-top:22px">
@@ -269,8 +268,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260725a"></script>
-  <script src="../js/cinema.js?v=20260725a"></script>
+  <script src="../supabase.js?v=20260726b"></script>
+  <script src="../js/cinema.js?v=20260726b"></script>
   <script>
   /* ── 프로필 데이터 모델 (admin profileKeys와 동일 · 기존 예다 DB 키 호환) ──
      name name_en soop_id avatar tagline quote intro birthday(MM-DD) debut agency
