@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="이예다 노래책 — SONG BOOK">
+  <title>LEE YEDA — 노래책</title>
+  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260728a">
+  <style>
+    /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
+    body:not(.dataready) .chapter,
+    body:not(.dataready) .editorial-copy,
+    body:not(.dataready) .quote-card,
+    body:not(.dataready) .ad-wrap,
+    body:not(.dataready) .hero-background{opacity:0}
+    .chapter,.editorial-copy,.quote-card,.ad-wrap,.hero-background{transition:opacity 260ms ease}
+  </style>
+  <style>
+    /* ── 노래책 전용 ── */
+    .sb-bar{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin:0 0 16px}
+    .sb-search{flex:1;min-width:230px;display:flex;align-items:center;gap:10px;padding:0 16px;border:1px solid var(--line);background:var(--glass)}
+    .sb-search i{font-style:normal;color:var(--tx-dim);font-size:12px}
+    .sb-search input{flex:1;padding:13px 0;border:0;background:none;color:var(--tx);font-family:var(--font-body);font-size:13.5px}
+    .sb-search input::placeholder{color:var(--tx-dim)}
+    .sb-search input:focus{outline:none}
+    .sb-count{color:var(--tx-dim);font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.08em;white-space:nowrap}
+
+    .sb-cats{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+    .sb-cat{
+      padding:9px 16px;border:1px solid var(--line);background:rgba(255,255,255,.04);
+      color:var(--tx);cursor:pointer;font-family:var(--font-body);font-size:12px;font-weight:750;letter-spacing:.04em;
+      transition:background 140ms ease;
+    }
+    body.day .sb-cat{background:rgba(255,255,255,.5)}
+    .sb-cat:hover{background:rgba(255,177,177,.12)}
+    .sb-cat.on{background:var(--point);color:#fff}
+
+    .sb-wrap{border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow-x:auto}
+    table.sb{width:100%;border-collapse:collapse;min-width:760px}
+    table.sb th{
+      padding:13px 12px;border-bottom:1px solid var(--line);white-space:nowrap;
+      color:var(--tx-dim);font-family:var(--font-serif);font-style:italic;font-weight:400;font-size:11px;letter-spacing:.1em;text-align:left;
+    }
+    table.sb td{padding:13px 12px;border-bottom:1px solid var(--line-soft);font-size:13.5px;vertical-align:middle}
+    table.sb tr:last-child td{border-bottom:0}
+    table.sb tbody tr:hover{background:rgba(255,177,177,.07)}
+    .sb-no{width:52px;color:var(--tx-dim);font-family:var(--font-serif);font-style:italic;font-size:12px}
+    .sb-artist{color:var(--tx-soft);white-space:nowrap}
+    .sb-title{font-weight:750}
+    .sb-tag{
+      display:inline-block;padding:3px 9px;border:1px solid var(--line-soft);
+      font-size:11px;font-weight:650;white-space:nowrap;
+    }
+    .sb-price{color:var(--main);font-size:13px;letter-spacing:1px;white-space:nowrap}
+    body.day .sb-price{color:var(--point)}
+    .sb-note{color:var(--tx-soft);font-size:12.5px;line-height:1.6;min-width:120px}
+    .sb-hit{background:rgba(255,177,177,.14)}
+
+    @media (max-width:620px){
+      table.sb{min-width:620px}
+      table.sb th,table.sb td{padding:10px 8px;font-size:12.5px}
+    }
+  </style>
+</head>
+<body class="cinema-sub" data-build="20260728a">
+<script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
+
+  <header class="site-header">
+    <a href="../index.html" class="monogram" aria-label="LEE YEDA 홈">YEDA</a>
+    <nav id="main-navigation" class="main-navigation" aria-label="메인 메뉴">
+      <a href="../profile/"><span>01</span>프로필</a>
+      <a href="../schedule/"><span>02</span>일정</a>
+      <a href="../dress/"><span>03</span>옷장</a>
+      <a href="../work/"><span>04</span>업보</a>
+      <a href="../ticket/"><span>05</span>시참권</a>
+      <a href="../stamp/"><span>06</span>스탬프</a>
+      <a href="../guide/"><span>07</span>안내</a>
+      <a href="../song/" class="on"><span>08</span>노래책</a>
+    </nav>
+    <div class="header-side">
+      <a class="live-link" href="https://www.sooplive.com/station/leeyeda" target="_blank" rel="noreferrer"><i aria-hidden="true"></i>ON AIR</a>
+      <button class="mode-toggle" type="button" aria-label="모드 전환">☀</button>
+    </div>
+    <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false" aria-label="메뉴 열기"><span></span><span></span></button>
+  </header>
+
+  <main class="chapter">
+    <div class="chapter-head rv">
+      <div class="chapter-ghost" aria-hidden="true">Song</div>
+      <p class="kicker">SCENE 08 · SONG BOOK</p>
+      <h1><span>노래책</span></h1>
+      <p class="desc" id="pg-desc">예다가 부를 수 있는 노래 목록이에요. 곡명이나 아티스트로 검색해 보세요.</p>
+    </div>
+
+    <div class="sb-bar rv">
+      <label class="sb-search">
+        <i>♪</i>
+        <input id="sb-q" type="search" placeholder="곡명 · 아티스트 검색" autocomplete="off">
+      </label>
+      <span class="sb-count" id="sb-count">0 SONGS</span>
+    </div>
+    <div class="sb-cats rv" id="sb-cats"></div>
+
+    <div class="sb-wrap rv">
+      <table class="sb">
+        <thead>
+          <tr>
+            <th class="sb-no">#</th>
+            <th>아티스트</th>
+            <th>제목</th>
+            <th>장르</th>
+            <th>난이도</th>
+            <th>숙련도</th>
+            <th>금액</th>
+            <th>비고</th>
+          </tr>
+        </thead>
+        <tbody id="sb-list"></tbody>
+      </table>
+    </div>
+
+    <footer class="cn-footer rv">
+      <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
+      <b>WEDDING CINEMA · SCENE 08</b>
+      <span>YBNZ</span>
+    </footer>
+  </main>
+
+  <!-- 연출 레이어 + 편지 모달 -->
+  <div id="cnPetals" aria-hidden="true"></div>
+  <div id="cnFx" aria-hidden="true"></div>
+  <div id="cnMask"></div>
+  <div id="cnLetter" role="dialog" aria-modal="true" aria-label="예다에게 편지 보내기">
+    <p class="lk">SEND A LETTER · 익명</p>
+    <h3>예다에게 편지</h3>
+    <textarea id="cnTa" placeholder="하고 싶은 말을 자유롭게 적어 주세요. 익명으로 예다에게만 전달돼요 ♥"></textarea>
+    <div class="acts">
+      <button id="cnClose" type="button">CLOSE</button>
+      <button id="cnSend" class="cn-btn-solid" type="button">보내기 ♥</button>
+    </div>
+    <p class="ok-msg">편지가 잘 도착했어요. 고마워요 ♥</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../supabase.js?v=20260728a"></script>
+  <script src="../js/cinema.js?v=20260728a"></script>
+  <script>
+  (function(){
+    var esc=CN.esc, txt=CN.txt;
+    var songs=[], curCat='전체', q='';
+    var PRICE_ICON='🍑';        /* 금액 표시 아이콘 (개수로 표시) */
+
+    function cats(){
+      var set=[];
+      songs.forEach(function(s){
+        var c=txt(s.category).trim();
+        if(c && c!=='전체' && set.indexOf(c)===-1) set.push(c);
+      });
+      set.sort(function(a,b){ return a.localeCompare(b,'ko'); });
+      return ['전체'].concat(set);
+    }
+    function renderCats(){
+      var el=document.getElementById('sb-cats'), list=cats();
+      if(list.length<=1){ el.innerHTML=''; return; }
+      el.innerHTML=list.map(function(c){
+        return '<button class="sb-cat'+(c===curCat?' on':'')+'" type="button" data-c="'+esc(c)+'">'+esc(c)+'</button>';
+      }).join('');
+      el.querySelectorAll('.sb-cat').forEach(function(b){
+        b.addEventListener('click',function(){ curCat=b.dataset.c; renderCats(); render(); });
+      });
+    }
+    function hi(s){
+      s=esc(s);
+      if(!q) return s;
+      try{
+        var re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+        return s.replace(re,'<span class="sb-hit">$1</span>');
+      }catch(e){ return s; }
+    }
+    function priceCell(v){
+      var n=parseInt(v,10)||0;
+      if(n<=0) return '<span style="color:var(--tx-dim)">—</span>';
+      if(n>12) return '<span class="sb-price">'+PRICE_ICON+' ×'+n+'</span>';
+      var out=''; for(var i=0;i<n;i++) out+=PRICE_ICON;
+      return '<span class="sb-price" title="'+n+'개">'+out+'</span>';
+    }
+    function render(){
+      var list=songs.filter(function(s){
+        if(curCat!=='전체' && txt(s.category).trim()!==curCat) return false;
+        if(q){
+          var hay=(txt(s.title)+' '+txt(s.artist)).toLowerCase();
+          if(hay.indexOf(q.toLowerCase())===-1) return false;
+        }
+        return true;
+      }).sort(function(a,b){
+        var sa=+a.sort_order||0, sb=+b.sort_order||0;
+        if(sa!==sb) return sa-sb;
+        var aa=txt(a.artist), ab=txt(b.artist);
+        if(aa!==ab) return aa.localeCompare(ab,'ko');
+        return txt(a.title).localeCompare(txt(b.title),'ko');
+      });
+      document.getElementById('sb-count').textContent=list.length+' SONGS';
+      var tb=document.getElementById('sb-list');
+      if(!list.length){
+        tb.innerHTML='<tr><td colspan="8"><div class="cn-empty">'+(q||curCat!=='전체'?'찾는 노래가 없어요':'아직 등록된 노래가 없어요')+'</div></td></tr>';
+        return;
+      }
+      tb.innerHTML=list.map(function(s,i){
+        return '<tr>'+
+          '<td class="sb-no">'+(i+1)+'</td>'+
+          '<td class="sb-artist">'+hi(txt(s.artist))+'</td>'+
+          '<td class="sb-title">'+hi(txt(s.title))+'</td>'+
+          '<td>'+(txt(s.genre).trim()?'<span class="sb-tag">'+esc(s.genre)+'</span>':'<span style="color:var(--tx-dim)">—</span>')+'</td>'+
+          '<td>'+(txt(s.level).trim()?esc(s.level):'<span style="color:var(--tx-dim)">—</span>')+'</td>'+
+          '<td>'+(txt(s.mastery).trim()?esc(s.mastery):'<span style="color:var(--tx-dim)">—</span>')+'</td>'+
+          '<td>'+priceCell(s.price)+'</td>'+
+          '<td class="sb-note">'+(txt(s.note).trim()?CN.linkify(s.note):'')+'</td>'+
+          '</tr>';
+      }).join('');
+    }
+    document.getElementById('sb-q').addEventListener('input',function(e){ q=(e.target.value||'').trim(); render(); });
+
+    async function load(){
+      try{
+        var rp=await db.from('profile').select('data').eq('id',1);
+        var pd=rp&&rp.data&&rp.data[0]&&rp.data[0].data;
+        if(pd && txt(pd['song-desc']).trim())
+          document.getElementById('pg-desc').innerHTML=CN.linkify(pd['song-desc']);
+        var r=await db.from('songs').select('*');
+        if(r&&Array.isArray(r.data)) songs=r.data;
+      }catch(e){}
+      finally{ renderCats(); render(); CN.dataReady(); CN.reveal(); }
+    }
+    renderCats(); render();
+    load();
+  })();
+  </script>
+</body>
+</html>

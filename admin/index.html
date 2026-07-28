@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260726b">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260728a">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -160,7 +160,7 @@
     }
   </style>
 </head>
-<body data-build="20260726b" class="cinema-sub">
+<body data-build="20260728a" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <!-- 로그인 -->
@@ -168,8 +168,13 @@
     <div class="box">
       <div class="mono">Lee <b>♥</b> Yeda</div>
       <div class="cap">PRIVATE CONSOLE</div>
-      <input id="ad-pw" class="input" type="password" placeholder="관리자 비밀번호" autocomplete="off">
+      <input id="ad-email" class="input" type="email" placeholder="관리자 이메일" autocomplete="username">
+      <input id="ad-pw" class="input" type="password" placeholder="비밀번호" autocomplete="current-password">
       <button id="ad-enter" class="cn-btn-solid" type="button">입장 ♥</button>
+      <p id="ad-login-msg" style="margin:0;color:#ffb1b1;font-size:12px;line-height:1.6;min-height:18px"></p>
+      <p style="margin:0;color:rgba(255,255,255,.45);font-size:10.5px;line-height:1.6">
+        계정은 Supabase → Authentication → Users 에서 관리해요.<br>비밀번호는 코드에 들어 있지 않아요.
+      </p>
     </div>
   </div>
 
@@ -183,9 +188,11 @@
       <a href="../ticket/"><span>05</span>시참권</a>
       <a href="../stamp/"><span>06</span>스탬프</a>
       <a href="../guide/"><span>07</span>안내</a>
+      <a href="../song/"><span>08</span>노래책</a>
     </nav>
     <div class="header-side">
       <span style="font-size:10px;font-weight:900;letter-spacing:.15em;color:var(--main)">CONSOLE</span>
+      <button id="ad-logout" class="cn-btn-line" type="button" style="padding:8px 12px;font-size:9px">로그아웃</button>
       <button class="mode-toggle" type="button" aria-label="모드 전환">☀</button>
     </div>
     <button class="menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false" aria-label="메뉴 열기"><span></span><span></span></button>
@@ -205,6 +212,7 @@
       <button class="ad-tab" data-tab="upbo" type="button">📜 업보</button>
       <button class="ad-tab" data-tab="ticket" type="button">🎟 시참권</button>
       <button class="ad-tab" data-tab="stamp" type="button">💌 스탬프</button>
+      <button class="ad-tab" data-tab="song" type="button">🎵 노래책</button>
       <button class="ad-tab" data-tab="guide" type="button">📖 안내</button>
       <button class="ad-tab" data-tab="inbox" type="button">📮 편지함</button>
       <button class="ad-tab" data-tab="theme" type="button">🎨 테마</button>
@@ -465,11 +473,11 @@
         </div>
         <div class="table-wrap" style="margin-top:16px">
           <table>
-            <thead><tr><th>시청자</th><th>업보</th><th>개수</th><th>기한 ↑</th><th>비고</th><th>삭제</th></tr></thead>
+            <thead><tr><th>시청자 ↑</th><th>업보</th><th>개수</th><th>기한 ↑</th><th>비고</th><th>삭제</th></tr></thead>
             <tbody id="ub-list"></tbody>
           </table>
         </div>
-        <span class="hint" style="display:block;margin-top:10px">기한이 임박한 순으로 정렬돼요 (무기한 → 만료는 뒤로) · 개수는 −/＋로 바로 조절되며 순서는 그대로 유지돼요 · 기한이 지난 항목은 페이지에서 "만료"로 표시되고 합계에서 빠져요</span>
+        <span class="hint" style="display:block;margin-top:10px">시청자 이름순으로 묶이고, 같은 사람 안에서는 기한이 임박한 순이에요 (무기한 → 만료는 뒤로) · 개수는 −/＋로 바로 조절되며 순서는 그대로 유지돼요 · 기한이 지난 항목은 페이지에서 "만료"로 표시되고 합계에서 빠져요</span>
       </div>
     </section>
 
@@ -511,7 +519,7 @@
         </div>
         <div class="table-wrap" style="margin-top:16px">
           <table>
-            <thead><tr><th>시청자</th><th>시참권</th><th>장수</th><th>기한 ↑</th><th>비고</th><th>삭제</th></tr></thead>
+            <thead><tr><th>시청자 ↑</th><th>시참권</th><th>장수</th><th>기한 ↑</th><th>비고</th><th>삭제</th></tr></thead>
             <tbody id="tk-list"></tbody>
           </table>
         </div>
@@ -556,6 +564,49 @@
           <button class="cn-btn-line" id="rw-add" type="button" style="margin-top:8px">+ 보상 추가</button>
         </div>
         <div class="save-bar" style="margin-top:16px"><button class="cn-btn-solid" id="save-stamp" type="button">스탬프 설정 저장 ♥</button></div>
+      </div>
+    </section>
+
+    <!-- ═══════════ 🎵 노래책 ═══════════ -->
+    <section class="tab-panel" id="tab-song">
+      <div class="cn-card">
+        <p class="cn-kicker">NOTICE · 노래책 안내 문구</p>
+        <div class="fld"><textarea class="input" id="f-song-desc" placeholder="노래책 페이지 제목 아래에 표시돼요 (줄바꿈 가능 · https:// 링크는 자동으로 눌리는 링크가 돼요)"></textarea></div>
+        <div class="save-bar" style="margin-top:12px"><button class="cn-btn-solid" id="save-song-desc" type="button">안내 문구 저장 ♥</button></div>
+      </div>
+
+      <div class="cn-card">
+        <p class="cn-kicker" id="sg-mode-label">ADD · 노래 추가</p>
+        <div class="fgrid">
+          <div class="fld"><span class="cn-label">아티스트</span><input class="input" id="sg-artist" placeholder="예) 아이유"></div>
+          <div class="fld"><span class="cn-label">제목</span><input class="input" id="sg-title" placeholder="예) 밤편지"></div>
+          <div class="fld"><span class="cn-label">카테고리</span><input class="input" id="sg-cat" list="sg-cat-list" placeholder="예) 발라드"><datalist id="sg-cat-list"></datalist><span class="hint">페이지 상단 분류 버튼으로 떠요 · 비우면 분류 없음</span></div>
+          <div class="fld"><span class="cn-label">장르</span><input class="input" id="sg-genre" placeholder="예) K-POP"></div>
+          <div class="fld"><span class="cn-label">난이도</span><input class="input" id="sg-level" placeholder="예) 상 / ★★★"></div>
+          <div class="fld"><span class="cn-label">숙련도</span><input class="input" id="sg-mastery" placeholder="예) 완곡 / 연습중"></div>
+          <div class="fld"><span class="cn-label">금액 (개수)</span><input class="input" id="sg-price" type="number" min="0" value="0"><span class="hint">숫자만 — 페이지에는 🍑 개수로 표시돼요 (0이면 —)</span></div>
+          <div class="fld"><span class="cn-label">비고 (공개)</span><input class="input" id="sg-note" placeholder="페이지에 보여요 · 링크 자동"></div>
+          <div class="fld full"><span class="cn-label">메모 (관리자만 확인)</span><input class="input" id="sg-memo" placeholder="로그인한 관리자만 볼 수 있어요 — 별도 표(song_memos)에 저장돼요"></div>
+        </div>
+        <div class="save-bar" style="margin-top:14px">
+          <button class="cn-btn-line" id="sg-new" type="button">새로 입력</button>
+          <button class="cn-btn-solid" id="sg-save" type="button">저장 ♥</button>
+        </div>
+      </div>
+
+      <div class="cn-card">
+        <p class="cn-kicker">LIST · 등록된 노래</p>
+        <div class="row-line" style="margin-bottom:12px">
+          <div class="fld"><span class="cn-label">검색</span><input class="input" id="sg-q" placeholder="곡명·아티스트·메모 검색"></div>
+          <div class="fld sm" style="flex:0 0 160px"><span class="cn-label">카테고리</span><select class="input" id="sg-fcat"><option value="">전체</option></select></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>순서</th><th>아티스트</th><th>제목</th><th>장르</th><th>난이도</th><th>숙련도</th><th>금액</th><th>비고</th><th>메모</th><th>수정</th><th>삭제</th></tr></thead>
+            <tbody id="sg-list"></tbody>
+          </table>
+        </div>
+        <span class="hint" style="display:block;margin-top:8px">▲▼ 로 순서를 바꿔요 (페이지도 이 순서로 표시) · 메모는 이 화면에서만 보여요</span>
       </div>
     </section>
 
@@ -617,6 +668,8 @@
           <button class="ed-dot" data-hl="rgba(111,143,232,.35)" style="background:linear-gradient(0deg,rgba(111,143,232,.55),rgba(111,143,232,.55)),#fff" type="button" title="형광펜 블루"></button>
           <button class="ed-btn" data-hl="transparent" type="button" title="형광펜 지우기">형광✕</button>
           <span class="ed-sep"></span>
+          <button class="ed-btn" data-cmd="insertUnorderedList" type="button" title="글머리표 목록 (● 점 목록)">● 목록</button>
+          <button class="ed-btn" data-cmd="insertOrderedList" type="button" title="번호 목록">1. 목록</button>
           <button class="ed-btn" data-cmd="insertHorizontalRule" type="button" title="구분선">─</button>
           <button class="ed-btn" data-cmd="formatBlock" data-val="blockquote" type="button" title="인용">❝</button>
           <button class="ed-btn" id="ed-toggle" type="button" title="접었다 펴는 토글">▸토글</button>
@@ -647,7 +700,8 @@
           <button class="ed-btn" data-tb="table-del" type="button">표 삭제</button>
         </div>
         <div id="ed-body" contenteditable="true"></div>
-        <span class="hint" style="display:block;margin-top:8px">글자를 드래그로 선택한 뒤 버튼을 누르면 그 부분에 적용돼요 · 이미지는 SOOP 게시판 "이미지 주소 복사" 링크로<br>토글 제목줄에 커서를 두고 <b>제목/소제목/본문</b>을 누르면 그 <b>토글 제목의 글자 크기</b>가 바뀌어요</span>
+        <span class="hint" style="display:block;margin-top:8px">글자를 드래그로 선택한 뒤 버튼을 누르면 그 부분에 적용돼요 · 이미지는 SOOP 게시판 "이미지 주소 복사" 링크로<br>토글 제목줄에 커서를 두고 <b>제목/소제목/본문</b>을 누르면 그 <b>토글 제목의 글자 크기</b>가 바뀌어요<br>
+          줄 맨 앞에 <b>- </b>(하이픈+띄어쓰기)를 치면 ● 목록이 돼요 · <b>본문</b> 버튼은 인용·목록을 해제하는 역할도 해요 · 이미지는 <b>클릭해서 고른 뒤</b> ⯇ ≡ ⯈ 로 정렬해요</span>
         <div class="save-bar" style="margin-top:14px">
           <button class="cn-btn-line" id="ed-new" type="button">새 글</button>
           <button class="cn-btn-solid" id="ed-save" type="button">글 저장 ♥</button>
@@ -679,11 +733,21 @@
           <button class="cn-btn-solid" id="save-theme" type="button">테마 저장 ♥</button>
         </div>
       </div>
+
+      <div class="cn-card">
+        <p class="cn-kicker">BACKUP · 데이터 백업</p>
+        <p style="margin:0 0 14px;color:var(--tx-soft);font-size:13px;line-height:1.75">
+          아래 버튼을 누르면 프로필·일정·옷장·업보·시참권·스탬프·노래책·안내글·편지함 전체가
+          <b>JSON 파일 한 개</b>로 내려받아져요. 한 달에 한 번 정도 받아 두면 사고가 나도 되돌릴 수 있어요.
+        </p>
+        <div class="save-bar"><button class="cn-btn-solid" id="bk-export" type="button">전체 백업 내려받기 ⤓</button></div>
+        <p class="mini" id="bk-status" style="margin:12px 0 0"></p>
+      </div>
     </section>
 
     <footer class="cn-footer">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
-      <b>PRIVATE CONSOLE · BUILD 20260726b</b>
+      <b>PRIVATE CONSOLE · BUILD 20260728a</b>
       <span>YBNZ</span>
     </footer>
   </main>
@@ -692,27 +756,57 @@
   <div id="cnPetals" aria-hidden="true"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260726b"></script>
-  <script src="../js/cinema.js?v=20260726b"></script>
+  <script src="../supabase.js?v=20260728a"></script>
+  <script src="../js/cinema.js?v=20260728a"></script>
   <script>
   (function(){
-    var ADMIN_PASSWORD='1234';
     var esc=CN.esc, txt=CN.txt;
     var READY=(typeof SB_READY!=='undefined')?SB_READY:false;
     if(!READY) document.getElementById('ad-banner').classList.add('on');
 
-    /* ── 로그인 ── */
+    /* ── 로그인: Supabase Auth (비밀번호는 코드에 없음 · 권한은 DB의 RLS가 판단) ── */
     var login=document.getElementById('adLogin');
-    function tryLogin(){
-      var v=document.getElementById('ad-pw').value;
-      if(v===ADMIN_PASSWORD){
-        sessionStorage.setItem('yeda-admin','1');
-        login.style.display='none';
-      }else alert('비밀번호가 달라요!');
+    var loginMsg=document.getElementById('ad-login-msg');
+    var authed=false;
+    function setAuthed(on){
+      authed=on;
+      login.style.display=on?'none':'grid';
+      var lo=document.getElementById('ad-logout');
+      if(lo) lo.style.display=on?'':'none';
+    }
+    setAuthed(false);
+    async function tryLogin(){
+      var email=(document.getElementById('ad-email').value||'').trim();
+      var pw=document.getElementById('ad-pw').value||'';
+      if(!email||!pw){ loginMsg.textContent='이메일과 비밀번호를 모두 입력해 주세요.'; return; }
+      if(!READY || !db.auth){ loginMsg.textContent='Supabase 키가 설정되지 않았어요.'; return; }
+      loginMsg.textContent='확인 중…';
+      try{
+        var r=await db.auth.signInWithPassword({ email:email, password:pw });
+        if(r.error){ loginMsg.textContent='로그인에 실패했어요. 이메일/비밀번호를 확인해 주세요.'; return; }
+        loginMsg.textContent='';
+        document.getElementById('ad-pw').value='';
+        setAuthed(true);
+        init();
+      }catch(e){ loginMsg.textContent='로그인 중 오류가 났어요.'; }
     }
     document.getElementById('ad-enter').addEventListener('click',tryLogin);
-    document.getElementById('ad-pw').addEventListener('keydown',function(e){ if(e.key==='Enter') tryLogin(); });
-    if(sessionStorage.getItem('yeda-admin')==='1') login.style.display='none';
+    ['ad-email','ad-pw'].forEach(function(id){
+      document.getElementById(id).addEventListener('keydown',function(e){ if(e.key==='Enter') tryLogin(); });
+    });
+    document.getElementById('ad-logout').addEventListener('click',async function(){
+      try{ if(db.auth) await db.auth.signOut(); }catch(e){}
+      setAuthed(false);
+      location.reload();
+    });
+    /* 새로고침해도 세션 유지 (Supabase가 보관) */
+    (async function restore(){
+      try{
+        if(!READY || !db.auth) return;
+        var r=await db.auth.getSession();
+        if(r && r.data && r.data.session){ setAuthed(true); init(); }
+      }catch(e){}
+    })();
 
     /* ── 탭 ── */
     document.querySelectorAll('.ad-tab').forEach(function(t){
@@ -722,7 +816,11 @@
       });
     });
 
-    function guard(){ if(!READY){ alert('Supabase 키가 아직 설정되지 않아 저장할 수 없어요.'); return false; } return true; }
+    function guard(){
+      if(!READY){ alert('Supabase 키가 아직 설정되지 않아 저장할 수 없어요.'); return false; }
+      if(!authed){ alert('로그인이 풀렸어요. 새로고침 후 다시 로그인해 주세요.'); return false; }
+      return true;
+    }
     async function getData(){
       try{
         var r=await db.from('profile').select('data').eq('id',1);
@@ -1124,7 +1222,10 @@
           var vn=(vById[c.viewer_id]||{});
           return String(vn.nickname||'').toLowerCase().indexOf(vq)>-1 || String(vn.soop_id||'').toLowerCase().indexOf(vq)>-1;
         }).sort(function(a,b){
-          /* 기한순: 임박 → 무기한 → 만료 (개수 ±로 정렬이 흔들리지 않게 tiebreak은 고정값 id) */
+          /* 1순위 시청자 이름(가나다) → 2순위 기한(임박 → 무기한 → 만료)
+             개수 ±로 순서가 흔들리지 않게 마지막 tiebreak은 고정값 id */
+          var na=(vById[a.viewer_id]||{}).nickname||'', nb=(vById[b.viewer_id]||{}).nickname||'';
+          if(na!==nb) return na.localeCompare(nb,'ko');
           var nowS=new Date(); nowS=nowS.getFullYear()+'-'+('0'+(nowS.getMonth()+1)).slice(-2)+'-'+('0'+nowS.getDate()).slice(-2);
           function key(c){
             if(!c.expires) return ['1','9999-12-31'];
@@ -1320,6 +1421,136 @@
       alert((await putData({'dress-desc':v('f-dress-desc')}))?'저장 완료 ♥':'저장 실패');
     });
 
+    /* ══════════ 🎵 노래책 ══════════ */
+    var songs=[], songMemos={}, sgId=null;
+    /* 메모는 songs가 아니라 song_memos에 저장한다 — songs는 사이트에 공개되는 표라
+       거기에 메모를 두면 API로 누구나 읽을 수 있다 */
+    function sgFields(){
+      return { artist:v('sg-artist'), title:v('sg-title'), category:v('sg-cat'), genre:v('sg-genre'),
+               level:v('sg-level'), mastery:v('sg-mastery'), price:Math.max(0,parseInt(v('sg-price'),10)||0),
+               note:v('sg-note') };
+    }
+    async function saveMemo(songId, memo){
+      memo=txt(memo).trim();
+      try{
+        if(!memo){ await db.from('song_memos').delete().eq('song_id',songId); return; }
+        await db.from('song_memos').upsert({ song_id:songId, memo:memo, updated_at:new Date().toISOString() });
+      }catch(e){ console.error('메모 저장 실패',e); }
+    }
+    function sgReset(){
+      sgId=null;
+      document.getElementById('sg-mode-label').textContent='ADD · 노래 추가';
+      ['sg-artist','sg-title','sg-genre','sg-level','sg-mastery','sg-note','sg-memo'].forEach(function(id){ setv(id,''); });
+      setv('sg-price','0');
+    }
+    document.getElementById('sg-new').addEventListener('click',sgReset);
+    document.getElementById('sg-save').addEventListener('click',async function(){
+      if(!guard()) return;
+      var f=sgFields();
+      if(!f.title){ alert('제목을 입력해 주세요!'); return; }
+      var ok, memo=v('sg-memo');
+      if(sgId){
+        ok=await updateRow('songs',sgId,f);
+        if(ok) await saveMemo(sgId, memo);
+      }else{
+        var maxSo=songs.reduce(function(m,x){ return Math.max(m,+x.sort_order||0); },0);
+        f.sort_order=maxSo+1;
+        var made = (typeof insertRowReturning==='function') ? await insertRowReturning('songs',f) : null;
+        ok = made ? true : await insertRow('songs',f);
+        if(ok && memo.trim() && made && made.id) await saveMemo(made.id, memo);
+        else if(ok && memo.trim()) alert('노래는 저장됐어요. 메모는 목록에서 ✎로 한 번 더 저장해 주세요.');
+      }
+      if(ok){ sgReset(); loadSongs(); }
+      else alert('저장 실패 — supabase_setup.sql 실행 여부를 확인해 주세요');
+    });
+    document.getElementById('sg-q').addEventListener('input',function(){ renderSongs(); });
+    document.getElementById('sg-fcat').addEventListener('change',function(){ renderSongs(); });
+    async function loadSongs(){
+      try{ var r=await db.from('songs').select('*'); songs=(r&&r.data)||[]; }catch(e){ songs=[]; }
+      songMemos={};
+      try{
+        var m=await db.from('song_memos').select('*');
+        ((m&&m.data)||[]).forEach(function(x){ songMemos[x.song_id]=txt(x.memo); });
+      }catch(e){}
+      renderSongs();
+    }
+    function renderSongs(){
+      songs.sort(function(a,b){
+        var sa=+a.sort_order||0, sb=+b.sort_order||0;
+        if(sa!==sb) return sa-sb;
+        return (+a.id||0)-(+b.id||0);
+      });
+      /* 카테고리 목록 동기화 */
+      var cs=[]; songs.forEach(function(x){ var c=txt(x.category).trim(); if(c && cs.indexOf(c)===-1) cs.push(c); });
+      cs.sort(function(a,b){ return a.localeCompare(b,'ko'); });
+      document.getElementById('sg-cat-list').innerHTML=cs.map(function(c){ return '<option value="'+esc(c)+'">'; }).join('');
+      var fsel=document.getElementById('sg-fcat'), keep=fsel.value;
+      fsel.innerHTML='<option value="">전체</option>'+cs.map(function(c){ return '<option value="'+esc(c)+'">'+esc(c)+'</option>'; }).join('');
+      if(cs.indexOf(keep)>-1) fsel.value=keep;
+
+      var q=(v('sg-q')||'').toLowerCase(), fc=fsel.value;
+      var shown=songs.filter(function(x){
+        if(fc && txt(x.category).trim()!==fc) return false;
+        if(q){
+          var hay=(txt(x.title)+' '+txt(x.artist)+' '+txt(songMemos[x.id]||'')+' '+txt(x.note)).toLowerCase();
+          if(hay.indexOf(q)===-1) return false;
+        }
+        return true;
+      });
+      var tb=document.getElementById('sg-list');
+      tb.innerHTML=shown.map(function(x,i){
+        var prev=shown[i-1], next=shown[i+1];
+        return '<tr data-id="'+x.id+'">'+
+          '<td style="width:58px;white-space:nowrap"><button class="ic-btn" data-mv="up" '+(prev?'':'disabled style="opacity:.3"')+'>▲</button>'+
+          '<button class="ic-btn" data-mv="dn" '+(next?'':'disabled style="opacity:.3"')+'>▼</button></td>'+
+          '<td class="mini">'+esc(x.artist)+'</td>'+
+          '<td><b>'+esc(x.title)+'</b>'+(txt(x.category).trim()?' <span class="mini">('+esc(x.category)+')</span>':'')+'</td>'+
+          '<td class="mini">'+esc(x.genre)+'</td>'+
+          '<td class="mini">'+esc(x.level)+'</td>'+
+          '<td class="mini">'+esc(x.mastery)+'</td>'+
+          '<td class="mini">'+((+x.price||0)>0?(+x.price)+'개':'—')+'</td>'+
+          '<td class="mini">'+esc(x.note)+'</td>'+
+          '<td class="mini" style="color:var(--main)">'+esc(songMemos[x.id]||'')+'</td>'+
+          '<td style="width:44px;text-align:center"><button class="ic-btn" data-ed="1" title="수정">✎</button></td>'+
+          '<td><button class="ic-btn del" data-del="1">✕</button></td></tr>';
+      }).join('') || '<tr><td colspan="11" class="mini">'+(q||fc?'검색 결과가 없어요':'아직 등록된 노래가 없어요')+'</td></tr>';
+      tb.querySelectorAll('tr[data-id]').forEach(function(tr){
+        var x=songs.find(function(y){ return String(y.id)===tr.dataset.id; });
+        tr.querySelectorAll('[data-mv]').forEach(function(mb){
+          mb.addEventListener('click',async function(){
+            if(!guard()||mb.disabled) return;
+            var gi=shown.indexOf(x), other=shown[gi+(mb.dataset.mv==='up'?-1:1)];
+            if(!other) return;
+            var so=+x.sort_order||0, oo=+other.sort_order||0;
+            if(so===oo){ so=gi; oo=gi+(mb.dataset.mv==='up'?-1:1); }
+            await updateRow('songs',x.id,{sort_order:oo});
+            await updateRow('songs',other.id,{sort_order:so});
+            loadSongs();
+          });
+        });
+        tr.querySelector('[data-ed]').addEventListener('click',function(){
+          sgId=x.id;
+          document.getElementById('sg-mode-label').textContent='EDIT · "'+txt(x.title)+'" 수정 중';
+          setv('sg-artist',x.artist); setv('sg-title',x.title); setv('sg-cat',x.category);
+          setv('sg-genre',x.genre); setv('sg-level',x.level); setv('sg-mastery',x.mastery);
+          setv('sg-price',+x.price||0); setv('sg-note',x.note); setv('sg-memo',songMemos[x.id]||'');
+          document.getElementById('sg-mode-label').scrollIntoView({behavior:'smooth',block:'center'});
+        });
+        tr.querySelector('[data-del]').addEventListener('click',async function(){
+          if(!guard()) return;
+          if(!confirm('"'+txt(x.title)+'" 을(를) 지울까요?')) return;
+          await deleteRow('songs',x.id);
+          try{ await db.from('song_memos').delete().eq('song_id',x.id); }catch(e){}
+          if(String(sgId)===String(x.id)) sgReset();
+          loadSongs();
+        });
+      });
+    }
+    document.getElementById('save-song-desc').addEventListener('click',async function(){
+      if(!guard()) return;
+      alert((await putData({'song-desc':v('f-song-desc')}))?'저장 완료 ♥':'저장 실패');
+    });
+
     /* ══════════ 📖 안내 게시판 ══════════ */
     var gdPosts=[], edId=null;
     var ed=document.getElementById('ed-body');
@@ -1419,6 +1650,39 @@
         else if(tag==='h3') sum.classList.add('sz-h3');
         return;
       }
+      if(tag==='p'){
+        /* '본문'은 되돌리기 역할도 한다: 인용·목록 껍데기를 벗겨 일반 문단으로 */
+        var sel=window.getSelection();
+        var n=(sel&&sel.rangeCount)?sel.getRangeAt(0).startContainer:null;
+        if(n && n.nodeType===3) n=n.parentNode;
+        var bq=null, cur=n;
+        while(cur && cur!==ed){ if(cur.tagName==='BLOCKQUOTE'){ bq=cur; break; } cur=cur.parentNode; }
+        if(bq){
+          var frag=document.createDocumentFragment();
+          Array.prototype.slice.call(bq.childNodes).forEach(function(ch){
+            if(ch.nodeType===3 && !ch.textContent.trim()) return;
+            if(ch.nodeType===1 && /^(P|H2|H3|DIV)$/.test(ch.tagName)) frag.appendChild(ch);
+            else { var np=document.createElement('p'); np.appendChild(ch); frag.appendChild(np); }
+          });
+          if(!frag.childNodes.length){ var e0=document.createElement('p'); e0.innerHTML='<br>'; frag.appendChild(e0); }
+          var first=frag.firstChild;
+          bq.parentNode.replaceChild(frag, bq);
+          if(first){
+            var r=document.createRange(); r.selectNodeContents(first); r.collapse(false);
+            sel.removeAllRanges(); sel.addRange(r); edSaveRange();
+          }
+          return;
+        }
+        /* 목록 안이면 목록 해제 */
+        var li=null; cur=n;
+        while(cur && cur!==ed){ if(cur.tagName==='LI'){ li=cur; break; } cur=cur.parentNode; }
+        if(li){
+          var listTag=li.parentNode.tagName;
+          edExec(listTag==='OL'?'insertOrderedList':'insertUnorderedList');
+          edRepair(ed);
+          return;
+        }
+      }
       if(tag==='blockquote' || tag==='h2' || tag==='h3' || tag==='p'){
         edExec('formatBlock', tag);
       }
@@ -1429,8 +1693,13 @@
     document.querySelectorAll('.ed-bar [data-cmd]').forEach(function(b){
       b.addEventListener('mousedown',function(e){ e.preventDefault(); });
       b.addEventListener('click',function(){
-        if(b.dataset.cmd==='formatBlock') edBlockFormat(b.dataset.val);
-        else edExec(b.dataset.cmd, b.dataset.val);
+        var c=b.dataset.cmd;
+        if(c==='formatBlock'){ edBlockFormat(b.dataset.val); return; }
+        if(c==='justifyLeft'||c==='justifyCenter'||c==='justifyRight'){
+          var dir=c==='justifyCenter'?'center':(c==='justifyRight'?'right':'left');
+          if(edAlignImage(dir)) return;          /* 이미지를 골랐으면 이미지 정렬 */
+        }
+        edExec(c, b.dataset.val);
       });
     });
     /* 깨진 토글 구조 복구 — 예전에 저장된 글도 열면 자동으로 정상화 */
@@ -1441,6 +1710,23 @@
         w.parentNode.insertBefore(d, w);
         if(!w.textContent.trim() && !w.querySelector('img,table')) w.remove();
       });
+      /* 편집용 이미지 선택 표시는 저장/표시에 남기지 않는다 */
+      root.querySelectorAll('img[style*="outline"]').forEach(function(im){ im.style.removeProperty('outline'); });
+      /* <p> 안에 목록이 들어간 잘못된 중첩 풀기 (execCommand 산출물) */
+      root.querySelectorAll('p > ul, p > ol').forEach(function(list){
+        var wrap=list.parentNode;
+        wrap.parentNode.insertBefore(list, wrap);
+        if(!wrap.textContent.trim() && !wrap.querySelector('img,table,details')) wrap.remove();
+      });
+      /* 편집영역 바로 아래의 맨몸 텍스트는 문단으로 감싸기 */
+      if(root.id==='ed-body'){
+        Array.prototype.slice.call(root.childNodes).forEach(function(n){
+          if(n.nodeType===3 && n.textContent.trim()){
+            var np=document.createElement('p');
+            root.insertBefore(np,n); np.appendChild(n);
+          }
+        });
+      }
       /* summary 없는 details → 바로 앞 details에 도로 합치기, 없으면 summary 새로 달기 */
       root.querySelectorAll('details').forEach(function(d){
         if(d.querySelector(':scope > summary')) return;
@@ -1515,6 +1801,21 @@
       var r=document.createRange(); r.selectNodeContents(pnew); r.collapse(true);
       sel.removeAllRanges(); sel.addRange(r); edSaveRange(); ed.focus();
     });
+    /* "- " 또는 "* " 를 줄 맨 앞에 치면 자동으로 글머리표 목록으로 */
+    ed.addEventListener('input',function(){
+      var sel=window.getSelection(); if(!sel||!sel.rangeCount) return;
+      var node=sel.getRangeAt(0).startContainer;
+      if(node.nodeType!==3) return;
+      var txt0=node.textContent;
+      if(!/^[-*]\u00a0?\s$/.test(txt0.replace(/\u00a0/g,' '))) return;
+      var block=node.parentNode;
+      while(block && block!==ed && !/^(P|DIV|H2|H3|LI|TD|TH|SUMMARY)$/.test(block.tagName)) block=block.parentNode;
+      if(!block || block===ed || /^(LI|TD|TH|SUMMARY)$/.test(block.tagName)) return;
+      node.textContent='';
+      edExec('insertUnorderedList');
+      edSaveRange();
+    });
+
     /* 인용/제목 안에서 Enter → 다음 줄은 일반 문단으로 빠져나오기 */
     ed.addEventListener('keydown',function(e){
       if(e.key!=='Enter' || e.shiftKey) return;
@@ -1534,6 +1835,23 @@
       var r=document.createRange(); r.selectNodeContents(pnew); r.collapse(true);
       sel.removeAllRanges(); sel.addRange(r); edSaveRange();
     });
+
+    /* ── 이미지: 클릭해서 고르고 정렬 ── */
+    var edImg=null;
+    ed.addEventListener('click',function(e){
+      var im=e.target.closest('img');
+      Array.prototype.forEach.call(ed.querySelectorAll('img'),function(x){ x.style.outline=''; });
+      edImg=im||null;
+      if(edImg) edImg.style.outline='2px solid var(--main)';
+    });
+    function edAlignImage(dir){
+      if(!edImg) return false;
+      edImg.style.display='block';
+      if(dir==='center'){ edImg.style.marginLeft='auto'; edImg.style.marginRight='auto'; }
+      else if(dir==='right'){ edImg.style.marginLeft='auto'; edImg.style.marginRight='0'; }
+      else { edImg.style.marginLeft='0'; edImg.style.marginRight='auto'; }
+      return true;
+    }
 
     /* ── 표 편집 ── */
     function edCurCell(){
@@ -1619,6 +1937,8 @@
       edRepair(ed);
       var clean=document.createElement('div');
       clean.innerHTML=ed.innerHTML;
+      clean.querySelectorAll('img[style*="outline"]').forEach(function(im){ im.style.removeProperty('outline'); });
+      clean.querySelectorAll('img[style=""]').forEach(function(im){ im.removeAttribute('style'); });
       /* 맨 끝의 빈 문단들은 저장 시 정리 (편집용으로만 필요) */
       while(clean.lastElementChild && clean.lastElementChild.tagName==='P' &&
             !clean.lastElementChild.textContent.trim() && !clean.lastElementChild.querySelector('img,table,details'))
@@ -1785,15 +2105,48 @@
       alert(ok?'테마 저장 완료 ♥ 모든 페이지에 적용돼요':'저장 실패');
     });
 
+    /* ══════════ 💾 백업 ══════════ */
+    var BACKUP_TABLES=['profile','schedule_events','dress_items','viewers','stamp_log',
+                       'upbo_types','upbo_counts','ticket_types','ticket_counts',
+                       'songs','song_memos','guide_posts','inquiries'];
+    document.getElementById('bk-export').addEventListener('click',async function(){
+      if(!guard()) return;
+      var st=document.getElementById('bk-status');
+      st.textContent='모으는 중…';
+      var out={ exported_at:new Date().toISOString(), site:'lee-yeda', tables:{} }, fail=[];
+      for(var i=0;i<BACKUP_TABLES.length;i++){
+        var t=BACKUP_TABLES[i];
+        try{
+          var r=await db.from(t).select('*');
+          if(r && Array.isArray(r.data)) out.tables[t]=r.data;
+          else fail.push(t);
+        }catch(e){ fail.push(t); }
+        st.textContent='모으는 중… ('+(i+1)+'/'+BACKUP_TABLES.length+')';
+      }
+      var blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+      var d=new Date(), pad=function(n){ return (n<10?'0':'')+n; };
+      var name='leeyeda-backup-'+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'.json';
+      var a=document.createElement('a');
+      a.href=URL.createObjectURL(blob); a.download=name;
+      document.body.appendChild(a); a.click();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1000);
+      var cnt=Object.keys(out.tables).reduce(function(m,k){ return m+out.tables[k].length; },0);
+      st.textContent=name+' 내려받음 · 표 '+Object.keys(out.tables).length+'개 / 줄 '+cnt+'개'+
+                     (fail.length?(' · 실패: '+fail.join(', ')):'');
+    });
+
     /* ══════════ 초기 로드 ══════════ */
     async function loadAllLedgers(){ await loadStampLog(); await loadViewers(); UB.load(); TK.load(); }
-    (async function init(){
+    var inited=false;
+    async function init(){
+      if(inited) return; inited=true;
       try{
       var d=await getData();
       fillProfile(d);
       setv('f-stamp-desc', txt(d['stamp-desc']||''));
       setv('f-upbo-desc', txt(d['upbo-desc']||''));
       setv('f-dress-desc', txt(d['dress-desc']||''));
+      setv('f-song-desc', txt(d['song-desc']||''));
       setv('f-ticket-desc', txt(d['ticket-desc']||''));
       if(Array.isArray(d['stamp-rewards'])&&d['stamp-rewards'].length)
         stRewards=d['stamp-rewards'].map(function(r){ return {at:+r.at||0,label:txt(r.label)}; }).filter(function(r){ return r.at>0; });
@@ -1805,12 +2158,14 @@
       loadDress();
       loadSchedule();
       loadGuide();
+      loadSongs();
       await loadAllLedgers();
       loadInbox();
       drawStamp();
       }catch(e){ console.error(e); }
       finally{ CN.dataReady(); }
-    })();
+    }
+    CN.dataReady();   /* 로그인 화면은 즉시 표시 */
   })();
   </script>
 </body>

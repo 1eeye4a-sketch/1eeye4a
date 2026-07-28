@@ -5,7 +5,7 @@
    supabase.js 뒤, </body> 직전에 로드
    ============================================================ */
 (function () {
-  var BUILD = '20260726b';
+  var BUILD = '20260728a';
   try { console.log('%c LEE YEDA site build ' + BUILD + ' ', 'background:#c62d42;color:#fff'); } catch (e) {}
   var $ = function (s) { return document.querySelector(s); };
   var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
@@ -159,8 +159,8 @@
     if (!a || noMotion) return;
     var href = a.getAttribute('href');
     if (!href || a.target === '_blank' || href.charAt(0) === '#') return;
-    if (/^(https?:|mailto:|tel:)/i.test(href)) return;
-    if (a.hasAttribute('data-letter')) return;
+    if (/^(https?:|mailto:|tel:|blob:|data:|javascript:)/i.test(href)) return;
+    if (a.hasAttribute('download') || a.hasAttribute('data-letter')) return;
     e.preventDefault();
     cover.classList.add('on');
     setTimeout(function () { location.href = href; }, 260);

@@ -8,7 +8,9 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
 // ── Supabase 클라이언트 초기화 (키 미설정이면 안전 모드) ──
 const SB_READY = typeof supabase !== 'undefined';
-const db = SB_READY ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON) : {
+const db = SB_READY ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
+  auth: { persistSession: true, autoRefreshToken: true, storageKey: 'yeda-auth' }
+}) : {
   from(){ const q={select:()=>q,order:()=>q,limit:()=>q,eq:()=>q,insert:()=>q,update:()=>q,delete:()=>q,
     then(res){ res({ data:null, error:{ message:'키 미설정' } }); } }; return q; }
 };
@@ -37,6 +39,13 @@ async function insertRow(table, row) {
   const { error } = await db.from(table).insert(row);
   if (error) { console.error(`insertRow(${table}) 오류:`, error); return false; }
   return true;
+}
+
+/** 등록 후 만들어진 행을 돌려준다 (새 id가 바로 필요할 때) */
+async function insertRowReturning(table, row) {
+  const { data, error } = await db.from(table).insert(row).select();
+  if (error) { console.error(`insertRowReturning(${table}) 오류:`, error); return null; }
+  return (data && data[0]) || null;
 }
 
 /** 단건 삭제
