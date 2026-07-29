@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260729a">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260729b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -78,6 +78,10 @@
       margin:1.1em 0;padding:12px 18px;border-left:3px solid var(--main);
       background:rgba(255,177,177,.08);color:var(--tx);
     }
+    .art-content blockquote > *{margin-top:0;margin-bottom:0}
+    .art-content blockquote > * + *{margin-top:.5em}
+    .art-content blockquote h2{font-size:1.2em;line-height:1.4}
+    .art-content blockquote h3{font-size:1.06em;line-height:1.4}
     body.day .art-content blockquote{border-left-color:var(--point);background:rgba(198,45,66,.06)}
     .art-content ul,.art-content ol{margin:.4em 0 .9em;padding-left:1.5em}
     .art-content li{margin:.2em 0}
@@ -116,7 +120,7 @@
     }
   </style>
 </head>
-<body data-build="20260729a" class="cinema-sub">
+<body data-build="20260729b" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
@@ -195,8 +199,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260729a"></script>
-  <script src="../js/cinema.js?v=20260729a"></script>
+  <script src="../supabase.js?v=20260729b"></script>
+  <script src="../js/cinema.js?v=20260729b"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;

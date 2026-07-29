@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260729a">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260729b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -132,6 +132,10 @@
     #ed-body h3{margin:.8em 0 .3em;font-weight:800;font-size:1.12em;color:var(--tx)}
     #ed-body hr{margin:1.2em 0;border:0;border-top:1px solid var(--line)}
     #ed-body blockquote{margin:.8em 0;padding:10px 15px;border-left:3px solid var(--main);background:rgba(255,177,177,.08);color:var(--tx)}
+    #ed-body blockquote > *{margin-top:0;margin-bottom:0}
+    #ed-body blockquote > * + *{margin-top:.5em}
+    #ed-body blockquote h2{font-size:1.2em;line-height:1.4}
+    #ed-body blockquote h3{font-size:1.06em;line-height:1.4}
     #ed-body a{color:var(--main);text-decoration:underline}
     #ed-body img{max-width:100%;border:1px solid var(--line-soft);display:block;margin:.5em 0}
     #ed-body details{margin:.7em 0;border:1px solid var(--line-soft)}
@@ -160,7 +164,7 @@
     }
   </style>
 </head>
-<body data-build="20260729a" class="cinema-sub">
+<body data-build="20260729b" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <!-- 로그인 -->
@@ -613,7 +617,7 @@
       <div class="cn-card">
         <p class="cn-kicker">LIST · 등록된 노래</p>
         <div class="row-line" style="margin-bottom:12px">
-          <div class="fld"><span class="cn-label">검색</span><input class="input" id="sg-q" placeholder="곡명·아티스트·메모 검색"></div>
+          <div class="fld"><span class="cn-label">검색</span><input class="input" id="sg-q" placeholder="곡명·아티스트·장르·분류·메모 검색"></div>
           <div class="fld sm" style="flex:0 0 160px"><span class="cn-label">카테고리</span><select class="input" id="sg-fcat"><option value="">전체</option></select></div>
         </div>
         <div class="table-wrap">
@@ -764,7 +768,7 @@
 
     <footer class="cn-footer">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
-      <b>PRIVATE CONSOLE · BUILD 20260729a</b>
+      <b>PRIVATE CONSOLE · BUILD 20260729b</b>
       <span>YBNZ</span>
     </footer>
   </main>
@@ -773,8 +777,8 @@
   <div id="cnPetals" aria-hidden="true"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260729a"></script>
-  <script src="../js/cinema.js?v=20260729a"></script>
+  <script src="../supabase.js?v=20260729b"></script>
+  <script src="../js/cinema.js?v=20260729b"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
@@ -1553,7 +1557,7 @@
       var shown=songs.filter(function(x){
         if(fc && txt(x.category).trim()!==fc) return false;
         if(q){
-          var hay=(txt(x.title)+' '+txt(x.artist)+' '+txt(songMemos[x.id]||'')+' '+txt(x.note)).toLowerCase();
+          var hay=(txt(x.title)+' '+txt(x.artist)+' '+txt(x.genre)+' '+txt(x.category)+' '+txt(songMemos[x.id]||'')+' '+txt(x.note)).toLowerCase();
           if(hay.indexOf(q)===-1) return false;
         }
         return true;

@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260729a">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260729b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -67,7 +67,7 @@
     }
   </style>
 </head>
-<body class="cinema-sub" data-build="20260729a">
+<body class="cinema-sub" data-build="20260729b">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
@@ -147,8 +147,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260729a"></script>
-  <script src="../js/cinema.js?v=20260729a"></script>
+  <script src="../supabase.js?v=20260729b"></script>
+  <script src="../js/cinema.js?v=20260729b"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
@@ -161,9 +161,8 @@
         var c=txt(s.category).trim();
         if(c && c!=='전체' && used.indexOf(c)===-1) used.push(c);
       });
-      /* admin에 등록한 순서를 우선 따르고, 목록에만 있는 분류는 뒤에 붙인다 */
-      var out=[];
-      catOrder.forEach(function(c){ if(used.indexOf(c)>-1) out.push(c); });
+      /* admin에 등록한 분류는 곡이 없어도 그대로 노출하고, 목록에만 있는 분류는 뒤에 붙인다 */
+      var out=catOrder.slice();
       used.forEach(function(c){ if(out.indexOf(c)===-1) out.push(c); });
       return ['전체'].concat(out);
     }
@@ -208,7 +207,9 @@
       document.getElementById('sb-count').textContent=list.length+' SONGS';
       var tb=document.getElementById('sb-list');
       if(!list.length){
-        tb.innerHTML='<tr><td colspan="8"><div class="cn-empty">'+(q||curCat!=='전체'?'찾는 노래가 없어요':'아직 등록된 노래가 없어요')+'</div></td></tr>';
+        var msg = q ? '찾는 노래가 없어요'
+                : (curCat!=='전체' ? esc(curCat)+' 분류에 등록된 노래가 아직 없어요' : '아직 등록된 노래가 없어요');
+        tb.innerHTML='<tr><td colspan="8"><div class="cn-empty">'+msg+'</div></td></tr>';
         return;
       }
       tb.innerHTML=list.map(function(s,i){
