@@ -12,6 +12,9 @@
 ## 2. Supabase (⚠️ 순서 중요)
 1. **Authentication → Users → Add user** 로 관리자 계정 생성 (이메일 + 비밀번호, **Auto Confirm User 켜기**)
 2. **SQL Editor 에서 `supabase_setup.sql` 전체 Run**
+   - "Potential issues detected" 창이 뜨면 오른쪽 초록 **Run and enable RLS** 를 누르세요.
+   - 예전 표(옛 노래책 등)에 없던 칸은 자동으로 채워지고, 기존 데이터는 그대로 유지됩니다.
+   - 여러 번 실행해도 안전합니다.
 - 순서를 바꾸면(정책 먼저 실행) 쓰기 권한이 로그인 계정에만 열린 상태에서 계정이 없어 **본인도 저장할 수 없게** 됩니다.
 - 비밀번호 변경·관리자 추가/삭제는 전부 Supabase → Authentication → Users 에서 합니다.
 - 권한: 읽기는 누구나 / 등록·수정·삭제는 로그인한 관리자만 / 편지 열람과 노래 메모는 관리자만.
@@ -40,8 +43,8 @@
 - 업보·시참권·스탬프는 **검색 전에는 명단이 노출되지 않아요** — 닉네임/아이디를 검색해야 본인 기록이 열려요.
 
 ## 6. 배포 확인법 (버전 스탬프)
-- 지금 배포된 게 최신인지 확인: 브라우저에서 **F12 → Console** 열면 `LEE YEDA site build 20260728a` 가 찍혀요.
-- 관리자 페이지 맨 아래에도 `PRIVATE CONSOLE · BUILD 20260728a` 로 표시돼요.
+- 지금 배포된 게 최신인지 확인: 브라우저에서 **F12 → Console** 열면 `LEE YEDA site build 20260729a` 가 찍혀요.
+- 관리자 페이지 맨 아래에도 `PRIVATE CONSOLE · BUILD 20260729a` 로 표시돼요.
 - 버전이 다르면 아직 예전 파일이 서비스되는 중 → Cloudflare Pages 배포 완료 확인 + **Ctrl+Shift+R**(강력 새로고침).
 - css/js 링크에 `?v=` 버전이 붙어 있어 새 HTML이 올라가면 새 CSS/JS를 강제로 받아와요.
 

@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260728a">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260729a">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -27,7 +27,7 @@
     .sb-search input{flex:1;padding:13px 0;border:0;background:none;color:var(--tx);font-family:var(--font-body);font-size:13.5px}
     .sb-search input::placeholder{color:var(--tx-dim)}
     .sb-search input:focus{outline:none}
-    .sb-count{color:var(--tx-dim);font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.08em;white-space:nowrap}
+    .sb-count{color:var(--tx-dim);font-family:var(--font-body);font-weight:700;font-size:11px;letter-spacing:.08em;white-space:nowrap}
 
     .sb-cats{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
     .sb-cat{
@@ -37,25 +37,26 @@
     }
     body.day .sb-cat{background:rgba(255,255,255,.5)}
     .sb-cat:hover{background:rgba(255,177,177,.12)}
-    .sb-cat.on{background:var(--point);color:#fff}
+    .sb-cat.on{background:var(--point);color:#fff;border-color:var(--point)}
+    body.day .sb-cat.on{background:#9c1f31;border-color:#9c1f31;color:#fff}
 
     .sb-wrap{border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow-x:auto}
     table.sb{width:100%;border-collapse:collapse;min-width:760px}
     table.sb th{
       padding:13px 12px;border-bottom:1px solid var(--line);white-space:nowrap;
-      color:var(--tx-dim);font-family:var(--font-serif);font-style:italic;font-weight:400;font-size:11px;letter-spacing:.1em;text-align:left;
+      color:var(--tx-dim);font-family:var(--font-body);font-weight:800;font-size:11.5px;letter-spacing:.06em;text-align:left;
     }
     table.sb td{padding:13px 12px;border-bottom:1px solid var(--line-soft);font-size:13.5px;vertical-align:middle}
     table.sb tr:last-child td{border-bottom:0}
     table.sb tbody tr:hover{background:rgba(255,177,177,.07)}
-    .sb-no{width:52px;color:var(--tx-dim);font-family:var(--font-serif);font-style:italic;font-size:12px}
+    .sb-no{width:52px;color:var(--tx-dim);font-family:var(--font-body);font-size:12px}
     .sb-artist{color:var(--tx-soft);white-space:nowrap}
     .sb-title{font-weight:750}
     .sb-tag{
       display:inline-block;padding:3px 9px;border:1px solid var(--line-soft);
       font-size:11px;font-weight:650;white-space:nowrap;
     }
-    .sb-price{color:var(--main);font-size:13px;letter-spacing:1px;white-space:nowrap}
+    .sb-price{color:var(--main);font-family:var(--font-body);font-weight:700;font-size:13px;white-space:nowrap}
     body.day .sb-price{color:var(--point)}
     .sb-note{color:var(--tx-soft);font-size:12.5px;line-height:1.6;min-width:120px}
     .sb-hit{background:rgba(255,177,177,.14)}
@@ -66,7 +67,7 @@
     }
   </style>
 </head>
-<body class="cinema-sub" data-build="20260728a">
+<body class="cinema-sub" data-build="20260729a">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
@@ -75,11 +76,11 @@
       <a href="../profile/"><span>01</span>프로필</a>
       <a href="../schedule/"><span>02</span>일정</a>
       <a href="../dress/"><span>03</span>옷장</a>
-      <a href="../work/"><span>04</span>업보</a>
-      <a href="../ticket/"><span>05</span>시참권</a>
-      <a href="../stamp/"><span>06</span>스탬프</a>
-      <a href="../guide/"><span>07</span>안내</a>
-      <a href="../song/" class="on"><span>08</span>노래책</a>
+      <a href="../song/" class="on"><span>04</span>노래책</a>
+      <a href="../work/"><span>05</span>업보</a>
+      <a href="../ticket/"><span>06</span>시참권</a>
+      <a href="../stamp/"><span>07</span>스탬프</a>
+      <a href="../guide/"><span>08</span>안내</a>
     </nav>
     <div class="header-side">
       <a class="live-link" href="https://www.sooplive.com/station/leeyeda" target="_blank" rel="noreferrer"><i aria-hidden="true"></i>ON AIR</a>
@@ -91,7 +92,7 @@
   <main class="chapter">
     <div class="chapter-head rv">
       <div class="chapter-ghost" aria-hidden="true">Song</div>
-      <p class="kicker">SCENE 08 · SONG BOOK</p>
+      <p class="kicker">SCENE 04 · SONG BOOK</p>
       <h1><span>노래책</span></h1>
       <p class="desc" id="pg-desc">예다가 부를 수 있는 노래 목록이에요. 곡명이나 아티스트로 검색해 보세요.</p>
     </div>
@@ -99,7 +100,7 @@
     <div class="sb-bar rv">
       <label class="sb-search">
         <i>♪</i>
-        <input id="sb-q" type="search" placeholder="곡명 · 아티스트 검색" autocomplete="off">
+        <input id="sb-q" type="search" placeholder="곡명 · 아티스트 · 장르 검색" autocomplete="off">
       </label>
       <span class="sb-count" id="sb-count">0 SONGS</span>
     </div>
@@ -125,7 +126,7 @@
 
     <footer class="cn-footer rv">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
-      <b>WEDDING CINEMA · SCENE 08</b>
+      <b>WEDDING CINEMA · SCENE 04</b>
       <span>YBNZ</span>
     </footer>
   </main>
@@ -146,22 +147,25 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260728a"></script>
-  <script src="../js/cinema.js?v=20260728a"></script>
+  <script src="../supabase.js?v=20260729a"></script>
+  <script src="../js/cinema.js?v=20260729a"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
     var songs=[], curCat='전체', q='';
-    var PRICE_ICON='🍑';        /* 금액 표시 아이콘 (개수로 표시) */
+    var catOrder=[];            /* admin에서 등록한 카테고리 순서 */
 
     function cats(){
-      var set=[];
+      var used=[];
       songs.forEach(function(s){
         var c=txt(s.category).trim();
-        if(c && c!=='전체' && set.indexOf(c)===-1) set.push(c);
+        if(c && c!=='전체' && used.indexOf(c)===-1) used.push(c);
       });
-      set.sort(function(a,b){ return a.localeCompare(b,'ko'); });
-      return ['전체'].concat(set);
+      /* admin에 등록한 순서를 우선 따르고, 목록에만 있는 분류는 뒤에 붙인다 */
+      var out=[];
+      catOrder.forEach(function(c){ if(used.indexOf(c)>-1) out.push(c); });
+      used.forEach(function(c){ if(out.indexOf(c)===-1) out.push(c); });
+      return ['전체'].concat(out);
     }
     function renderCats(){
       var el=document.getElementById('sb-cats'), list=cats();
@@ -184,15 +188,13 @@
     function priceCell(v){
       var n=parseInt(v,10)||0;
       if(n<=0) return '<span style="color:var(--tx-dim)">—</span>';
-      if(n>12) return '<span class="sb-price">'+PRICE_ICON+' ×'+n+'</span>';
-      var out=''; for(var i=0;i<n;i++) out+=PRICE_ICON;
-      return '<span class="sb-price" title="'+n+'개">'+out+'</span>';
+      return '<span class="sb-price">'+n+'개</span>';
     }
     function render(){
       var list=songs.filter(function(s){
         if(curCat!=='전체' && txt(s.category).trim()!==curCat) return false;
         if(q){
-          var hay=(txt(s.title)+' '+txt(s.artist)).toLowerCase();
+          var hay=(txt(s.title)+' '+txt(s.artist)+' '+txt(s.genre)).toLowerCase();
           if(hay.indexOf(q.toLowerCase())===-1) return false;
         }
         return true;
@@ -230,6 +232,7 @@
         var pd=rp&&rp.data&&rp.data[0]&&rp.data[0].data;
         if(pd && txt(pd['song-desc']).trim())
           document.getElementById('pg-desc').innerHTML=CN.linkify(pd['song-desc']);
+        if(pd && Array.isArray(pd['song-cats'])) catOrder=pd['song-cats'].map(txt).filter(Boolean);
         var r=await db.from('songs').select('*');
         if(r&&Array.isArray(r.data)) songs=r.data;
       }catch(e){}

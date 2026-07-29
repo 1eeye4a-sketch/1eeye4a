@@ -113,6 +113,77 @@ CREATE TABLE IF NOT EXISTS songs (
   note TEXT DEFAULT '', memo TEXT DEFAULT '', sort_order INT DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+
+
+-- ============================================================
+-- 컬럼 보강
+--   이미 만들어져 있는 표는 위의 CREATE TABLE이 건너뛰어집니다.
+--   그래서 예전 표에 없던 컬럼을 여기서 채웁니다. (기존 데이터는 그대로)
+-- ============================================================
+ALTER TABLE profile         ADD COLUMN IF NOT EXISTS data JSONB DEFAULT '{}'::jsonb;
+
+ALTER TABLE dress_items     ADD COLUMN IF NOT EXISTS category TEXT DEFAULT 'hair';
+ALTER TABLE dress_items     ADD COLUMN IF NOT EXISTS description TEXT DEFAULT '';
+ALTER TABLE dress_items     ADD COLUMN IF NOT EXISTS image_url TEXT DEFAULT '';
+ALTER TABLE dress_items     ADD COLUMN IF NOT EXISTS badges JSONB DEFAULT '[]';
+ALTER TABLE dress_items     ADD COLUMN IF NOT EXISTS sort_order INT DEFAULT 0;
+ALTER TABLE dress_items     ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
+
+ALTER TABLE viewers         ADD COLUMN IF NOT EXISTS soop_id TEXT;
+ALTER TABLE viewers         ADD COLUMN IF NOT EXISTS sort_order INT DEFAULT 0;
+ALTER TABLE viewers         ADD COLUMN IF NOT EXISTS stamp_count INT DEFAULT 0;
+ALTER TABLE viewers         ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
+
+ALTER TABLE upbo_types      ADD COLUMN IF NOT EXISTS category TEXT DEFAULT '일반';
+ALTER TABLE upbo_types      ADD COLUMN IF NOT EXISTS sort_order INT DEFAULT 0;
+ALTER TABLE upbo_counts     ADD COLUMN IF NOT EXISTS expires DATE;
+ALTER TABLE upbo_counts     ADD COLUMN IF NOT EXISTS note TEXT;
+ALTER TABLE upbo_counts     ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
+
+ALTER TABLE ticket_types    ADD COLUMN IF NOT EXISTS category TEXT DEFAULT '일반';
+ALTER TABLE ticket_types    ADD COLUMN IF NOT EXISTS sort_order INT DEFAULT 0;
+ALTER TABLE ticket_counts   ADD COLUMN IF NOT EXISTS expires DATE;
+ALTER TABLE ticket_counts   ADD COLUMN IF NOT EXISTS note TEXT;
+ALTER TABLE ticket_counts   ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
+
+ALTER TABLE stamp_log       ADD COLUMN IF NOT EXISTS note TEXT DEFAULT '';
+ALTER TABLE stamp_log       ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
+
+ALTER TABLE schedule_events ADD COLUMN IF NOT EXISTS time TEXT DEFAULT '';
+ALTER TABLE schedule_events ADD COLUMN IF NOT EXISTS memo TEXT DEFAULT '';
+ALTER TABLE schedule_events ADD COLUMN IF NOT EXISTS link TEXT DEFAULT '';
+ALTER TABLE schedule_events ADD COLUMN IF NOT EXISTS image_url TEXT DEFAULT '';
+ALTER TABLE schedule_events ADD COLUMN IF NOT EXISTS color TEXT DEFAULT '';
+
+ALTER TABLE guide_posts     ADD COLUMN IF NOT EXISTS category TEXT DEFAULT '가이드';
+ALTER TABLE guide_posts     ADD COLUMN IF NOT EXISTS content_html TEXT DEFAULT '';
+ALTER TABLE guide_posts     ADD COLUMN IF NOT EXISTS pinned BOOLEAN DEFAULT FALSE;
+ALTER TABLE guide_posts     ADD COLUMN IF NOT EXISTS sort_order INT DEFAULT 0;
+ALTER TABLE guide_posts     ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
+
+-- 노래책: 예전 표에는 category/level/mastery/price/note/sort_order 가 없습니다
+ALTER TABLE songs           ADD COLUMN IF NOT EXISTS category TEXT DEFAULT '';
+ALTER TABLE songs           ADD COLUMN IF NOT EXISTS artist TEXT DEFAULT '';
+ALTER TABLE songs           ADD COLUMN IF NOT EXISTS genre TEXT DEFAULT '';
+ALTER TABLE songs           ADD COLUMN IF NOT EXISTS level TEXT DEFAULT '';
+ALTER TABLE songs           ADD COLUMN IF NOT EXISTS mastery TEXT DEFAULT '';
+ALTER TABLE songs           ADD COLUMN IF NOT EXISTS price INT DEFAULT 0;
+ALTER TABLE songs           ADD COLUMN IF NOT EXISTS note TEXT DEFAULT '';
+ALTER TABLE songs           ADD COLUMN IF NOT EXISTS memo TEXT DEFAULT '';
+ALTER TABLE songs           ADD COLUMN IF NOT EXISTS sort_order INT DEFAULT 0;
+-- 예전 노래책의 난이도(difficulty 숫자)가 있으면 새 난이도 칸으로 한 번 옮깁니다
+DO $mig$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_name='songs' AND column_name='difficulty') THEN
+    UPDATE songs SET level = difficulty::text
+     WHERE COALESCE(level,'') = '' AND difficulty IS NOT NULL;
+  END IF;
+END $mig$;
+
+ALTER TABLE inquiries       ADD COLUMN IF NOT EXISTS nickname TEXT;
+
 CREATE INDEX IF NOT EXISTS idx_songs_category ON songs(category);
 
 -- ⑪ 노래 메모 (관리자 전용 — 공개 표와 분리해야 외부에서 못 읽습니다)
@@ -166,6 +237,25 @@ ALTER TABLE song_memos ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "song_memos_all" ON song_memos;
 DROP POLICY IF EXISTS "song_memos_admin" ON song_memos;
 CREATE POLICY "song_memos_admin" ON song_memos FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+
+-- ── 예전 템플릿에서 만들어졌지만 지금은 쓰지 않는 표들 ──
+--    (notice · diary · comments · schedule · original_songs · overlay_state)
+--    이 표들이 남아 있으면 "누구나 수정·삭제" 정책도 함께 남습니다. 있으면 잠급니다.
+DO $legacy$
+DECLARE t text;
+BEGIN
+  FOREACH t IN ARRAY ARRAY['notice','diary','comments','schedule','original_songs','overlay_state'] LOOP
+    IF to_regclass('public.'||t) IS NOT NULL THEN
+      EXECUTE format('ALTER TABLE %I ENABLE ROW LEVEL SECURITY', t);
+      EXECUTE format('DROP POLICY IF EXISTS %I ON %I', t || '_all', t);
+      EXECUTE format('DROP POLICY IF EXISTS %I ON %I', t || '_read', t);
+      EXECUTE format('DROP POLICY IF EXISTS %I ON %I', t || '_admin', t);
+      EXECUTE format('CREATE POLICY %I ON %I FOR SELECT USING (true)', t || '_read', t);
+      EXECUTE format('CREATE POLICY %I ON %I FOR ALL TO authenticated USING (true) WITH CHECK (true)', t || '_admin', t);
+    END IF;
+  END LOOP;
+END $legacy$;
 
 -- 확인용 (선택): 정책이 어떻게 걸렸는지 보기
 -- SELECT tablename, policyname, cmd, roles FROM pg_policies WHERE schemaname='public' ORDER BY tablename, cmd;
