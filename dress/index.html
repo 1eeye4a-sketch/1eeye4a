@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
   <meta name="description" content="이예다 옷장 — SCENE 03 · DRESS ROOM">
   <title>LEE YEDA — Dress Room</title>
   <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260729b">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260731b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -25,9 +26,14 @@
     .dr-hero img{width:100%;height:100%;object-fit:cover;object-position:center 28%;filter:saturate(.9) contrast(1.03)}
     .dr-hero .wash{position:absolute;inset:0;background:linear-gradient(90deg,rgba(72,12,31,.55),transparent 45%),linear-gradient(0deg,rgba(52,8,22,.55),transparent 42%)}
     body.day .dr-hero .wash{background:linear-gradient(90deg,rgba(255,241,238,.5),transparent 45%),linear-gradient(0deg,rgba(255,238,234,.5),transparent 42%)}
-    .dr-hero .cap{position:absolute;left:26px;bottom:18px}
-    .dr-hero .cap .k{display:block;color:#ffd9d9;font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.14em;margin-bottom:6px}
-    body.day .dr-hero .cap .k{color:var(--point)}
+    .dr-hero .cap{
+      position:absolute;left:22px;bottom:16px;max-width:calc(100% - 44px);padding:10px 14px;
+      background:linear-gradient(90deg,rgba(30,4,14,.62),rgba(30,4,14,.28));
+      backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+    }
+    body.day .dr-hero .cap{background:linear-gradient(90deg,rgba(255,252,251,.86),rgba(255,252,251,.58))}
+    .dr-hero .cap .k{display:block;color:#ffe3e3;font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.14em;margin-bottom:6px}
+    body.day .dr-hero .cap .k{color:var(--accent-txt)}
     .dr-hero .cap b{color:#fff;font-family:var(--font-serif);font-weight:400;font-size:clamp(18px,2vw,26px);letter-spacing:-.02em;text-shadow:0 3px 18px rgba(53,6,22,.5)}
     body.day .dr-hero .cap b{color:#4a1224;text-shadow:none}
 
@@ -49,13 +55,13 @@
     .cat-tabs button::after{content:"";position:absolute;right:100%;bottom:4px;left:0;height:1px;background:var(--white);transition:right 180ms ease}
     .cat-tabs button.on{color:var(--tx)}
     .cat-tabs button.on::after{right:0}
-    .cat-tabs button.on i{color:var(--main)}
-    body.day .cat-tabs button.on i{color:var(--point)}
+    .cat-tabs button.on i{color:var(--accent-txt)}
+    body.day .cat-tabs button.on i{color:var(--accent-txt)}
 
     /* 포스터 그리드 */
     .poster-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
     .poster{
-      position:relative;border:1px solid var(--line);background:var(--glass);
+      position:relative;border:1px solid var(--line);background:#4a1224;
       aspect-ratio:3/4;overflow:hidden;cursor:pointer;
     }
     .poster img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 400ms cubic-bezier(.2,.75,.25,1)}
@@ -69,7 +75,7 @@
     .poster .meta .c{display:block;font-family:var(--font-serif);font-style:italic;font-size:10px;letter-spacing:.12em;color:#ffd9d9;margin-bottom:4px}
     .poster .meta b{font-family:var(--font-serif);font-weight:400;font-size:19px;letter-spacing:-.02em;line-height:1.3}
     .poster .meta .d{display:block;margin-top:5px;font-size:9px;letter-spacing:.1em;color:rgba(255,255,255,.62)}
-    .poster .noimg{position:absolute;inset:0;display:grid;place-items:center;color:var(--tx-dim);font-family:var(--font-serif);font-style:italic;font-size:14px}
+    .poster .noimg{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.55);font-family:var(--font-serif);font-style:italic;font-size:14px}
 
     /* 아카이브 그리드 */
     .arch-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
@@ -100,8 +106,8 @@
     #drView .box{position:relative;max-width:min(92vw,560px);max-height:90vh;border:1px solid var(--line);background:var(--glass-deep);display:grid;grid-template-rows:1fr auto}
     #drView .box img{width:100%;max-height:66vh;object-fit:contain;display:block;background:rgba(0,0,0,.2)}
     #drView .info{padding:18px 22px;border-top:1px solid var(--line-soft)}
-    #drView .info .c{color:var(--main);font-family:var(--font-serif);font-style:italic;font-size:10px;letter-spacing:.14em}
-    body.day #drView .info .c{color:var(--point)}
+    #drView .info .c{color:var(--accent-txt);font-family:var(--font-serif);font-style:italic;font-size:10px;letter-spacing:.14em}
+    body.day #drView .info .c{color:var(--accent-txt)}
     #drView .info b{display:block;margin:5px 0 4px;font-family:var(--font-serif);font-weight:400;font-size:22px}
     #drView .info p{margin:0;color:var(--tx-soft);font-size:13px;line-height:1.75;white-space:normal}
     #drView .x{
@@ -117,7 +123,7 @@
     }
   </style>
 </head>
-<body data-build="20260729b" class="cinema-sub">
+<body data-build="20260731b" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
@@ -203,8 +209,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260729b"></script>
-  <script src="../js/cinema.js?v=20260729b"></script>
+  <script src="../supabase.js?v=20260731b"></script>
+  <script src="../js/cinema.js?v=20260731b"></script>
   <script>
   (function(){
     /* ── 분류 (admin select + admin DRESS_CATS와 같은 값 유지 — 세 곳 동기화) ── */

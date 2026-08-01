@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
   <meta name="description" content="이예다 프로필 — SCENE 01 · THE LOVELY">
   <title>LEE YEDA — Profile</title>
   <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260729b">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260731b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -29,14 +30,22 @@
     .pf-hero .wash{position:absolute;inset:0;background:linear-gradient(90deg,rgba(72,12,31,.55),transparent 45%),linear-gradient(0deg,rgba(52,8,22,.6),transparent 42%)}
     body.day .pf-hero .wash{background:linear-gradient(90deg,rgba(255,241,238,.5),transparent 45%),linear-gradient(0deg,rgba(255,238,234,.55),transparent 42%)}
     .pf-hero .cap{
-      position:absolute;left:26px;bottom:20px;display:grid;gap:6px;
+      position:absolute;left:22px;bottom:18px;display:grid;gap:6px;
+      max-width:calc(100% - 44px);padding:10px 14px;
+      background:linear-gradient(90deg,rgba(30,4,14,.62),rgba(30,4,14,.28));
+      backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
     }
+    body.day .pf-hero .cap{background:linear-gradient(90deg,rgba(255,252,251,.86),rgba(255,252,251,.58))}
     .pf-hero .cap .k{color:#ffd9d9;font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.14em}
-    body.day .pf-hero .cap .k{color:var(--point)}
+    body.day .pf-hero .cap .k{color:var(--accent-txt)}
     .pf-hero .cap b{color:#fff;font-family:var(--font-serif);font-weight:400;font-size:clamp(20px,2.2vw,30px);letter-spacing:-.02em;text-shadow:0 3px 18px rgba(53,6,22,.5)}
     body.day .pf-hero .cap b{color:#4a1224;text-shadow:none}
-    .pf-hero .frame{position:absolute;right:18px;top:16px;color:rgba(255,255,255,.6);font-size:8px;font-weight:800;letter-spacing:.24em}
-    body.day .pf-hero .frame{color:rgba(74,18,36,.5)}
+    .pf-hero .frame{
+      position:absolute;right:16px;top:14px;padding:4px 9px;
+      background:rgba(30,4,14,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+      color:rgba(255,255,255,.92);font-size:8px;font-weight:800;letter-spacing:.24em;
+    }
+    body.day .pf-hero .frame{background:rgba(255,252,251,.8);color:var(--accent-txt)}
 
     .pf-grid{display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:22px;align-items:start}
     .pf-col{display:grid;gap:22px}
@@ -61,8 +70,8 @@
 
     /* 좋아/싫어 */
     .ld-head{display:flex;align-items:baseline;gap:9px;margin:0 0 10px}
-    .ld-head i{font-style:normal;color:var(--main);font-size:13px}
-    body.day .ld-head i{color:var(--point)}
+    .ld-head i{font-style:normal;color:var(--accent-txt);font-size:13px}
+    body.day .ld-head i{color:var(--accent-txt)}
     .ld-head b{font-family:var(--font-serif);font-style:italic;font-weight:400;font-size:14px;letter-spacing:.06em}
     .ld-block + .ld-block{margin-top:20px}
 
@@ -77,8 +86,8 @@
     .week-cell .t{font-size:12px;font-weight:800;letter-spacing:0;white-space:nowrap}
     .week-cell.off .t{color:var(--tx-dim);font-weight:500}
     .week-cell.today{background:rgba(255,177,177,.1)}
-    .week-cell.today .d{color:var(--main)}
-    body.day .week-cell.today .d{color:var(--point)}
+    .week-cell.today .d{color:var(--accent-txt)}
+    body.day .week-cell.today .d{color:var(--accent-txt)}
 
     /* 필모그래피(진행·참여 컨텐츠) */
     .filmo{display:grid}
@@ -89,8 +98,8 @@
     .filmo-row:last-child{border-bottom:0}
     .filmo-row .dt{font-family:var(--font-serif);font-style:italic;font-size:12px;color:var(--tx-dim)}
     .filmo-row .tt{font-size:14px;font-weight:700;line-height:1.5}
-    .filmo-row .go{font-size:9px;font-weight:900;letter-spacing:.14em;color:var(--main)}
-    body.day .filmo-row .go{color:var(--point)}
+    .filmo-row .go{font-size:9px;font-weight:900;letter-spacing:.14em;color:var(--accent-txt)}
+    body.day .filmo-row .go{color:var(--accent-txt)}
     .filmo-row .go:hover{text-decoration:underline}
 
     /* 링크 */
@@ -116,7 +125,7 @@
     }
   </style>
 </head>
-<body data-build="20260729b" class="cinema-sub">
+<body data-build="20260731b" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
@@ -171,8 +180,8 @@
             <span class="en" data-hook="name_en">LEE YEDA</span>
           </div>
           <div class="cn-rows">
-            <div class="cn-row"><b>BIRTHDAY</b><span><span data-hook="birthday-txt">8월 18일</span> · <b style="color:var(--main);font-style:normal;font-size:12px" id="pf-dday">D-?</b></span></div>
-            <div class="cn-row"><b>DEBUT</b><span><span data-hook="debut">2022.12.17</span> · <b style="color:var(--main);font-style:normal;font-size:12px" id="pf-dplus">D+?</b></span></div>
+            <div class="cn-row"><b>BIRTHDAY</b><span><span data-hook="birthday-txt">8월 18일</span> · <b style="color:var(--accent-txt);font-style:normal;font-size:12px" id="pf-dday">D-?</b></span></div>
+            <div class="cn-row"><b>DEBUT</b><span><span data-hook="debut">2022.12.17</span> · <b style="color:var(--accent-txt);font-style:normal;font-size:12px" id="pf-dplus">D+?</b></span></div>
             <div class="cn-row"><b>AGENCY</b><span data-hook="agency">유부녀즈 · 크리에이터 버스</span></div>
             <div class="cn-row"><b>FANDOM</b><span data-hook="fan_name">복숭이 🍑</span></div>
             <div class="cn-row" id="row-mbti" hidden><b>MBTI</b><span data-hook="mbti"></span></div>
@@ -269,8 +278,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260729b"></script>
-  <script src="../js/cinema.js?v=20260729b"></script>
+  <script src="../supabase.js?v=20260731b"></script>
+  <script src="../js/cinema.js?v=20260731b"></script>
   <script>
   /* ── 프로필 데이터 모델 (admin profileKeys와 동일 · 기존 예다 DB 키 호환) ──
      name name_en soop_id avatar tagline quote intro birthday(MM-DD) debut agency

@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
   <meta name="description" content="이예다 안내 — 방송 규칙 · 시참 규칙 · 가이드">
   <title>LEE YEDA — 안내</title>
   <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260729b">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260731b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -42,8 +43,8 @@
     }
     .gd-row:last-child{border-bottom:0}
     .gd-row:hover{background:rgba(255,177,177,.08)}
-    .gd-row .c{font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.06em;color:var(--main)}
-    body.day .gd-row .c{color:var(--point)}
+    .gd-row .c{font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.06em;color:var(--accent-txt)}
+    body.day .gd-row .c{color:var(--accent-txt)}
     .gd-row .t{font-size:14.5px;font-weight:750;line-height:1.5}
     .gd-row .t .pin{margin-right:7px;font-size:12px}
     .gd-row .d{color:var(--tx-dim);font-family:var(--font-serif);font-style:italic;font-size:11px;white-space:nowrap}
@@ -56,8 +57,8 @@
     .art-head .back{border:0;background:none;color:var(--tx-dim);cursor:pointer;font-size:10px;font-weight:900;letter-spacing:.14em;padding:8px 0}
     .art-head .back:hover{color:var(--tx)}
     .art-body-card{padding:34px clamp(22px,4vw,46px) 40px}
-    .art-cat{margin:0 0 6px;color:var(--main);font-family:var(--font-serif);font-style:italic;font-size:12px;letter-spacing:.12em}
-    body.day .art-cat{color:var(--point)}
+    .art-cat{margin:0 0 6px;color:var(--accent-txt);font-family:var(--font-serif);font-style:italic;font-size:12px;letter-spacing:.12em}
+    body.day .art-cat{color:var(--accent-txt)}
     .cn-card h2.art-title{margin:0 0 6px;font-family:var(--font-body);font-weight:800;font-size:clamp(23px,2.6vw,32px);letter-spacing:-.02em;line-height:1.45}
     .art-date{margin:0 0 24px;padding-bottom:20px;border-bottom:1px solid var(--line-soft);color:var(--tx-dim);font-size:11px;letter-spacing:.08em}
     .art-share{
@@ -82,11 +83,11 @@
     .art-content blockquote > * + *{margin-top:.5em}
     .art-content blockquote h2{font-size:1.2em;line-height:1.4}
     .art-content blockquote h3{font-size:1.06em;line-height:1.4}
-    body.day .art-content blockquote{border-left-color:var(--point);background:rgba(198,45,66,.06)}
+    body.day .art-content blockquote{border-left-color:var(--accent-txt);background:rgba(198,45,66,.06)}
     .art-content ul,.art-content ol{margin:.4em 0 .9em;padding-left:1.5em}
     .art-content li{margin:.2em 0}
-    .art-content a{color:var(--main);text-decoration:underline;text-underline-offset:3px}
-    body.day .art-content a{color:var(--point)}
+    .art-content a{color:var(--accent-txt);text-decoration:underline;text-underline-offset:3px}
+    body.day .art-content a{color:var(--accent-txt)}
     .art-content img{max-width:100%;margin:.6em 0;border:1px solid var(--line-soft);display:block}
     .art-content details{
       margin:.9em 0;border:1px solid var(--line-soft);background:rgba(255,255,255,.04);
@@ -97,8 +98,8 @@
     }
     .art-content summary.sz-h2{font-size:1.3em;font-weight:800}
     .art-content summary.sz-h3{font-size:1.12em;font-weight:800}
-    .art-content summary::before{content:"▸";margin-right:9px;color:var(--main);display:inline-block;transition:transform 160ms ease}
-    body.day .art-content summary::before{color:var(--point)}
+    .art-content summary::before{content:"▸";margin-right:9px;color:var(--accent-txt);display:inline-block;transition:transform 160ms ease}
+    body.day .art-content summary::before{color:var(--accent-txt)}
     .art-content details[open] summary::before{transform:rotate(90deg)}
     .art-content details > *:not(summary){margin-left:16px;margin-right:16px}
     .art-content details > *:last-child{padding-bottom:12px}
@@ -106,7 +107,8 @@
     body.day .art-content details details{background:rgba(255,255,255,.42)}
     .art-content mark{padding:.05em .15em;color:inherit}
     .art-content b,.art-content strong{color:var(--tx)}
-    .art-content table{width:100%;margin:.8em 0;border-collapse:collapse;font-size:.95em;table-layout:fixed}
+    .art-content table{width:100% !important;max-width:100%;margin:.8em 0;border-collapse:collapse;font-size:.95em;table-layout:fixed}
+    .art-content table td[width],.art-content table th[width]{width:auto}
     .art-content [style*="text-align"]{display:block}
     .art-content td[style*="text-align"],.art-content th[style*="text-align"]{display:table-cell}
     .art-content th,.art-content td{padding:9px 12px;border:1px solid var(--line-soft);text-align:left;vertical-align:top}
@@ -120,7 +122,7 @@
     }
   </style>
 </head>
-<body data-build="20260729b" class="cinema-sub">
+<body data-build="20260731b" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
@@ -199,8 +201,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260729b"></script>
-  <script src="../js/cinema.js?v=20260729b"></script>
+  <script src="../supabase.js?v=20260731b"></script>
+  <script src="../js/cinema.js?v=20260731b"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
@@ -266,6 +268,42 @@
       ac.querySelectorAll('h2 > details, h3 > details, blockquote > details').forEach(function(d){
         var w=d.parentNode; w.parentNode.insertBefore(d,w);
         if(!w.textContent.trim() && !w.querySelector('img,table')) w.remove();
+      });
+      /* 표 폭 정규화 — 관리자에서 조절한 폭이 여기서도 그대로 보이게
+         (셀마다 흩어진 width나 붙여넣기한 px 폭을 colgroup % 하나로 통일) */
+      ac.querySelectorAll('table').forEach(function(tbl){
+        tbl.style.removeProperty('width'); tbl.removeAttribute('width');
+        var rows=[].slice.call(tbl.querySelectorAll('tr')); if(!rows.length) return;
+        var n=0; rows.forEach(function(tr){ n=Math.max(n,tr.children.length); });
+        if(!n) return;
+        var cg=tbl.querySelector('colgroup');
+        var pct=[];
+        if(cg && cg.children.length===n){
+          pct=[].map.call(cg.children,function(c){ return parseFloat(c.style.width)||0; });
+        }
+        if(!pct.length || pct.some(function(x){ return !x; })){
+          pct=[]; var head=rows[0];
+          for(var i=0;i<n;i++){
+            var c=head.children[i];
+            var w=c?parseFloat(c.style.width||c.getAttribute('width')||0):0;
+            pct.push(w>0?w:0);
+          }
+          if(pct.every(function(x){ return !x; })) pct=pct.map(function(){ return 100/n; });
+          else {
+            var known=pct.filter(function(x){ return x>0; }).reduce(function(a,b){ return a+b; },0);
+            var blanks=pct.filter(function(x){ return !x; }).length;
+            var each=blanks?Math.max(4,(100-known)/blanks):0;
+            pct=pct.map(function(x){ return x>0?x:each; });
+          }
+        }
+        var sum=pct.reduce(function(a,b){ return a+b; },0)||100;
+        pct=pct.map(function(x){ return Math.max(4, x/sum*100); });
+        if(cg) cg.remove();
+        cg=document.createElement('colgroup');
+        pct.forEach(function(w){ var col=document.createElement('col'); col.style.width=w+'%'; cg.appendChild(col); });
+        tbl.insertBefore(cg, tbl.firstChild);
+        rows.forEach(function(tr){ [].forEach.call(tr.children,function(c){
+          c.style.removeProperty('width'); c.removeAttribute('width'); }); });
       });
       /* 편집용 잔재(이미지 선택 테두리) 제거 */
       ac.querySelectorAll('img[style*="outline"]').forEach(function(im){ im.style.removeProperty('outline'); });

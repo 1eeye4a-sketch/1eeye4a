@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
   <meta name="description" content="이예다 업보 — SCENE 05 · THE VOWS">
   <title>LEE YEDA — 업보</title>
   <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260729b">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260731b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -46,9 +47,9 @@
     .vw-id{margin-top:-4px;color:var(--tx-dim);font-size:10px;letter-spacing:.06em}
     .vw-total{
       margin-top:2px;padding:4px 14px;border:1px solid var(--line);
-      color:var(--main);font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.08em;
+      color:var(--accent-txt);font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.08em;
     }
-    body.day .vw-total{color:var(--point)}
+    body.day .vw-total{color:var(--accent-txt)}
 
     /* 서약서 모달 */
     #vwModal{
@@ -64,8 +65,8 @@
     }
     #vwModal .x{position:absolute;top:16px;right:16px;border:0;background:none;color:var(--tx-dim);cursor:pointer;font-size:10px;font-weight:900;letter-spacing:.14em}
     #vwModal .x:hover{color:var(--tx)}
-    #vwModal .vk{margin:0 0 4px;color:var(--main);font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.14em}
-    body.day #vwModal .vk{color:var(--point)}
+    #vwModal .vk{margin:0 0 4px;color:var(--accent-txt);font-family:var(--font-serif);font-style:italic;font-size:11px;letter-spacing:.14em}
+    body.day #vwModal .vk{color:var(--accent-txt)}
     #vwModal h3{margin:0 0 4px;font-family:var(--font-serif);font-weight:400;font-size:28px;letter-spacing:-.02em}
     #vwModal .vid{margin:0 0 18px;color:var(--tx-dim);font-size:11px;letter-spacing:.06em}
     .vow-row{
@@ -76,14 +77,14 @@
     .vow-row .nm{font-size:14px;font-weight:700;line-height:1.5}
     .vow-row .nm .ev{
       margin-left:8px;padding:2px 8px;border:1px solid var(--line);
-      color:var(--main);font-size:9px;font-weight:900;letter-spacing:.12em;vertical-align:1px;
+      color:var(--accent-txt);font-size:9px;font-weight:900;letter-spacing:.12em;vertical-align:1px;
     }
-    body.day .vow-row .nm .ev{color:var(--point)}
-    .vow-row .ct{font-family:var(--font-serif);font-style:italic;font-size:16px;color:var(--main);white-space:nowrap}
-    body.day .vow-row .ct{color:var(--point)}
+    body.day .vow-row .nm .ev{color:var(--accent-txt)}
+    .vow-row .ct{font-family:var(--font-serif);font-style:italic;font-size:16px;color:var(--accent-txt);white-space:nowrap}
+    body.day .vow-row .ct{color:var(--accent-txt)}
     .vow-row .sub{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:12px;color:var(--tx-dim);font-size:11px;letter-spacing:.03em}
-    .vow-row .sub .exp b{color:var(--main);font-weight:700}
-    body.day .vow-row .sub .exp b{color:var(--point)}
+    .vow-row .sub .exp b{color:var(--accent-txt);font-weight:700}
+    body.day .vow-row .sub .exp b{color:var(--accent-txt)}
     .vow-row.expired{opacity:.5}
     .vow-row.expired .nm{text-decoration:line-through;text-decoration-color:var(--point);text-decoration-thickness:1px}
     .vow-row.expired .sub .exp b{color:var(--tx-dim)}
@@ -92,8 +93,8 @@
       margin-top:16px;padding-top:14px;border-top:1px solid var(--line);
     }
     .vow-sum span{color:var(--tx-dim);font-size:10px;font-weight:800;letter-spacing:.18em}
-    .vow-sum b{font-family:var(--font-serif);font-style:italic;font-weight:400;font-size:24px;color:var(--main)}
-    body.day .vow-sum b{color:var(--point)}
+    .vow-sum b{font-family:var(--font-serif);font-style:italic;font-weight:400;font-size:24px;color:var(--accent-txt)}
+    body.day .vow-sum b{color:var(--accent-txt)}
 
     @media (max-width:900px){.vw-grid{grid-template-columns:repeat(3,1fr)}}
     @media (max-width:620px){
@@ -104,7 +105,7 @@
     }
   </style>
 </head>
-<body data-build="20260729b" class="cinema-sub">
+<body data-build="20260731b" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
@@ -177,8 +178,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260729b"></script>
-  <script src="../js/cinema.js?v=20260729b"></script>
+  <script src="../supabase.js?v=20260731b"></script>
+  <script src="../js/cinema.js?v=20260731b"></script>
   <script>
   (function(){
     /* ── 업보(서약) 명부 — viewers × upbo_types × upbo_counts (기한·비고 v2) ── */

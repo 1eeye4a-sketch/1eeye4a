@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   <meta name="robots" content="noindex">
   <title>LEE YEDA — Console</title>
   <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/le/leeyeda/leeyeda.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260729b">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260731b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -25,8 +26,8 @@
     .ad-wrap{max-width:1080px;margin:0 auto;padding:calc(clamp(74px,9.5vh,104px) + 40px) 4vw 40px}
     .ad-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:26px}
     .ad-head h1{margin:0;font-family:var(--font-serif);font-weight:400;font-size:clamp(34px,4vw,52px);letter-spacing:-.04em}
-    .ad-head h1 em{color:var(--main);font-size:.5em;letter-spacing:.1em;margin-right:12px}
-    body.day .ad-head h1 em{color:var(--point)}
+    .ad-head h1 em{color:var(--accent-txt);font-size:.5em;letter-spacing:.1em;margin-right:12px}
+    body.day .ad-head h1 em{color:var(--accent-txt)}
     .ad-head .who{color:var(--tx-dim);font-family:var(--font-serif);font-style:italic;font-size:12px;letter-spacing:.1em}
 
     .ad-banner{display:none;margin:0 0 18px;padding:13px 18px;border:1px solid var(--point);background:rgba(198,45,66,.15);color:var(--tx);font-size:13px;line-height:1.6}
@@ -86,8 +87,8 @@
     .ic-btn:hover{background:rgba(255,177,177,.14);color:var(--tx)}
     .ic-btn.del:hover{border-color:var(--point);color:var(--point)}
     .mini{color:var(--tx-dim);font-size:11px}
-    .tag-ev{padding:2px 7px;border:1px solid var(--line);color:var(--main);font-size:9px;font-weight:900;letter-spacing:.1em}
-    body.day .tag-ev{color:var(--point)}
+    .tag-ev{padding:2px 7px;border:1px solid var(--line);color:var(--accent-txt);font-size:9px;font-weight:900;letter-spacing:.1em}
+    body.day .tag-ev{color:var(--accent-txt)}
     .row-line{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
     .row-line .fld{flex:1;min-width:130px}
     .row-line .fld.sm{flex:0 0 96px}
@@ -100,8 +101,8 @@
     .st-cell{position:relative;aspect-ratio:1;display:grid;place-items:center;border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);font-size:8px;color:var(--tx-dim)}
     .st-cell.hit{background:rgba(255,177,177,.12);color:transparent}
     .st-cell.hit::before{content:"♥";position:absolute;inset:0;display:grid;place-items:center;color:var(--point);font-size:10px}
-    .st-cell.ms{color:var(--main);font-weight:700}
-    body.day .st-cell.ms{color:var(--point)}
+    .st-cell.ms{color:var(--accent-txt);font-weight:700}
+    body.day .st-cell.ms{color:var(--accent-txt)}
     .rw-edit{display:grid;gap:8px}
     .rw-edit .row-line .fld.sm{flex:0 0 84px}
 
@@ -136,7 +137,7 @@
     #ed-body blockquote > * + *{margin-top:.5em}
     #ed-body blockquote h2{font-size:1.2em;line-height:1.4}
     #ed-body blockquote h3{font-size:1.06em;line-height:1.4}
-    #ed-body a{color:var(--main);text-decoration:underline}
+    #ed-body a{color:var(--accent-txt);text-decoration:underline}
     #ed-body img{max-width:100%;border:1px solid var(--line-soft);display:block;margin:.5em 0}
     #ed-body details{margin:.7em 0;border:1px solid var(--line-soft)}
     #ed-body summary{padding:9px 13px;cursor:pointer;font-weight:750;color:var(--tx)}
@@ -164,7 +165,7 @@
     }
   </style>
 </head>
-<body data-build="20260729b" class="cinema-sub">
+<body data-build="20260731b" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <!-- 로그인 -->
@@ -195,7 +196,7 @@
       <a href="../guide/"><span>08</span>안내</a>
     </nav>
     <div class="header-side">
-      <span style="font-size:10px;font-weight:900;letter-spacing:.15em;color:var(--main)">CONSOLE</span>
+      <span style="font-size:10px;font-weight:900;letter-spacing:.15em;color:var(--accent-txt)">CONSOLE</span>
       <button id="ad-logout" class="cn-btn-line" type="button" style="padding:8px 12px;font-size:9px">로그아웃</button>
       <button class="mode-toggle" type="button" aria-label="모드 전환">☀</button>
     </div>
@@ -706,7 +707,7 @@
           <button class="ed-btn" data-cmd="removeFormat" type="button" title="서식 지우기">지우개</button>
         </div>
         <div class="ed-bar" id="ed-tablebar" style="display:none;border-top:0">
-          <span class="ed-btn" style="border:0;background:none;cursor:default;color:var(--main)">⊞ 표 편집</span>
+          <span class="ed-btn" style="border:0;background:none;cursor:default;color:var(--accent-txt)">⊞ 표 편집</span>
           <button class="ed-btn" data-tb="row-above" type="button">행↑추가</button>
           <button class="ed-btn" data-tb="row-below" type="button">행↓추가</button>
           <button class="ed-btn" data-tb="row-del" type="button">행 삭제</button>
@@ -768,7 +769,7 @@
 
     <footer class="cn-footer">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
-      <b>PRIVATE CONSOLE · BUILD 20260729b</b>
+      <b>PRIVATE CONSOLE · BUILD 20260731b</b>
       <span>YBNZ</span>
     </footer>
   </main>
@@ -777,8 +778,8 @@
   <div id="cnPetals" aria-hidden="true"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260729b"></script>
-  <script src="../js/cinema.js?v=20260729b"></script>
+  <script src="../supabase.js?v=20260731b"></script>
+  <script src="../js/cinema.js?v=20260731b"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
@@ -1575,7 +1576,7 @@
           '<td class="mini">'+esc(x.mastery)+'</td>'+
           '<td class="mini">'+((+x.price||0)>0?(+x.price)+'개':'—')+'</td>'+
           '<td class="mini">'+esc(x.note)+'</td>'+
-          '<td class="mini" style="color:var(--main)">'+esc(songMemos[x.id]||'')+'</td>'+
+          '<td class="mini" style="color:var(--accent-txt)">'+esc(songMemos[x.id]||'')+'</td>'+
           '<td style="width:44px;text-align:center"><button class="ic-btn" data-ed="1" title="수정">✎</button></td>'+
           '<td><button class="ic-btn del" data-del="1">✕</button></td></tr>';
       }).join('') || '<tr><td colspan="11" class="mini">'+(q||fc?'검색 결과가 없어요':'아직 등록된 노래가 없어요')+'</td></tr>';
@@ -1863,6 +1864,7 @@
       for(var i=0;i<r;i++){ h+='<tr>'; for(var j2=0;j2<c;j2++) h+='<td><br></td>'; h+='</tr>'; }
       h+='</table><p><br></p>';
       edInsertBlock(h);
+      edNormalizeTables(ed);
     });
     /* 기본 글자색으로 되돌리기 (라이트/다크 자동) — 선택 안의 color 인라인 스타일만 제거 */
     document.getElementById('ed-color-reset').addEventListener('click',function(){
@@ -1996,6 +1998,54 @@
       sel.removeAllRanges(); sel.addRange(r); edSaveRange();
     });
 
+    /* ── 표 정규화 ──
+       폭 정보를 <colgroup>의 % 하나로 모은다.
+       (셀마다 width가 흩어져 있거나, 다른 곳에서 붙여넣어 px 폭이 박힌 표도
+        관리자와 홈페이지가 똑같이 보이도록 맞춘다) */
+    function edNormalizeTables(root){
+      root.querySelectorAll('table').forEach(function(tbl){
+        tbl.style.removeProperty('width');
+        tbl.removeAttribute('width');
+        var rows=Array.prototype.slice.call(tbl.querySelectorAll('tr'));
+        if(!rows.length) return;
+        var n=0;
+        rows.forEach(function(tr){ n=Math.max(n, tr.children.length); });
+        if(!n) return;
+        /* 현재 폭 비율 파악: colgroup > 첫 행 셀 style > 실제 렌더 폭 순 */
+        var pct=[], cg=tbl.querySelector('colgroup');
+        if(cg && cg.children.length===n){
+          for(var i=0;i<n;i++) pct.push(parseFloat(cg.children[i].style.width)||0);
+        }
+        if(!pct.length || pct.some(function(x){ return !x; })){
+          pct=[];
+          var head=rows[0];
+          var total=tbl.getBoundingClientRect().width||1;
+          for(var j=0;j<n;j++){
+            var c=head.children[j];
+            var w=c?parseFloat(c.style.width):0;
+            if(c && c.style.width && c.style.width.indexOf('%')>-1 && w) pct.push(w);
+            else if(c) pct.push(Math.round(c.getBoundingClientRect().width/total*1000)/10);
+            else pct.push(100/n);
+          }
+        }
+        var sum=pct.reduce(function(a,b){ return a+b; },0) || 100;
+        pct=pct.map(function(x){ return Math.max(4, Math.round(x/sum*1000)/10); });
+        /* colgroup 재작성 + 셀에 흩어진 width 제거 */
+        if(cg) cg.remove();
+        cg=document.createElement('colgroup');
+        pct.forEach(function(w){
+          var col=document.createElement('col'); col.style.width=w+'%'; cg.appendChild(col);
+        });
+        tbl.insertBefore(cg, tbl.firstChild);
+        rows.forEach(function(tr){
+          Array.prototype.forEach.call(tr.children,function(c){
+            c.style.removeProperty('width'); c.removeAttribute('width');
+          });
+        });
+      });
+      return root;
+    }
+
     /* ── 이미지: 클릭해서 고르고 정렬 ── */
     var edImg=null;
     ed.addEventListener('click',function(e){
@@ -2056,11 +2106,27 @@
         rows.forEach(function(tr){ if(tr.children[idx]) tr.children[idx].remove(); });
       }
       else if(act==='col-narrow'||act==='col-wide'){
-        var cur=parseFloat(cell.style.width)||Math.round(cell.getBoundingClientRect().width/table.getBoundingClientRect().width*100);
-        var next=Math.max(8,Math.min(80, cur+(act==='col-wide'?8:-8)));
-        rows.forEach(function(tr){ if(tr.children[idx]) tr.children[idx].style.width=next+'%'; });
+        edNormalizeTables(table.parentNode===ed?ed:table.closest('#ed-body')||ed);
+        var cg=table.querySelector('colgroup');
+        if(cg && cg.children[idx]){
+          var arr=Array.prototype.map.call(cg.children,function(c){ return parseFloat(c.style.width)||0; });
+          var delta=(act==='col-wide'?6:-6);
+          var target=Math.max(6, Math.min(85, arr[idx]+delta));
+          var used=target, others=arr.length-1;
+          if(others>0){
+            var rest=100-target, oldRest=arr.reduce(function(a,b,i2){ return i2===idx?a:a+b; },0)||1;
+            arr=arr.map(function(w,i2){ return i2===idx?target:Math.max(4, Math.round(w/oldRest*rest*10)/10); });
+          }else arr=[100];
+          var sum2=arr.reduce(function(a,b){ return a+b; },0);
+          arr=arr.map(function(w){ return Math.round(w/sum2*1000)/10; });
+          Array.prototype.forEach.call(cg.children,function(c,i2){ c.style.width=arr[i2]+'%'; });
+        }
       }
       else if(act==='table-del'){ if(confirm('표를 지울까요?')){ table.remove(); edSyncTableBar(); edEnsureTail(); return; } }
+      if(act==='col-left'||act==='col-right'||act==='col-del'){
+        var cg2=table.querySelector('colgroup'); if(cg2) cg2.remove();   /* 열 수가 바뀌면 다시 계산 */
+        edNormalizeTables(ed);
+      }
       /* 편집 후 커서를 표 안에 다시 놓아 표 편집바가 유지되게 */
       var live=table.isConnected ? (row.isConnected ? row : table.querySelector('tr')) : null;
       if(live){
@@ -2095,10 +2161,11 @@
       if(!guard()) return;
       var title=v('ed-title'); if(!title){ alert('제목을 입력해 주세요!'); return; }
       edRepair(ed);
+      edNormalizeTables(ed);
       var clean=document.createElement('div');
       clean.innerHTML=ed.innerHTML;
       clean.querySelectorAll('img[style*="outline"]').forEach(function(im){ im.style.removeProperty('outline'); });
-      clean.querySelectorAll('img[style=""]').forEach(function(im){ im.removeAttribute('style'); });
+      clean.querySelectorAll('[style=""]').forEach(function(el){ el.removeAttribute('style'); });
       /* 앞뒤의 빈 문단들은 저장 시 정리 (편집용으로만 필요) */
       while(clean.lastElementChild && clean.lastElementChild.tagName==='P' &&
             !clean.lastElementChild.textContent.trim() && !clean.lastElementChild.querySelector('img,table,details'))
@@ -2179,6 +2246,7 @@
           document.getElementById('ed-pin').checked=!!p.pinned;
           ed.innerHTML=p.content_html||'';
           edRepair(ed);
+          edNormalizeTables(ed);
           edEnsureTail();
           ed.querySelectorAll('details').forEach(function(d){ d.setAttribute('open',''); });
           ed.scrollIntoView({behavior:'smooth',block:'center'});

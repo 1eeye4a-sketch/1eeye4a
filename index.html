@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
   <meta name="description" content="이예다 공식 홈페이지 — 아이돌을 꿈꾸는 당신의 옆집 유부녀 예다">
   <meta property="og:title" content="LEE YEDA">
   <meta property="og:description" content="아이돌을 꿈꾸는 당신의 옆집 유부녀 예다 🍑">
@@ -11,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/cinema.css?v=20260729b">
+  <link rel="stylesheet" href="css/cinema.css?v=20260731b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -39,6 +40,16 @@
       linear-gradient(0deg,rgba(255,238,234,.6) 0%,transparent 36%)}
     body.day .wedding-cinema{background:#fdf1ee}
 
+    /* 메뉴가 사진의 밝은 부분 위로 지나가면 글자가 묻혀서, 상단바 뒤에 얇은 막을 깐다 */
+    .site-header{isolation:isolate}
+    .site-header::before{
+      content:"";position:absolute;inset:0;z-index:-1;
+      background:linear-gradient(180deg,rgba(45,7,19,.78),rgba(45,7,19,.42));
+      backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    }
+    body.day .site-header::before{
+      background:linear-gradient(180deg,rgba(255,247,244,.90),rgba(255,247,244,.62));
+    }
     .editorial-copy{position:absolute;z-index:3;top:22vh;left:6.3vw;width:min(39vw,700px)}
     .volume{display:flex;align-items:center;gap:13px;margin:0 0 2.4vh;color:var(--tx-soft);font-family:var(--font-serif);font-size:10px;font-style:italic;letter-spacing:.12em}
     .volume span{width:42px;height:1px;background:var(--line)}
@@ -50,8 +61,8 @@
     .meet-button:hover,.meet-button:focus-visible{gap:44px;opacity:.82}
     .letter-button{display:inline-flex;align-items:center;gap:9px;padding:13px 0;border:0;background:none;color:var(--tx);cursor:pointer;font-size:10px;font-weight:900;letter-spacing:.16em;opacity:.85;transition:opacity 160ms ease}
     .letter-button:hover{opacity:1}
-    .letter-button b{color:var(--main);font-weight:400}
-    body.day .letter-button b{color:var(--point)}
+    .letter-button b{color:var(--accent-txt);font-weight:400}
+    body.day .letter-button b{color:var(--accent-txt)}
 
     .quote-card{position:absolute;z-index:4;right:5.5vw;bottom:13.5vh;width:min(21vw,380px);padding:22px 24px;border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
     .heart-mark{position:absolute;top:-26px;right:20px;display:grid;place-items:center;width:clamp(42px,3.1vw,62px);aspect-ratio:1;border:1px solid var(--line);border-radius:50%;background:rgba(198,45,66,.8);color:#fff;font-size:clamp(16px,1.2vw,24px);cursor:pointer;transition:transform 160ms ease}
@@ -60,7 +71,8 @@
     @keyframes hbump{30%{transform:scale(1.24)}60%{transform:scale(.94)}}
     .quote-card p{margin:0;font-family:var(--font-serif);font-size:clamp(14px,1.05vw,20px);font-weight:700;line-height:1.55}
     .quote-card > span:last-child{display:block;margin-top:15px;color:var(--tx-soft);font-size:9px;letter-spacing:.08em}
-    .sideword{position:absolute;z-index:3;top:15vh;right:1.2vw;color:var(--tx-dim);font-size:8px;font-weight:800;letter-spacing:.25em;writing-mode:vertical-rl}
+    .sideword{position:absolute;z-index:3;top:15vh;right:1.2vw;color:var(--tx-soft);font-size:8px;font-weight:800;letter-spacing:.25em;writing-mode:vertical-rl;text-shadow:0 1px 6px rgba(30,4,14,.5)}
+    body.day .sideword{text-shadow:0 1px 6px rgba(255,255,255,.7)}
     .site-footer{position:absolute;z-index:4;right:3vw;bottom:3.5vh;left:3vw;display:flex;justify-content:space-between;align-items:center;color:var(--tx-dim);font-size:8px;letter-spacing:.14em}
     .site-footer b{color:var(--tx);font-size:8px}
 
@@ -84,7 +96,7 @@
     }
   </style>
 </head>
-<body data-build="20260729b">
+<body data-build="20260731b">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <main id="home" class="page-shell">
@@ -153,8 +165,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="supabase.js?v=20260729b"></script>
-  <script src="js/cinema.js?v=20260729b"></script>
+  <script src="supabase.js?v=20260731b"></script>
+  <script src="js/cinema.js?v=20260731b"></script>
   <script>
   /* ── 메인 DB 로더 (§2-B.2) ── */
   (function(){

@@ -3,6 +3,7 @@
 ## 0. 페이지 구성
 - `index.html` 메인(웨딩 시네마) · `profile/` 프로필 · `schedule/` 일정(캘린더) · `dress/` 옷장 · `work/` 업보 · `ticket/` 시참권 · `stamp/` 스탬프 · `guide/` 안내(게시판 · 글 검색) · `song/` 노래책 · `admin/` 관리자 콘솔
 - 공통: `css/cinema.css` · `js/cinema.js` · `supabase.js` · `assets/`
+- 모바일 브라우저의 '웹 강제 다크'(안드로이드 크롬·삼성인터넷)가 라이트 화면을 어둡게 칠하지 않도록 `color-scheme`을 선언해 뒀어요.
 - ☀/☾ 버튼 = EVENING(버건디 시네마) / MORNING(아이보리 브라이덜) 모드 — 방문자 브라우저에 저장돼요
 
 ## 1. 키 꽂는 곳 (1파일)
@@ -43,8 +44,8 @@
 - 업보·시참권·스탬프는 **검색 전에는 명단이 노출되지 않아요** — 닉네임/아이디를 검색해야 본인 기록이 열려요.
 
 ## 6. 배포 확인법 (버전 스탬프)
-- 지금 배포된 게 최신인지 확인: 브라우저에서 **F12 → Console** 열면 `LEE YEDA site build 20260729b` 가 찍혀요.
-- 관리자 페이지 맨 아래에도 `PRIVATE CONSOLE · BUILD 20260729b` 로 표시돼요.
+- 지금 배포된 게 최신인지 확인: 브라우저에서 **F12 → Console** 열면 `LEE YEDA site build 20260731b` 가 찍혀요.
+- 관리자 페이지 맨 아래에도 `PRIVATE CONSOLE · BUILD 20260731b` 로 표시돼요.
 - 버전이 다르면 아직 예전 파일이 서비스되는 중 → Cloudflare Pages 배포 완료 확인 + **Ctrl+Shift+R**(강력 새로고침).
 - css/js 링크에 `?v=` 버전이 붙어 있어 새 HTML이 올라가면 새 CSS/JS를 강제로 받아와요.
 
