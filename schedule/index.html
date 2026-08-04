@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260731b">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260801a">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -45,9 +45,10 @@
     .cal-head span{padding:11px 4px;text-align:center;color:var(--tx-soft);font-family:var(--font-serif);font-style:italic;font-size:12px;letter-spacing:.14em}
     .cal-head span:first-child{color:var(--accent-txt)}
     body.day .cal-head span:first-child{color:var(--accent-txt)}
-    .cal-body{display:grid;grid-template-columns:repeat(7,1fr)}
+    .cal{overflow:hidden}                     /* 칩이 달력 밖으로 새지 않게 */
+    .cal-body{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
     .cal-cell{
-      position:relative;min-height:96px;padding:8px 8px 6px;
+      position:relative;min-width:0;min-height:96px;padding:8px 8px 6px;
       border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);
     }
     .cal-cell:nth-child(7n){border-right:0}
@@ -58,7 +59,7 @@
     body.day .cal-cell.today .dn{color:var(--accent-txt)}
     .cal-cell.hitday{box-shadow:inset 0 0 0 1px var(--main)}
     .ev{
-      position:relative;display:block;width:100%;margin-top:5px;padding:4px 7px;text-align:left;
+      position:relative;display:block;width:100%;max-width:100%;min-width:0;margin-top:5px;padding:4px 7px;text-align:left;
       border:1px solid var(--line);background:rgba(255,255,255,.08);
       color:var(--tx);cursor:pointer;font-family:var(--font-body);font-size:12px;font-weight:650;line-height:1.4;
       transition:background 140ms ease;
@@ -72,10 +73,11 @@
     .ev b{color:var(--accent-txt);font-family:var(--font-serif);font-style:italic;font-weight:400;font-size:11px;margin-right:5px}
     body.day .ev b{color:var(--accent-txt)}
     .ev.dim{opacity:.35}
-    /* 메모 호버 툴팁 */
+    /* 메모 호버 툴팁 — 달력이 overflow:hidden이라 화면 기준(fixed)으로 띄운다 */
     .ev[data-memo]:hover::after{
       content:attr(data-memo);
-      position:absolute;z-index:20;left:0;bottom:calc(100% + 6px);
+      position:fixed;z-index:60;left:var(--tipx,0);top:var(--tipy,0);
+      transform:translate(-50%,-100%);
       width:max-content;max-width:230px;padding:9px 12px;
       border:1px solid var(--line);background:var(--glass-deep);
       backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
@@ -124,7 +126,7 @@
     }
   </style>
 </head>
-<body data-build="20260731b" class="cinema-sub">
+<body data-build="20260801a" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
@@ -212,8 +214,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260731b"></script>
-  <script src="../js/cinema.js?v=20260731b"></script>
+  <script src="../supabase.js?v=20260801a"></script>
+  <script src="../js/cinema.js?v=20260801a"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
@@ -267,6 +269,13 @@
       body.innerHTML=h;
       body.querySelectorAll('.ev').forEach(function(b){
         b.addEventListener('click',function(ev){ ev.stopPropagation(); openEvent(b.dataset.id); });
+        if(b.hasAttribute('data-memo')){
+          b.addEventListener('mouseenter',function(){
+            var r=b.getBoundingClientRect();
+            b.style.setProperty('--tipx', Math.round(r.left+r.width/2)+'px');
+            b.style.setProperty('--tipy', Math.round(r.top-8)+'px');
+          });
+        }
       });
       body.querySelectorAll('.cal-cell').forEach(function(c){
         c.addEventListener('click',function(){
