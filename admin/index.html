@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260805b">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260805c">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -25,7 +25,7 @@
     body.cinema-sub{padding-bottom:60px}
     .ad-wrap{max-width:1080px;margin:0 auto;padding:calc(clamp(74px,9.5vh,104px) + 40px) 4vw 40px}
     /* 안내(에디터) 탭은 게시글 본문과 같은 폭이어야 "보이는 대로" 저장된다 */
-    body.wide-guide .ad-wrap{max-width:1360px}
+    body.wide-guide .ad-wrap{max-width:1420px}
     .ad-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:26px}
     .ad-head h1{margin:0;font-family:var(--font-serif);font-weight:400;font-size:clamp(34px,4vw,52px);letter-spacing:-.04em}
     .ad-head h1 em{color:var(--accent-txt);font-size:.5em;letter-spacing:.1em;margin-right:12px}
@@ -117,6 +117,7 @@
 
     /* 안내 에디터 */
     .ed-bar{display:flex;flex-wrap:wrap;gap:5px;padding:9px;border:1px solid var(--line);border-bottom:0;background:rgba(255,255,255,.05)}
+    body.wide-guide .ed-bar,body.wide-guide #ed-tablebar{width:100%;max-width:calc(1154px + 52px + 10px);margin-left:auto;margin-right:auto}
     .ed-btn{
       min-width:32px;height:30px;padding:0 9px;border:1px solid var(--line-soft);background:transparent;
       color:var(--tx);cursor:pointer;font-family:var(--font-body);font-size:11.5px;font-weight:750;
@@ -125,17 +126,24 @@
     .ed-dot{width:22px;height:22px;min-width:22px;padding:0;border-radius:50%;border:1px solid var(--line);align-self:center;cursor:pointer}
     .ed-sep{width:1px;background:var(--line-soft);margin:2px 3px;align-self:stretch}
     #ed-body{
-      min-height:280px;max-height:64vh;overflow:auto;padding:20px 0;
+      width:100%;max-width:calc(1154px + 52px + 10px);   /* 내용 1154 + 좌우 여백 26 + 스크롤바 */
+      margin:0 auto;
+      min-height:280px;max-height:64vh;overflow:auto;padding:22px 26px;
       border:1px solid var(--line);background:rgba(255,255,255,.05);
       color:var(--tx-soft);font-size:14.5px;line-height:1.95;word-break:keep-all;
     }
     /* 게시글 본문과 같은 폭(1154px 기준)으로 맞춘 편집 영역 */
-    #ed-body > *{max-width:1154px;margin-left:auto;margin-right:auto}
+    /* 내용은 1154px(게시글 폭) 고정 + 가운데 정렬 — 스크롤바가 생겨도 좌우가 대칭이 되게 */
+    #ed-body > *{width:1154px;max-width:1154px;margin-left:0;margin-right:0}
+    #ed-body{scrollbar-width:thin}
+    /* 세로 스크롤바가 오른쪽 여백을 먹지 않도록 컨테이너 폭을 스크롤바만큼 넓혀 둔다 */
+    body.wide-guide #ed-body{padding-right:26px}
     /* 화면이 좁으면 편집 영역을 가로로 넘겨서라도 게시글 폭(1154px)을 유지 —
        "보이는 대로 저장" 이 유지되도록 */
     @media (max-width:1300px){
       body.wide-guide #ed-body{overflow-x:auto}
       body.wide-guide #ed-body > *{min-width:1154px}
+      body.wide-guide #ed-body::after{content:"";display:block;height:8px}
       body.wide-guide .ed-widthnote::after{content:" (화면이 좁아 가로로 밀어 볼 수 있어요)"}
     }
     #ed-body::after{content:"";display:block;height:8px}
@@ -232,7 +240,7 @@
     }
   </style>
 </head>
-<body data-build="20260805b" class="cinema-sub">
+<body data-build="20260805c" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <!-- 로그인 -->
@@ -842,7 +850,7 @@
 
     <footer class="cn-footer">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
-      <b>PRIVATE CONSOLE · BUILD 20260805b</b>
+      <b>PRIVATE CONSOLE · BUILD 20260805c</b>
       <span>YBNZ</span>
     </footer>
   </main>
@@ -870,8 +878,8 @@
   <div id="cnPetals" aria-hidden="true"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260805b"></script>
-  <script src="../js/cinema.js?v=20260805b"></script>
+  <script src="../supabase.js?v=20260805c"></script>
+  <script src="../js/cinema.js?v=20260805c"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
