@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260801a">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260805a">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -24,6 +24,8 @@
     /* ── 콘솔 전용 ── */
     body.cinema-sub{padding-bottom:60px}
     .ad-wrap{max-width:1080px;margin:0 auto;padding:calc(clamp(74px,9.5vh,104px) + 40px) 4vw 40px}
+    /* 안내(에디터) 탭은 게시글 본문과 같은 폭이어야 "보이는 대로" 저장된다 */
+    body.wide-guide .ad-wrap{max-width:1360px}
     .ad-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:26px}
     .ad-head h1{margin:0;font-family:var(--font-serif);font-weight:400;font-size:clamp(34px,4vw,52px);letter-spacing:-.04em}
     .ad-head h1 em{color:var(--accent-txt);font-size:.5em;letter-spacing:.1em;margin-right:12px}
@@ -123,9 +125,23 @@
     .ed-dot{width:22px;height:22px;min-width:22px;padding:0;border-radius:50%;border:1px solid var(--line);align-self:center;cursor:pointer}
     .ed-sep{width:1px;background:var(--line-soft);margin:2px 3px;align-self:stretch}
     #ed-body{
-      min-height:280px;max-height:60vh;overflow:auto;padding:20px 22px;
+      min-height:280px;max-height:64vh;overflow:auto;padding:20px 0;
       border:1px solid var(--line);background:rgba(255,255,255,.05);
-      color:var(--tx-soft);font-size:14px;line-height:1.9;word-break:keep-all;
+      color:var(--tx-soft);font-size:14.5px;line-height:1.95;word-break:keep-all;
+    }
+    /* 게시글 본문과 같은 폭(1154px 기준)으로 맞춘 편집 영역 */
+    #ed-body > *{max-width:1154px;margin-left:auto;margin-right:auto}
+    /* 화면이 좁으면 편집 영역을 가로로 넘겨서라도 게시글 폭(1154px)을 유지 —
+       "보이는 대로 저장" 이 유지되도록 */
+    @media (max-width:1300px){
+      body.wide-guide #ed-body{overflow-x:auto}
+      body.wide-guide #ed-body > *{min-width:1154px}
+      body.wide-guide .ed-widthnote::after{content:" (화면이 좁아 가로로 밀어 볼 수 있어요)"}
+    }
+    #ed-body::after{content:"";display:block;height:8px}
+    .ed-widthnote{
+      display:flex;justify-content:center;gap:8px;align-items:center;
+      margin:8px 0 0;color:var(--tx-dim);font-size:10.5px;letter-spacing:.04em;
     }
     body.day #ed-body{background:rgba(255,255,255,.7)}
     #ed-body:focus{outline:1px solid var(--main)}
@@ -149,9 +165,60 @@
     body.day #ed-body details details{background:rgba(255,255,255,.45)}
     #ed-body b,#ed-body strong{color:var(--tx)}
     #ed-body table{width:100%;margin:.7em 0;border-collapse:collapse;font-size:.95em;table-layout:fixed}
-    #ed-body th,#ed-body td{padding:8px 11px;border:1px solid var(--line-soft);text-align:left;min-width:40px}
+    #ed-body th,#ed-body td{padding:8px 11px;border:1px solid var(--line-soft);text-align:left;min-width:40px;position:relative}
+    #ed-body table{cursor:auto}
+    #ed-body.col-resizing{cursor:col-resize;user-select:none}
+    #ed-body .colguide{position:absolute;top:0;bottom:0;width:2px;background:var(--point);pointer-events:none;z-index:5}
     #ed-body th{background:rgba(255,177,177,.1);color:var(--tx);font-weight:800}
 
+    /* 편집 영역도 게시글과 같은 규칙으로 보이게 (.art-content 규칙을 그대로 상속) */
+    #ed-body{ }
+    /* 게시글 본문과 동일한 표시 스타일 (미리보기·에디터 공용) */
+/* 본문 타이포 (에디터 산출물) */
+    .art-content{font-size:14.5px;line-height:1.95;color:var(--tx-soft);word-break:keep-all;overflow-wrap:anywhere}
+    .art-content p{margin:0 0 .5em}
+    .art-content h2{margin:1.5em 0 .5em;font-family:var(--font-body) !important;font-weight:800;font-size:1.4em;letter-spacing:-.01em;color:var(--tx)}
+    .art-content h3{margin:1.3em 0 .4em;font-weight:800;font-size:1.13em;color:var(--tx)}
+    .art-content hr{margin:1.6em 0;border:0;border-top:1px solid var(--line)}
+    .art-content blockquote{
+      margin:1.1em 0;padding:12px 18px;border-left:3px solid var(--main);
+      background:rgba(255,177,177,.08);color:var(--tx);
+    }
+    .art-content blockquote > *{margin-top:0;margin-bottom:0}
+    .art-content blockquote > * + *{margin-top:.5em}
+    .art-content blockquote h2{font-size:1.2em;line-height:1.4}
+    .art-content blockquote h3{font-size:1.06em;line-height:1.4}
+    body.day .art-content blockquote{border-left-color:var(--accent-txt);background:rgba(198,45,66,.06)}
+    .art-content ul,.art-content ol{margin:.4em 0 .9em;padding-left:1.5em}
+    .art-content li{margin:.2em 0}
+    .art-content a{color:var(--accent-txt);text-decoration:underline;text-underline-offset:3px}
+    body.day .art-content a{color:var(--accent-txt)}
+    .art-content img{max-width:100%;margin:.6em 0;border:1px solid var(--line-soft);display:block}
+    .art-content details{
+      margin:.9em 0;border:1px solid var(--line-soft);background:rgba(255,255,255,.04);
+    }
+    body.day .art-content details{background:rgba(255,255,255,.5)}
+    .art-content summary{
+      padding:12px 16px;cursor:pointer;font-weight:750;color:var(--tx);list-style:none;
+    }
+    .art-content summary.sz-h2{font-size:1.3em;font-weight:800}
+    .art-content summary.sz-h3{font-size:1.12em;font-weight:800}
+    .art-content summary::before{content:"▸";margin-right:9px;color:var(--accent-txt);display:inline-block;transition:transform 160ms ease}
+    body.day .art-content summary::before{color:var(--accent-txt)}
+    .art-content details[open] summary::before{transform:rotate(90deg)}
+    .art-content details > *:not(summary){margin-left:16px;margin-right:16px}
+    .art-content details > *:last-child{padding-bottom:12px}
+    .art-content details details{margin:.6em 14px;background:rgba(255,255,255,.03)}
+    body.day .art-content details details{background:rgba(255,255,255,.42)}
+    .art-content mark{padding:.05em .15em;color:inherit}
+    .art-content b,.art-content strong{color:var(--tx)}
+    .art-content table{width:100% !important;max-width:100%;margin:.8em 0;border-collapse:collapse;font-size:.95em;table-layout:fixed}
+    .art-content table td[width],.art-content table th[width]{width:auto}
+    .art-content [style*="text-align"]{display:block}
+    .art-content td[style*="text-align"],.art-content th[style*="text-align"]{display:table-cell}
+    .art-content th,.art-content td{padding:9px 12px;border:1px solid var(--line-soft);text-align:left;vertical-align:top}
+    .art-content th{background:rgba(255,177,177,.1);color:var(--tx);font-weight:800}
+    body.day .art-content th{background:rgba(198,45,66,.07)}
     /* 로그인 */
     #adLogin{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:linear-gradient(135deg,#5b1027,#350917)}
     #adLogin .box{display:grid;gap:16px;width:min(88vw,360px);padding:38px 34px;border:1px solid var(--line);background:rgba(64,11,28,.6)}
@@ -165,7 +232,7 @@
     }
   </style>
 </head>
-<body data-build="20260801a" class="cinema-sub">
+<body data-build="20260805a" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <!-- 로그인 -->
@@ -705,6 +772,8 @@
           <button class="ed-btn" id="ed-para" type="button" title="이 블록 뒤에 새 문단 (토글 밖으로 나올 때)">⏎문단</button>
           <button class="ed-btn" id="ed-delblock" type="button" title="커서가 있는 토글·표를 통째로 삭제">🗑 블록삭제</button>
           <button class="ed-btn" data-cmd="removeFormat" type="button" title="서식 지우기">지우개</button>
+          <span class="ed-sep"></span>
+          <button class="ed-btn" id="ed-preview" type="button" title="게시글에서 어떻게 보이는지 그대로 확인">👁 미리보기</button>
         </div>
         <div class="ed-bar" id="ed-tablebar" style="display:none;border-top:0">
           <span class="ed-btn" style="border:0;background:none;cursor:default;color:var(--accent-txt)">⊞ 표 편집</span>
@@ -722,8 +791,9 @@
           <button class="ed-btn" data-tb="table-del" type="button">표 삭제</button>
         </div>
         <div id="ed-body" contenteditable="true"></div>
+        <p class="ed-widthnote">↑ 여기 보이는 폭·크기가 게시글에서 보이는 것과 같아요 · <b>👁 미리보기</b>로 최종 화면을 확인할 수 있어요</p>
         <span class="hint" style="display:block;margin-top:8px">글자를 드래그로 선택한 뒤 버튼을 누르면 그 부분에 적용돼요 · 이미지는 SOOP 게시판 "이미지 주소 복사" 링크로<br>토글 제목줄에 커서를 두고 <b>제목/소제목/본문</b>을 누르면 그 <b>토글 제목의 글자 크기</b>가 바뀌어요<br>
-          토글·표를 지우려면 그 안에 커서를 두고 <b>🗑 블록삭제</b> · 줄 맨 앞에 <b>- </b>(하이픈+띄어쓰기)를 치면 ● 목록이 돼요 · <b>본문</b> 버튼은 인용·목록을 해제하는 역할도 해요 · 이미지는 <b>클릭해서 고른 뒤</b> ⯇ ≡ ⯈ 로 정렬해요</span>
+          표 열 너비는 <b>경계선을 좌우로 드래그</b>해서 바꿔요 (버튼 <b>폭 −/＋</b>도 가능) · 토글·표를 지우려면 그 안에 커서를 두고 <b>🗑 블록삭제</b> · 줄 맨 앞에 <b>- </b>(하이픈+띄어쓰기)를 치면 ● 목록이 돼요 · <b>본문</b> 버튼은 인용·목록을 해제하는 역할도 해요 · 이미지는 <b>클릭해서 고른 뒤</b> ⯇ ≡ ⯈ 로 정렬해요</span>
         <div class="save-bar" style="margin-top:14px">
           <button class="cn-btn-line" id="ed-new" type="button">새 글</button>
           <button class="cn-btn-solid" id="ed-save" type="button">글 저장 ♥</button>
@@ -769,17 +839,36 @@
 
     <footer class="cn-footer">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
-      <b>PRIVATE CONSOLE · BUILD 20260801a</b>
+      <b>PRIVATE CONSOLE · BUILD 20260805a</b>
       <span>YBNZ</span>
     </footer>
   </main>
+
+  <!-- 게시글 미리보기 -->
+  <div id="pvMask" style="position:fixed;inset:0;z-index:95;display:none;background:rgba(30,4,14,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)"></div>
+  <div id="pvBox" style="position:fixed;z-index:96;inset:4vh 3vw;display:none;flex-direction:column;border:1px solid var(--line);background:var(--glass-deep);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 22px;border-bottom:1px solid var(--line-soft)">
+      <span style="color:var(--accent-txt);font-family:var(--font-serif);font-style:italic;font-size:12px;letter-spacing:.14em">PREVIEW · 게시글에서 보이는 모습</span>
+      <button id="pvClose" class="cn-btn-line" type="button" style="padding:8px 14px;font-size:10px">닫기</button>
+    </div>
+    <div id="pvScroll" style="flex:1;overflow:auto;padding:30px 0 50px">
+      <div style="max-width:1360px;margin:0 auto;padding:0 clamp(24px,4vw,56px)">
+        <div class="cn-card" style="padding:34px clamp(22px,4vw,46px) 40px">
+          <p id="pvCat" style="margin:0 0 6px;color:var(--accent-txt);font-family:var(--font-serif);font-style:italic;font-size:12px;letter-spacing:.12em"></p>
+          <h2 id="pvTitle" style="margin:0 0 6px;font-family:var(--font-body);font-weight:800;font-size:clamp(23px,2.6vw,32px);letter-spacing:-.02em;line-height:1.45"></h2>
+          <p id="pvDate" style="margin:0 0 24px;padding-bottom:20px;border-bottom:1px solid var(--line-soft);color:var(--tx-dim);font-size:11px;letter-spacing:.08em"></p>
+          <div id="pvBody" class="art-content"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div id="cnFx" aria-hidden="true"></div>
   <div id="cnPetals" aria-hidden="true"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260801a"></script>
-  <script src="../js/cinema.js?v=20260801a"></script>
+  <script src="../supabase.js?v=20260805a"></script>
+  <script src="../js/cinema.js?v=20260805a"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
@@ -835,6 +924,8 @@
       t.addEventListener('click',function(){
         document.querySelectorAll('.ad-tab').forEach(function(x){ x.classList.toggle('on',x===t); });
         document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.toggle('on',p.id==='tab-'+t.dataset.tab); });
+        /* 안내 탭에서는 편집 영역을 게시글과 같은 폭으로 넓힌다 */
+        document.body.classList.toggle('wide-guide', t.dataset.tab==='guide');
       });
     });
 
@@ -1617,6 +1708,31 @@
       alert((await putData({'song-desc':v('f-song-desc')}))?'저장 완료 ♥':'저장 실패');
     });
 
+    /* ── 미리보기: 게시글과 똑같은 화면으로 확인 (저장·새로고침 없이) ── */
+    function pvOpen(){
+      edRepair(ed); edNormalizeTables(ed);
+      var box=document.getElementById('pvBox'), mask=document.getElementById('pvMask');
+      var body=document.getElementById('pvBody');
+      body.innerHTML=ed.innerHTML;
+      body.querySelectorAll('img[style*="outline"]').forEach(function(im){ im.style.removeProperty('outline'); });
+      body.querySelectorAll('details').forEach(function(d){ d.removeAttribute('open'); });
+      body.querySelectorAll('a[href]').forEach(function(a){ a.setAttribute('target','_blank'); a.setAttribute('rel','noreferrer'); });
+      document.getElementById('pvCat').textContent=document.getElementById('ed-cat').value;
+      document.getElementById('pvTitle').textContent=v('ed-title')||'(제목 없음)';
+      var d=new Date(), pad=function(n){ return (n<10?'0':'')+n; };
+      document.getElementById('pvDate').textContent=d.getFullYear()+'.'+pad(d.getMonth()+1)+'.'+pad(d.getDate())+' 업데이트';
+      mask.style.display='block'; box.style.display='flex';
+      document.getElementById('pvScroll').scrollTop=0;
+    }
+    function pvClose(){
+      document.getElementById('pvBox').style.display='none';
+      document.getElementById('pvMask').style.display='none';
+    }
+    document.getElementById('ed-preview').addEventListener('click',pvOpen);
+    document.getElementById('pvClose').addEventListener('click',pvClose);
+    document.getElementById('pvMask').addEventListener('click',pvClose);
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') pvClose(); });
+
     /* ══════════ 📖 안내 게시판 ══════════ */
     var gdPosts=[], edId=null;
     var ed=document.getElementById('ed-body');
@@ -1997,6 +2113,51 @@
       var r=document.createRange(); r.selectNodeContents(pnew); r.collapse(true);
       sel.removeAllRanges(); sel.addRange(r); edSaveRange();
     });
+
+    /* ── 열 경계선 드래그로 폭 조절 (버튼보다 직관적) ── */
+    (function(){
+      var drag=null;
+      function edgeAt(e){
+        var cell=e.target.closest && e.target.closest('#ed-body td, #ed-body th');
+        if(!cell) return null;
+        var r=cell.getBoundingClientRect();
+        if(e.clientX > r.right-6){                       /* 셀 오른쪽 경계 */
+          var idx=Array.prototype.indexOf.call(cell.parentNode.children, cell);
+          var tbl=cell.closest('table');
+          if(idx >= (cell.parentNode.children.length-1)) return null;  /* 마지막 경계는 제외 */
+          return {tbl:tbl, idx:idx};
+        }
+        return null;
+      }
+      ed.addEventListener('mousemove',function(e){
+        if(drag) return;
+        ed.style.cursor = edgeAt(e) ? 'col-resize' : '';
+      });
+      ed.addEventListener('mousedown',function(e){
+        var hit=edgeAt(e); if(!hit) return;
+        e.preventDefault();
+        edNormalizeTables(ed);
+        var cg=hit.tbl.querySelector('colgroup'); if(!cg) return;
+        drag={tbl:hit.tbl, cg:cg, idx:hit.idx, startX:e.clientX,
+              w:Array.prototype.map.call(cg.children,function(c){ return parseFloat(c.style.width)||0; }),
+              total:hit.tbl.getBoundingClientRect().width};
+        ed.classList.add('col-resizing');
+      });
+      document.addEventListener('mousemove',function(e){
+        if(!drag) return;
+        var deltaPct=(e.clientX-drag.startX)/drag.total*100;
+        var i=drag.idx, j=drag.idx+1;
+        var a=drag.w[i]+deltaPct, b2=drag.w[j]-deltaPct;
+        if(a<6||b2<6) return;
+        drag.cg.children[i].style.width=Math.round(a*10)/10+'%';
+        drag.cg.children[j].style.width=Math.round(b2*10)/10+'%';
+      });
+      document.addEventListener('mouseup',function(){
+        if(!drag) return;
+        drag=null; ed.classList.remove('col-resizing'); ed.style.cursor='';
+        edSaveRange();
+      });
+    })();
 
     /* ── 표 정규화 ──
        폭 정보를 <colgroup>의 % 하나로 모은다.
