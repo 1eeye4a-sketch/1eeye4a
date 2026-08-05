@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260805a">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260805b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -232,7 +232,7 @@
     }
   </style>
 </head>
-<body data-build="20260805a" class="cinema-sub">
+<body data-build="20260805b" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <!-- 로그인 -->
@@ -711,7 +711,10 @@
             <tbody id="gd-plist"></tbody>
           </table>
         </div>
-        <span class="hint" style="display:block;margin-top:8px">▲▼ = 같은 그룹(고정글끼리 / 일반글끼리) 안에서 순서 바꾸기 · 🔗 = 이 글로 바로 가는 주소 복사 (SOOP 공지·채팅에 붙여넣기용) · 📌 고정글은 목록 맨 위에 떠요</span>
+        <div class="save-bar" style="margin-top:12px;justify-content:flex-start">
+          <button class="cn-btn-line" id="gd-fixtables" type="button">📐 모든 글의 표 폭 교정</button>
+        </div>
+        <span class="hint" style="display:block;margin-top:8px">📐 = 예전에 만든 표가 게시글에서 좁게 나올 때 한 번 눌러 주세요 (전체 글을 훑어 폭을 맞춰요)<br>▲▼ = 같은 그룹(고정글끼리 / 일반글끼리) 안에서 순서 바꾸기 · 🔗 = 이 글로 바로 가는 주소 복사 (SOOP 공지·채팅에 붙여넣기용) · 📌 고정글은 목록 맨 위에 떠요</span>
       </div>
 
       <div class="cn-card">
@@ -839,7 +842,7 @@
 
     <footer class="cn-footer">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
-      <b>PRIVATE CONSOLE · BUILD 20260805a</b>
+      <b>PRIVATE CONSOLE · BUILD 20260805b</b>
       <span>YBNZ</span>
     </footer>
   </main>
@@ -867,8 +870,8 @@
   <div id="cnPetals" aria-hidden="true"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260805a"></script>
-  <script src="../js/cinema.js?v=20260805a"></script>
+  <script src="../supabase.js?v=20260805b"></script>
+  <script src="../js/cinema.js?v=20260805b"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
@@ -2165,8 +2168,9 @@
         관리자와 홈페이지가 똑같이 보이도록 맞춘다) */
     function edNormalizeTables(root){
       root.querySelectorAll('table').forEach(function(tbl){
-        tbl.style.removeProperty('width');
         tbl.removeAttribute('width');
+        tbl.style.setProperty('width','100%');          /* 저장 HTML에 폭을 명시 */
+        tbl.style.setProperty('table-layout','fixed');  /* 열 폭(%)이 그대로 지켜지게 */
         var rows=Array.prototype.slice.call(tbl.querySelectorAll('tr'));
         if(!rows.length) return;
         var n=0;
@@ -2345,6 +2349,26 @@
       var ok = edId ? await updateRow('guide_posts',edId,row) : await insertRow('guide_posts',row);
       if(ok){ alert(edId?'수정 완료 ♥':'등록 완료 ♥'); edReset(); loadGuide(); }
       else alert('저장 실패 — supabase_setup.sql 실행 여부를 확인해 주세요');
+    });
+    document.getElementById('gd-fixtables').addEventListener('click',async function(){
+      if(!guard()) return;
+      var targets=gdPosts.filter(function(p){ return /<table/i.test(p.content_html||''); });
+      if(!targets.length){ alert('표가 들어간 글이 없어요.'); return; }
+      if(!confirm(targets.length+'개 글의 표 폭을 게시글 폭에 맞게 고칠까요?')) return;
+      var box=document.createElement('div');
+      box.style.cssText='position:fixed;left:-9999px;top:0;width:1154px';
+      document.body.appendChild(box);
+      var done=0;
+      for(var i=0;i<targets.length;i++){
+        var post=targets[i];
+        box.innerHTML=post.content_html;
+        edNormalizeTables(box);
+        var ok=await updateRow('guide_posts',post.id,{content_html:box.innerHTML,updated_at:new Date().toISOString()});
+        if(ok) done++;
+      }
+      box.remove();
+      alert(done+'개 글의 표를 고쳤어요 ♥ 게시글에서 새로고침해 확인해 주세요.');
+      loadGuide();
     });
     function guideUrl(id){ return new URL('../guide/?p='+id, location.href).href; }
     function gdNormCat(c){
