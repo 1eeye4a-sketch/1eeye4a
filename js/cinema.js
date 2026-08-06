@@ -5,7 +5,7 @@
    supabase.js 뒤, </body> 직전에 로드
    ============================================================ */
 (function () {
-  var BUILD = '20260806a';
+  var BUILD = '20260806b';
   try { console.log('%c LEE YEDA site build ' + BUILD + ' ', 'background:#c62d42;color:#fff'); } catch (e) {}
   var $ = function (s) { return document.querySelector(s); };
   var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };

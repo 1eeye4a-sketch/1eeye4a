@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260806a">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260806b">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -125,6 +125,7 @@
     .ed-btn:hover{background:rgba(255,177,177,.14)}
     .ed-dot{width:22px;height:22px;min-width:22px;padding:0;border-radius:50%;border:1px solid var(--line);align-self:center;cursor:pointer}
     .ed-sep{width:1px;background:var(--line-soft);margin:2px 3px;align-self:stretch}
+    .ed-break{flex-basis:100%;height:0}          /* 이 지점부터 다음 줄 */
     #ed-body{
       width:100%;max-width:calc(1154px + 52px + 10px);   /* 내용 1154 + 좌우 여백 26 + 스크롤바 */
       margin:0 auto;
@@ -240,7 +241,7 @@
     }
   </style>
 </head>
-<body data-build="20260806a" class="cinema-sub">
+<body data-build="20260806b" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <!-- 로그인 -->
@@ -745,7 +746,7 @@
         <div class="ed-bar">
           <button class="ed-btn" data-cmd="formatBlock" data-val="h2" type="button" title="큰 제목">제목</button>
           <button class="ed-btn" data-cmd="formatBlock" data-val="h3" type="button" title="소제목">소제목</button>
-          <button class="ed-btn" data-cmd="formatBlock" data-val="p" type="button" title="본문">본문</button>
+          <button class="ed-btn" data-cmd="formatBlock" data-val="p" type="button" title="본문 (인용·목록 해제)">본문</button>
           <span class="ed-sep"></span>
           <button class="ed-btn" data-cmd="bold" type="button" title="굵게"><b>B</b></button>
           <button class="ed-btn" data-cmd="italic" type="button" title="기울임"><i>I</i></button>
@@ -766,24 +767,26 @@
           <button class="ed-dot" data-hl="rgba(232,176,75,.35)" style="background:linear-gradient(0deg,rgba(232,176,75,.55),rgba(232,176,75,.55)),#fff" type="button" title="형광펜 골드"></button>
           <button class="ed-dot" data-hl="rgba(111,143,232,.35)" style="background:linear-gradient(0deg,rgba(111,143,232,.55),rgba(111,143,232,.55)),#fff" type="button" title="형광펜 블루"></button>
           <button class="ed-btn" data-hl="transparent" type="button" title="형광펜 지우기">형광✕</button>
+
+          <span class="ed-break"></span>
+
+          <button class="ed-btn" data-cmd="justifyLeft" type="button" title="왼쪽 정렬">⯇ 왼쪽</button>
+          <button class="ed-btn" data-cmd="justifyCenter" type="button" title="가운데 정렬">≡ 가운데</button>
+          <button class="ed-btn" data-cmd="justifyRight" type="button" title="오른쪽 정렬">⯈ 오른쪽</button>
           <span class="ed-sep"></span>
-          <button class="ed-btn" data-cmd="insertUnorderedList" type="button" title="글머리표 목록 (● 점 목록)">● 목록</button>
+          <button class="ed-btn" data-cmd="insertUnorderedList" type="button" title="글머리표 목록">● 목록</button>
           <button class="ed-btn" data-cmd="insertOrderedList" type="button" title="번호 목록">1. 목록</button>
-          <button class="ed-btn" data-cmd="insertHorizontalRule" type="button" title="구분선">─</button>
-          <button class="ed-btn" data-cmd="formatBlock" data-val="blockquote" type="button" title="인용">❝</button>
-          <button class="ed-btn" id="ed-toggle" type="button" title="접었다 펴는 토글">▸토글</button>
-          <button class="ed-btn" id="ed-table" type="button" title="표 넣기">⊞표</button>
-          <button class="ed-btn" id="ed-img" type="button" title="이미지 넣기">🖼</button>
-          <button class="ed-btn" id="ed-link" type="button" title="링크 걸기">🔗</button>
+          <button class="ed-btn" data-cmd="insertHorizontalRule" type="button" title="구분선">─ 구분선</button>
+          <button class="ed-btn" data-cmd="formatBlock" data-val="blockquote" type="button" title="인용">❝ 인용</button>
           <span class="ed-sep"></span>
-          <button class="ed-btn" data-cmd="justifyLeft" type="button" title="왼쪽 정렬">⯇</button>
-          <button class="ed-btn" data-cmd="justifyCenter" type="button" title="가운데 정렬">≡</button>
-          <button class="ed-btn" data-cmd="justifyRight" type="button" title="오른쪽 정렬">⯈</button>
+          <button class="ed-btn" id="ed-toggle" type="button" title="접었다 펴는 토글">▸ 토글</button>
+          <button class="ed-btn" id="ed-table" type="button" title="표 넣기">⊞ 표</button>
+          <button class="ed-btn" id="ed-img" type="button" title="이미지 넣기">🖼 이미지</button>
+          <button class="ed-btn" id="ed-link" type="button" title="링크 걸기">🔗 링크</button>
           <span class="ed-sep"></span>
-          <button class="ed-btn" id="ed-para" type="button" title="이 블록 뒤에 새 문단 (토글 밖으로 나올 때)">⏎문단</button>
+          <button class="ed-btn" id="ed-para" type="button" title="이 블록 뒤에 새 문단 (토글 밖으로 나올 때)">⏎ 문단</button>
           <button class="ed-btn" id="ed-delblock" type="button" title="커서가 있는 토글·표를 통째로 삭제">🗑 블록삭제</button>
           <button class="ed-btn" data-cmd="removeFormat" type="button" title="서식 지우기">지우개</button>
-          <span class="ed-sep"></span>
           <button class="ed-btn" id="ed-preview" type="button" title="게시글에서 어떻게 보이는지 그대로 확인">👁 미리보기</button>
         </div>
         <div class="ed-bar" id="ed-tablebar" style="display:none;border-top:0">
@@ -850,7 +853,7 @@
 
     <footer class="cn-footer">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
-      <b>PRIVATE CONSOLE · BUILD 20260806a</b>
+      <b>PRIVATE CONSOLE · BUILD 20260806b</b>
       <span>YBNZ</span>
     </footer>
   </main>
@@ -878,8 +881,8 @@
   <div id="cnPetals" aria-hidden="true"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260806a"></script>
-  <script src="../js/cinema.js?v=20260806a"></script>
+  <script src="../supabase.js?v=20260806b"></script>
+  <script src="../js/cinema.js?v=20260806b"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
@@ -1928,6 +1931,7 @@
         if(c==='justifyLeft'||c==='justifyCenter'||c==='justifyRight'){
           var dir=c==='justifyCenter'?'center':(c==='justifyRight'?'right':'left');
           if(edAlignImage(dir)) return;          /* 이미지를 골랐으면 이미지 정렬 */
+          edAlign(dir); return;                  /* 그 외에는 직접 적용 (표 구조 보존) */
         }
         edExec(c, b.dataset.val);
       });
@@ -2228,6 +2232,45 @@
         });
       });
       return root;
+    }
+
+    /* ── 글 정렬: 선택 범위에 걸친 "줄"에만 text-align을 직접 준다 ──
+       execCommand('justifyCenter')는 표를 통째로 감싸거나 구조를 바꿔
+       표 폭이 틀어지는 원인이 되므로 쓰지 않는다 */
+    function edAlign(dir){
+      edRestoreRange();
+      var sel=window.getSelection();
+      if(!sel || !sel.rangeCount) return;
+      var range=sel.getRangeAt(0);
+      var targets=[];
+      function isLine(el){
+        return el && el.nodeType===1 && /^(P|H2|H3|LI|TD|TH|DIV|BLOCKQUOTE|SUMMARY)$/.test(el.tagName) && ed.contains(el);
+      }
+      if(range.collapsed){
+        var n=range.startContainer; if(n.nodeType===3) n=n.parentNode;
+        while(n && n!==ed && !isLine(n)) n=n.parentNode;
+        if(isLine(n)) targets.push(n);
+      }else{
+        /* 선택 범위와 겹치는 줄 요소 모으기 */
+        ed.querySelectorAll('p,h2,h3,li,td,th,blockquote,summary').forEach(function(el){
+          if(range.intersectsNode(el)) targets.push(el);
+        });
+        /* 바깥 블록(표·토글 전체)을 통째로 고른 경우, 안쪽 줄만 남긴다 */
+        targets=targets.filter(function(el){
+          return !targets.some(function(o){ return o!==el && el.contains(o); });
+        });
+        if(!targets.length){
+          var n2=range.startContainer; if(n2.nodeType===3) n2=n2.parentNode;
+          while(n2 && n2!==ed && !isLine(n2)) n2=n2.parentNode;
+          if(isLine(n2)) targets.push(n2);
+        }
+      }
+      targets.forEach(function(el){
+        if(dir==='left') el.style.removeProperty('text-align');
+        else el.style.setProperty('text-align', dir);
+      });
+      edNormalizeTables(ed);       /* 표 폭은 항상 원래대로 유지 */
+      edSaveRange();
     }
 
     /* ── 이미지: 클릭해서 고르고 정렬 ── */
