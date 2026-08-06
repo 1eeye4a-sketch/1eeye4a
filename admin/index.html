@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260805c">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260806a">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -240,7 +240,7 @@
     }
   </style>
 </head>
-<body data-build="20260805c" class="cinema-sub">
+<body data-build="20260806a" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <!-- 로그인 -->
@@ -281,7 +281,7 @@
   <main class="ad-wrap">
     <div class="ad-head">
       <h1><em>CONSOLE ·</em>예다의 분장실</h1>
-      <span class="who">for LEE YEDA only ♥</span>
+      <span class="who">for LEE YEDA only ♥ · <b id="ad-build" style="color:var(--accent-txt);font-style:normal;font-family:var(--font-body);font-size:11px;letter-spacing:.06em"></b></span>
     </div>
     <div class="ad-banner" id="ad-banner">⚠ Supabase 키가 아직 설정되지 않았어요 — <b>supabase.js</b> 상단 두 줄을 채우기 전까지 저장이 되지 않아요.</div>
 
@@ -850,7 +850,7 @@
 
     <footer class="cn-footer">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
-      <b>PRIVATE CONSOLE · BUILD 20260805c</b>
+      <b>PRIVATE CONSOLE · BUILD 20260806a</b>
       <span>YBNZ</span>
     </footer>
   </main>
@@ -878,11 +878,13 @@
   <div id="cnPetals" aria-hidden="true"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260805c"></script>
-  <script src="../js/cinema.js?v=20260805c"></script>
+  <script src="../supabase.js?v=20260806a"></script>
+  <script src="../js/cinema.js?v=20260806a"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
+    (function(){ var el=document.getElementById('ad-build');
+      if(el) el.textContent='BUILD '+(document.body.dataset.build||'?'); })();
     var READY=(typeof SB_READY!=='undefined')?SB_READY:false;
     if(!READY) document.getElementById('ad-banner').classList.add('on');
 
@@ -2177,8 +2179,17 @@
     function edNormalizeTables(root){
       root.querySelectorAll('table').forEach(function(tbl){
         tbl.removeAttribute('width');
-        tbl.style.setProperty('width','100%');          /* 저장 HTML에 폭을 명시 */
-        tbl.style.setProperty('table-layout','fixed');  /* 열 폭(%)이 그대로 지켜지게 */
+        /* 저장되는 HTML에 폭을 직접 못 박는다.
+           (게시글 CSS가 옛 버전이거나 캐시돼 있어도 표가 본문 폭을 채우도록) */
+        tbl.setAttribute('width','100%');
+        tbl.style.setProperty('width','100%','important');
+        tbl.style.setProperty('min-width','100%','important');
+        tbl.style.setProperty('max-width','100%','important');
+        tbl.style.setProperty('table-layout','fixed','important');
+        /* 빈 칸만 있는 표는 auto 레이아웃에서 쪼그라들 수 있어 빈 셀에 줄바꿈을 채워 둔다 */
+        tbl.querySelectorAll('td,th').forEach(function(c){
+          if(!c.innerHTML.trim()) c.innerHTML='<br>';
+        });
         var rows=Array.prototype.slice.call(tbl.querySelectorAll('tr'));
         if(!rows.length) return;
         var n=0;
