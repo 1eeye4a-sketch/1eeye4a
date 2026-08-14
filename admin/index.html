@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260806b">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260806c">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -241,7 +241,7 @@
     }
   </style>
 </head>
-<body data-build="20260806b" class="cinema-sub">
+<body data-build="20260806c" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <!-- 로그인 -->
@@ -683,7 +683,7 @@
           <div class="fld"><span class="cn-label">숙련도</span><input class="input" id="sg-mastery" placeholder="예) 완곡 / 연습중"></div>
           <div class="fld"><span class="cn-label">금액 (개수)</span><input class="input" id="sg-price" type="number" min="0" value="0"><span class="hint">숫자만 — 페이지에는 🍑 개수로 표시돼요 (0이면 —)</span></div>
           <div class="fld"><span class="cn-label">비고 (공개)</span><input class="input" id="sg-note" placeholder="페이지에 보여요 · 링크 자동"></div>
-          <div class="fld full"><span class="cn-label">메모 (관리자만 확인)</span><input class="input" id="sg-memo" placeholder="로그인한 관리자만 볼 수 있어요 — 별도 표(song_memos)에 저장돼요"></div>
+          <div class="fld full"><span class="cn-label">메모 (관리자만 확인)</span><input class="input" id="sg-memo" placeholder="로그인한 관리자만 볼 수 있어요 · https:// 링크는 목록에서 눌리는 링크가 돼요"></div>
         </div>
         <div class="save-bar" style="margin-top:14px">
           <button class="cn-btn-line" id="sg-new" type="button">새로 입력</button>
@@ -853,7 +853,7 @@
 
     <footer class="cn-footer">
       <span>© <b id="copyright-year">2026</b> LEE YEDA</span>
-      <b>PRIVATE CONSOLE · BUILD 20260806b</b>
+      <b>PRIVATE CONSOLE · BUILD 20260806c</b>
       <span>YBNZ</span>
     </footer>
   </main>
@@ -881,8 +881,8 @@
   <div id="cnPetals" aria-hidden="true"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260806b"></script>
-  <script src="../js/cinema.js?v=20260806b"></script>
+  <script src="../supabase.js?v=20260806c"></script>
+  <script src="../js/cinema.js?v=20260806c"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
@@ -1648,10 +1648,11 @@
       renderSongs();
     }
     function renderSongs(){
+      /* 최근에 등록한 곡이 위로 (▲▼로 바꾼 순서가 있으면 그 순서를 따른다) */
       songs.sort(function(a,b){
         var sa=+a.sort_order||0, sb=+b.sort_order||0;
-        if(sa!==sb) return sa-sb;
-        return (+a.id||0)-(+b.id||0);
+        if(sa!==sb) return sb-sa;
+        return (+b.id||0)-(+a.id||0);
       });
       /* 곡에 실제로 쓰인 분류 + 등록해 둔 분류를 합쳐 필터 목록 구성 */
       var used=[]; songs.forEach(function(x){ var c=txt(x.category).trim(); if(c && used.indexOf(c)===-1) used.push(c); });
@@ -1683,7 +1684,7 @@
           '<td class="mini">'+esc(x.mastery)+'</td>'+
           '<td class="mini">'+((+x.price||0)>0?(+x.price)+'개':'—')+'</td>'+
           '<td class="mini">'+esc(x.note)+'</td>'+
-          '<td class="mini" style="color:var(--accent-txt)">'+esc(songMemos[x.id]||'')+'</td>'+
+          '<td class="mini" style="color:var(--accent-txt)">'+CN.linkify(songMemos[x.id]||'')+'</td>'+
           '<td style="width:44px;text-align:center"><button class="ic-btn" data-ed="1" title="수정">✎</button></td>'+
           '<td><button class="ic-btn del" data-del="1">✕</button></td></tr>';
       }).join('') || '<tr><td colspan="11" class="mini">'+(q||fc?'검색 결과가 없어요':'아직 등록된 노래가 없어요')+'</td></tr>';
