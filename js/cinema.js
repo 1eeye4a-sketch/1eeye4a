@@ -5,7 +5,7 @@
    supabase.js 뒤, </body> 직전에 로드
    ============================================================ */
 (function () {
-  var BUILD = '20260806c';
+  var BUILD = '20260814a';
   try { console.log('%c LEE YEDA site build ' + BUILD + ' ', 'background:#c62d42;color:#fff'); } catch (e) {}
   var $ = function (s) { return document.querySelector(s); };
   var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
@@ -93,7 +93,7 @@
     for (var i = 0; i < 12; i++) {
       var el = document.createElement('i');
       el.textContent = GLYPH[i % GLYPH.length];
-      el.style.left = (Math.random() * 100) + '%';
+      el.style.left = (Math.random() * 92) + '%';   /* 오른쪽 끝에서 시작하면 화면 밖으로 흘러 가로 스크롤이 생긴다 */
       el.style.fontSize = (8 + Math.random() * 7) + 'px';
       el.style.animationDuration = (11 + Math.random() * 12) + 's';
       el.style.animationDelay = (-Math.random() * 18) + 's';

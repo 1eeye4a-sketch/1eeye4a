@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/cinema.css?v=20260806c">
+  <link rel="stylesheet" href="../css/cinema.css?v=20260814a">
   <style>
     /* 배포 캐시로 cinema.css가 옛것이어도 깜빡임(옛 데이터 노출)이 없도록 페이지에 직접 심은 게이트 */
     body:not(.dataready) .chapter,
@@ -22,8 +22,8 @@
   </style>
   <style>
     /* ── 일정 전용 ── */
-    .cal-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin:0 0 18px}
-    .cal-nav{display:flex;align-items:center;gap:18px}
+    .cal-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin:0 0 18px;max-width:100%}
+    .cal-nav{display:flex;align-items:center;gap:18px;flex-wrap:wrap;min-width:0;max-width:100%}
     .cal-nav button{
       width:38px;height:38px;border:1px solid var(--line);background:transparent;color:var(--tx);
       cursor:pointer;font-family:var(--font-serif);font-size:15px;transition:background 150ms ease;
@@ -33,7 +33,7 @@
     .cal-nav .ym i{font-style:italic;color:var(--accent-txt);font-size:.55em;margin-left:8px;letter-spacing:.08em}
     body.day .cal-nav .ym i{color:var(--accent-txt)}
     .cal-nav .today-btn{width:auto;padding:0 14px;font-family:var(--font-body);font-size:10px;font-weight:900;letter-spacing:.12em}
-    .cal-search{display:flex;align-items:center;gap:10px;min-width:230px;padding:0 14px;border:1px solid var(--line);background:var(--glass)}
+    .cal-search{display:flex;align-items:center;gap:10px;flex:1 1 230px;min-width:0;max-width:100%;padding:0 14px;border:1px solid var(--line);background:var(--glass);box-sizing:border-box}
     .cal-search i{font-style:normal;color:var(--tx-dim);font-size:12px}
     .cal-search input{flex:1;padding:11px 0;border:0;background:none;color:var(--tx);font-family:var(--font-body);font-size:13px}
     .cal-search input::placeholder{color:var(--tx-dim)}
@@ -126,7 +126,7 @@
     }
   </style>
 </head>
-<body data-build="20260806c" class="cinema-sub">
+<body data-build="20260814a" class="cinema-sub">
 <script>if(localStorage.getItem('yeda-mode')==='day')document.body.classList.add('day');</script>
 
   <header class="site-header">
@@ -214,8 +214,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../supabase.js?v=20260806c"></script>
-  <script src="../js/cinema.js?v=20260806c"></script>
+  <script src="../supabase.js?v=20260814a"></script>
+  <script src="../js/cinema.js?v=20260814a"></script>
   <script>
   (function(){
     var esc=CN.esc, txt=CN.txt;
